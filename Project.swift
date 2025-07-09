@@ -59,7 +59,7 @@ let project = Project(
             ),
             sources: ["TtouchIsland/Sources/**"],
             resources: ["TtouchIsland/Resources/**"],
-            dependencies: [],
+            dependencies: []
 //            settings: settings
         ),
         .target(
@@ -71,6 +71,6 @@ let project = Project(
             sources: ["TtouchIsland/Tests/**"],
             resources: [],
             dependencies: [.target(name: "TtouchIsland")]
-        ),
+        )
     ]
 )
