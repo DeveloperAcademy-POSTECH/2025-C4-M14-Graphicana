@@ -32,6 +32,9 @@ import ProjectDescription
 let project = Project(
     name: "TtouchIsland",
     organizationName: "Graphicana",
+    packages: [
+        .local(path: "Packages/DummyAssets"),
+    ],
     targets: [
         .target(
             name: "TtouchIsland",
@@ -60,7 +63,7 @@ let project = Project(
             sources: ["TtouchIsland/Sources/**"],
             resources: ["TtouchIsland/Resources/**"],
             dependencies: [
-                .project(target: "DummyAssets", path: "Packages/DummyAssets")
+                .package(product: "DummyAssets"),
             ]
 //            settings: settings
         ),
@@ -73,6 +76,6 @@ let project = Project(
             sources: ["TtouchIsland/Tests/**"],
             resources: [],
             dependencies: [.target(name: "TtouchIsland")]
-        )
+        ),
     ]
 )
