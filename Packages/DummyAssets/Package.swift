@@ -6,10 +6,7 @@ import PackageDescription
 let package = Package(
     name: "DummyAssets",
     platforms: [
-        .visionOS("3.0"),
-        .macOS("16.0"),
-        .iOS("19.0"),
-        .tvOS("19.0")
+        .iOS("19.0")
     ],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.

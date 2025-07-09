@@ -59,7 +59,9 @@ let project = Project(
             ),
             sources: ["TtouchIsland/Sources/**"],
             resources: ["TtouchIsland/Resources/**"],
-            dependencies: []
+            dependencies: [
+                .project(target: "DummyAssets", path: "Packages/DummyAssets")
+            ]
 //            settings: settings
         ),
         .target(
