@@ -279,5 +279,19 @@ def Xform "Root"
             token outputs:surface
         }
     }
+
+    def "Ttouch" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707965, -1.5707963, 3.1415925)
+        }
+        prepend references = @Ttouch.usd@
+    )
+    {
+        quatf xformOp:orient = (-0.5, 0.5, 0.5, 0.5)
+        float3 xformOp:scale = (0.5, 0.5, 0.5)
+        float3 xformOp:translate = (11.445112, 1.9015491, 17.933052)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
 }
 
