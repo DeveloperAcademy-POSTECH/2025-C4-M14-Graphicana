@@ -34,6 +34,7 @@ let project = Project(
     organizationName: "Graphicana",
     packages: [
         .local(path: "Packages/DummyAssets"),
+        .local(path: "Packages/CharacterMovement"),
     ],
     targets: [
         .target(
@@ -64,6 +65,7 @@ let project = Project(
             resources: ["TtouchIsland/Resources/**"],
             dependencies: [
                 .package(product: "DummyAssets"),
+                .package(product: "CharacterMovement"),
             ]
 //            settings: settings
         ),

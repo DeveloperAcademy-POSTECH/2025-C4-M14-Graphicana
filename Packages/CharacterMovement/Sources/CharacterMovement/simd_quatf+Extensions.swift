@@ -1,6 +1,3 @@
-// swift-tools-version:6.0
-// The swift-tools-version declares the minimum version of Swift required to build this package.
-
 /*
   Copyright © 2025 Apple Inc.
 
@@ -11,30 +8,17 @@
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import PackageDescription
+import simd
 
-let package = Package(
-    name: "DummyAssets",
-    platforms: [
-        .iOS("19.0"),
-    ],
-    products: [
-        // Products define the executables and libraries a package produces, and make them visible to other packages.
-        .library(
-            name: "DummyAssets",
-            targets: ["DummyAssets"]
-        ),
-    ],
-    dependencies: [
-        // Dependencies declare other packages that this package depends on.
-        // .package(url: /* package url */, from: "1.0.0"),
-    ],
-    targets: [
-        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-        // Targets can depend on other targets in this package, and on products in packages this package depends on.
-        .target(
-            name: "DummyAssets",
-            dependencies: []
-        ),
-    ]
-)
+extension simd_quatf {
+    // 카메라의 수직 회전(상하 기울임)을 제거하고 수평 회전만 남김
+    // 플레이어가 위나 아래를 보더라도 캐릭터는 지면에 평행하게 이동하게 됨.
+    var flattened: simd_quatf {
+        let forward = simd_normalize(simd_act(self, [0, 0, 1]))
+        var flatForward = forward
+        flatForward.y = 0
+        flatForward = simd_normalize(flatForward)
+
+        return simd_quatf(from: [0, 0, 1], to: flatForward)
+    }
+}
