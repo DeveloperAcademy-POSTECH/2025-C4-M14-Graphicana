@@ -36,6 +36,7 @@ let project = Project(
         .package(path: "Packages/DummyAssets"),
         .package(path: "Packages/CharacterMovement"),
         .package(path: "Packages/ThumbStickView"),
+        .package(path: "Packages/WorldCamera"),
     ],
     targets: [
         .target(
@@ -68,6 +69,7 @@ let project = Project(
                 .package(product: "DummyAssets"),
                 .package(product: "CharacterMovement"),
                 .package(product: "ThumbStickView"),
+                .package(product: "WorldCamera"),
             ]
 //            settings: settings
         ),
