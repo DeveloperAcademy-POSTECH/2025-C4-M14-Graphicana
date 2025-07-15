@@ -53,15 +53,15 @@ struct GameView: View {
 
     fileprivate struct PlatformerThumbControl: View {
         let hero: Entity?
-        @State var movementThumbStick: CGPoint = .zero
+        @State var CharacterJoystick: CGPoint = .zero
 
         var body: some View {
             VStack {
                 Spacer()
 
                 HStack(alignment: .bottom) {
-                    ThumbStickView(updatingValue: $movementThumbStick)
-                        .onChange(of: movementThumbStick) { _, newValue in
+                    ThumbStickView(updatingValue: $CharacterJoystick)
+                        .onChange(of: CharacterJoystick) { _, newValue in
                             let movementVector: SIMD3<Float> = [Float(newValue.x), 0, Float(newValue.y)] / 10
                             hero?.components[CharacterMovementComponent.self]?.controllerDirection = movementVector
                         }

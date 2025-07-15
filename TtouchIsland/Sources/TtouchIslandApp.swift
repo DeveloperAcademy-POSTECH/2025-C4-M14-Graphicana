@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct RealityKitPracticeApp: App {
+struct TtouchIslandApp: App {
     @State private var appModel = AppModel()
 
     var body: some Scene {
