@@ -33,8 +33,8 @@ let project = Project(
     name: "TtouchIsland",
     organizationName: "Graphicana",
     packages: [
-        .local(path: "Packages/DummyAssets"),
-        .local(path: "Packages/CharacterMovement"),
+        .package(path: "Packages/DummyAssets"),
+        .package(path: "Packages/CharacterMovement"),
     ],
     targets: [
         .target(
