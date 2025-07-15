@@ -35,6 +35,7 @@ let project = Project(
     packages: [
         .package(path: "Packages/DummyAssets"),
         .package(path: "Packages/CharacterMovement"),
+        .package(path: "Packages/ThumbStickView"),
     ],
     targets: [
         .target(
@@ -66,6 +67,7 @@ let project = Project(
             dependencies: [
                 .package(product: "DummyAssets"),
                 .package(product: "CharacterMovement"),
+                .package(product: "ThumbStickView"),
             ]
 //            settings: settings
         ),
