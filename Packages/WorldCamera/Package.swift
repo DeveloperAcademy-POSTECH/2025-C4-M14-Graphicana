@@ -15,6 +15,6 @@ let package = Package(
     products: [.library(name: "WorldCamera", targets: ["WorldCamera"])],
     targets: [.target(
         name: "WorldCamera",
-        swiftSettings: [.enableUpcomingFeature("MemberImportVisibility")],
-    )],
+        swiftSettings: [.enableUpcomingFeature("MemberImportVisibility")]
+    )]
 )
