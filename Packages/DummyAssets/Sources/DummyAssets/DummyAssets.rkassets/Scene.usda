@@ -11,278 +11,30 @@
 def Xform "Root"
 {
     reorder nameChildren = ["DummyMap", "SphereMaterial", "DummyMap_Bouondary", "Ttouch_1"]
-    def "DummyMap" (
-        active = true
+    def Xform "DirectionalLight" (
         customData = {
-            float3 rotationEulerHint = (-1.5707964, 0, 0)
+            float3 rotationEulerHint = (-0.71140635, 1.556634e-7, -5.782976e-8)
         }
-        references = @250706_DummyMap_Sample.usdc@
     )
     {
-        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
-        float3 xformOp:scale = (1, 1, 1)
-        float3 xformOp:translate = (0, 0, 0)
+        quatf xformOp:orient = (0.93740183, -0.3482496, 8.302918e-8, 0)
+        float3 xformOp:translate = (0, 24.496136, 0)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
-        over "_materials"
+        def RealityKitComponent "DirectionalLight"
         {
-            over "Material"
+            float3 color = (0.9048901, 0.9454482, 1)
+            token info:id = "RealityKit.DirectionalLight"
+
+            def RealityKitStruct "Shadow"
             {
-                token outputs:mtlx:surface
-                token outputs:realitykit:vertex
-
-                over "Principled_BSDF"
-                {
-                    color3f inputs:diffuseColor = (0.9063318, 0.75382847, 0.60329956) (
-                        colorSpace = "srgb_displayp3"
-                    )
-                }
             }
-        }
-
-        over "Sphere_006" (
-            prepend apiSchemas = ["MaterialBindingAPI"]
-        )
-        {
-            rel material:binding = </Root/SphereMaterial> (
-                bindMaterialAs = "weakerThanDescendants"
-            )
-
-            over "Sphere_009" (
-                prepend apiSchemas = ["MaterialBindingAPI"]
-            )
-            {
-                rel material:binding = </Root/SphereMaterial> (
-                    bindMaterialAs = "weakerThanDescendants"
-                )
-            }
-        }
-
-        over "env_light" (
-            active = false
-        )
-        {
-            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-        }
-
-        over "Sphere_012" (
-            prepend apiSchemas = ["MaterialBindingAPI"]
-        )
-        {
-            rel material:binding = </Root/SphereMaterial> (
-                bindMaterialAs = "weakerThanDescendants"
-            )
-        }
-
-        over "Sphere" (
-            prepend apiSchemas = ["MaterialBindingAPI"]
-        )
-        {
-            rel material:binding = </Root/SphereMaterial> (
-                bindMaterialAs = "weakerThanDescendants"
-            )
-        }
-
-        over "Sphere_003" (
-            prepend apiSchemas = ["MaterialBindingAPI"]
-        )
-        {
-            rel material:binding = </Root/SphereMaterial> (
-                bindMaterialAs = "weakerThanDescendants"
-            )
-        }
-
-        over "Sphere_004" (
-            prepend apiSchemas = ["MaterialBindingAPI"]
-        )
-        {
-            rel material:binding = </Root/SphereMaterial> (
-                bindMaterialAs = "weakerThanDescendants"
-            )
-        }
-
-        over "Sphere_019" (
-            prepend apiSchemas = ["MaterialBindingAPI"]
-        )
-        {
-            rel material:binding = </Root/SphereMaterial> (
-                bindMaterialAs = "weakerThanDescendants"
-            )
-        }
-
-        over "Sphere_007" (
-            prepend apiSchemas = ["MaterialBindingAPI"]
-        )
-        {
-            rel material:binding = </Root/SphereMaterial> (
-                bindMaterialAs = "weakerThanDescendants"
-            )
-        }
-
-        over "Sphere_022" (
-            prepend apiSchemas = ["MaterialBindingAPI"]
-        )
-        {
-            rel material:binding = </Root/SphereMaterial> (
-                bindMaterialAs = "weakerThanDescendants"
-            )
-        }
-
-        over "Sphere_001" (
-            prepend apiSchemas = ["MaterialBindingAPI"]
-        )
-        {
-            rel material:binding = </Root/SphereMaterial> (
-                bindMaterialAs = "weakerThanDescendants"
-            )
-        }
-
-        over "Sphere_013" (
-            prepend apiSchemas = ["MaterialBindingAPI"]
-        )
-        {
-            rel material:binding = </Root/SphereMaterial> (
-                bindMaterialAs = "weakerThanDescendants"
-            )
-        }
-
-        over "Sphere_010" (
-            prepend apiSchemas = ["MaterialBindingAPI"]
-        )
-        {
-            rel material:binding = </Root/SphereMaterial> (
-                bindMaterialAs = "weakerThanDescendants"
-            )
-        }
-
-        over "Sphere_011" (
-            prepend apiSchemas = ["MaterialBindingAPI"]
-        )
-        {
-            rel material:binding = </Root/SphereMaterial> (
-                bindMaterialAs = "weakerThanDescendants"
-            )
-        }
-
-        over "Sphere_021" (
-            prepend apiSchemas = ["MaterialBindingAPI"]
-        )
-        {
-            rel material:binding = </Root/SphereMaterial> (
-                bindMaterialAs = "weakerThanDescendants"
-            )
-        }
-
-        over "Sphere_017" (
-            prepend apiSchemas = ["MaterialBindingAPI"]
-        )
-        {
-            rel material:binding = </Root/SphereMaterial> (
-                bindMaterialAs = "weakerThanDescendants"
-            )
-        }
-
-        over "Sphere_016" (
-            prepend apiSchemas = ["MaterialBindingAPI"]
-        )
-        {
-            rel material:binding = </Root/SphereMaterial> (
-                bindMaterialAs = "weakerThanDescendants"
-            )
-        }
-
-        over "Sphere_018" (
-            prepend apiSchemas = ["MaterialBindingAPI"]
-        )
-        {
-            rel material:binding = </Root/SphereMaterial> (
-                bindMaterialAs = "weakerThanDescendants"
-            )
-        }
-
-        over "Sphere_002" (
-            prepend apiSchemas = ["MaterialBindingAPI"]
-        )
-        {
-            rel material:binding = </Root/SphereMaterial> (
-                bindMaterialAs = "weakerThanDescendants"
-            )
-        }
-
-        over "Sphere_020" (
-            prepend apiSchemas = ["MaterialBindingAPI"]
-        )
-        {
-            rel material:binding = </Root/SphereMaterial> (
-                bindMaterialAs = "weakerThanDescendants"
-            )
-        }
-
-        over "Sphere_014" (
-            prepend apiSchemas = ["MaterialBindingAPI"]
-        )
-        {
-            rel material:binding = </Root/SphereMaterial> (
-                bindMaterialAs = "weakerThanDescendants"
-            )
-        }
-
-        over "Sphere_015" (
-            prepend apiSchemas = ["MaterialBindingAPI"]
-        )
-        {
-            rel material:binding = </Root/SphereMaterial> (
-                bindMaterialAs = "weakerThanDescendants"
-            )
-        }
-
-        over "Sphere_009" (
-            prepend apiSchemas = ["MaterialBindingAPI"]
-        )
-        {
-            rel material:binding = </Root/SphereMaterial> (
-                bindMaterialAs = "weakerThanDescendants"
-            )
-        }
-
-        over "Sphere_008" (
-            prepend apiSchemas = ["MaterialBindingAPI"]
-        )
-        {
-            rel material:binding = </Root/SphereMaterial> (
-                bindMaterialAs = "weakerThanDescendants"
-            )
-        }
-
-        over "Sphere_005" (
-            prepend apiSchemas = ["MaterialBindingAPI"]
-        )
-        {
-            rel material:binding = </Root/SphereMaterial> (
-                bindMaterialAs = "weakerThanDescendants"
-            )
         }
     }
 
-    def Material "SphereMaterial"
-    {
-        token outputs:mtlx:surface
-        token outputs:realitykit:vertex
-        token outputs:surface.connect = </Root/SphereMaterial/UsdPreviewSurface.outputs:surface>
-
-        def Shader "UsdPreviewSurface"
-        {
-            uniform token info:id = "UsdPreviewSurface"
-            color3f inputs:diffuseColor = (0.54793817, 0.8336523, 0.5187698) (
-                colorSpace = "srgb_displayp3"
-            )
-            token outputs:surface
-        }
-    }
-
-    def "DummyMap_Bouondary" (
+    def "EnvironmentMap" (
         active = true
-        references = @DummyMapBoundary/250706_DummyMap_Sample.usd@
+        prepend references = @EnvironmentMap/EnvironmentMap.usd@
     )
     {
         quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
@@ -291,17 +43,14 @@ def Xform "Root"
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
     }
 
-    def "Ttouch_1" (
+    def "TtouchParent" (
         active = true
-        customData = {
-            float3 rotationEulerHint = (-4.712389, -1.5707963, 0)
-        }
-        references = @Ttouch/Ttouch.usd@
+        prepend references = @Character/TtouchParent.usd@
     )
     {
-        quatf xformOp:orient = (-0.5, 0.5, 0.5, 0.5)
-        float3 xformOp:scale = (0.5, 0.5, 0.5)
-        float3 xformOp:translate = (10.232078, 1.5463305, 18.623917)
+        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (-77.907196, -0.7571563, -36.65532)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
     }
 }

@@ -17,7 +17,7 @@ extension GameView {
             )  // 맵은 플레이어나 적과만 충돌하도록 설정한 필터 적용
         }
         // 맵에 대하여 설정
-        if let map = world.findEntity(named: "DummyMap") {
+        if let map = world.findEntity(named: "EnvironmentMap") {
             try? await map.generateStaticShapeResources(
                 recursive: true,
                 filter: GameCollisionFilters.terrainFilter

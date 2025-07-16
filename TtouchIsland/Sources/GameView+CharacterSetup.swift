@@ -96,7 +96,7 @@ extension GameView {
         // 이동 제어 설정
         /// 캐릭터 이동 관련 컴포넌트 생성
         var moveComponent = CharacterMovementComponent(
-            characterProxy: "Cube_002"
+            characterProxy: "Cube_027"
         )
         /// 이동 업데이트 함수
         moveComponent.update = characterMoveUpdated(entity:velocity:deltaTime:)
@@ -126,9 +126,9 @@ extension GameView {
     /// 캐릭터가 추락했거나 금지된 영역에 접근했을 때 원래 위치로 복귀시키는 안전장치 역할
     func resetMaxPosition(event: CollisionEvents.Began) {
         var maxParent = event.entityB
-        if maxParent.name != "Ttouch_1" {
+        if maxParent.name != "Ttouch" {
             maxParent = event.entityA
-            if maxParent.name != "Ttouch_1" { return }
+            if maxParent.name != "Ttouch" { return }
         }
         maxParent.teleportCharacter(
             to: [0, 1.0, -0.25],
