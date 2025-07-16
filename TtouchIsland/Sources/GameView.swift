@@ -8,7 +8,7 @@ import WorldCamera
 struct GameView: View {
     @Environment(AppModel.self) private var appModel
 
-    var hero: Entity? {
+    var character: Entity? {
         appModel.gameRoot?.findEntity(named: "Ttouch_1")
     }
 
@@ -35,16 +35,16 @@ struct GameView: View {
             .ignoresSafeArea()
 
             if showCharacterJoystick {
-                PlatformerThumbControl(hero: hero)
+                PlatformerThumbControl(character: character)
             }
         }
         .allowedDynamicRange(.high)
     }
 
     fileprivate func initializeGameSetting(_ game: Entity, _ content: some RealityViewContentProtocol) async {
-        if let hero {
-            setupWorldCamera(target: hero)
-            await heroSetup(hero)
+        if let character {
+            setupWorldCamera(target: character)
+            await characterSetup(character)
         }
 
         // TODO: - 환경 충돌 설정
@@ -52,7 +52,7 @@ struct GameView: View {
     }
 
     fileprivate struct PlatformerThumbControl: View {
-        let hero: Entity?
+        let character: Entity?
         @State var CharacterJoystick: CGPoint = .zero
 
         var body: some View {
@@ -63,7 +63,7 @@ struct GameView: View {
                     ThumbStickView(updatingValue: $CharacterJoystick)
                         .onChange(of: CharacterJoystick) { _, newValue in
                             let movementVector: SIMD3<Float> = [Float(newValue.x), 0, Float(newValue.y)] / 10
-                            hero?.components[CharacterMovementComponent.self]?.controllerDirection = movementVector
+                            character?.components[CharacterMovementComponent.self]?.controllerDirection = movementVector
                         }
 
                     Spacer()
@@ -74,7 +74,7 @@ struct GameView: View {
                         .font(.system(size: 36))
                         .glassEffect(.regular.interactive())
                         .onLongPressGesture(minimumDuration: 0.0, perform: {}, onPressingChanged: { isPressed in
-                            hero?.components[CharacterMovementComponent.self]?.jumpPressed = isPressed
+                            character?.components[CharacterMovementComponent.self]?.jumpPressed = isPressed
                         })
                         .padding()
                 }
