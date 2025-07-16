@@ -66,7 +66,7 @@ public struct ThumbStickView: View {
             Circle()
                 .foregroundColor(.clear)
                 .frame(width: outerRadius * 2, height: outerRadius * 2)
-                .glassEffect(.clear, in: .circle)
+//                .glassEffect(.clear, in: .circle)
 
             // 내부 움직이는 원
             Circle()

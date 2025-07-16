@@ -9,7 +9,7 @@ struct GameView: View {
     @Environment(AppModel.self) private var appModel
 
     var character: Entity? {
-        appModel.gameRoot?.findEntity(named: "Ttouch_1")
+        appModel.gameRoot?.findEntity(named: "TtouchParent")
     }
 
     @State var showCharacterJoystick: Bool = false
