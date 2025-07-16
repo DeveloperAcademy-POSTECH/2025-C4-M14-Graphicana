@@ -12,36 +12,42 @@ struct GameView: View {
         appModel.gameRoot?.findEntity(named: "TtouchParent")
     }
 
-    @State var showCharacterJoystick: Bool = false
+    @State var showJoystick: Bool = false
 
     var body: some View {
         ZStack {
-            
+
             Color.black
                 .ignoresSafeArea()
 
             RealityView { content in
-                guard let game = try? await Entity(
-                    named: "Scene", in: dummyAssetsBundle
-                ) else { return }
+                guard
+                    let game = try? await Entity(
+                        named: "Scene",
+                        in: dummyAssetsBundle
+                    )
+                else { return }
 
                 appModel.gameRoot = game
 
                 await initializeGameSetting(game, content)
                 content.add(game)
 
-                showCharacterJoystick = true
+                showJoystick = true
             }
             .ignoresSafeArea()
 
-            if showCharacterJoystick {
-                PlatformerThumbControl(character: character)
+            if showJoystick {
+                PlatformerThumbControl(character: character, appModel: appModel)
             }
         }
         .allowedDynamicRange(.high)
     }
 
-    fileprivate func initializeGameSetting(_ game: Entity, _ content: some RealityViewContentProtocol) async {
+    fileprivate func initializeGameSetting(
+        _ game: Entity,
+        _ content: some RealityViewContentProtocol
+    ) async {
         if let character {
             setupWorldCamera(target: character)
             await characterSetup(character)
@@ -53,30 +59,61 @@ struct GameView: View {
 
     fileprivate struct PlatformerThumbControl: View {
         let character: Entity?
-        @State var CharacterJoystick: CGPoint = .zero
+        let appModel: AppModel
+
+        @State var characterJoystick: CGPoint = .zero
+        @State var cameraAngleThumbstick: CGPoint = .zero
 
         var body: some View {
             VStack {
                 Spacer()
 
                 HStack(alignment: .bottom) {
-                    ThumbStickView(updatingValue: $CharacterJoystick)
-                        .onChange(of: CharacterJoystick) { _, newValue in
-                            let movementVector: SIMD3<Float> = [Float(newValue.x), 0, Float(newValue.y)] / 10
-                            character?.components[CharacterMovementComponent.self]?.controllerDirection = movementVector
+                    ThumbStickView(updatingValue: $characterJoystick)
+                        .onChange(of: characterJoystick) { _, newValue in
+                            let movementVector: SIMD3<Float> =
+                                [Float(newValue.x), 0, Float(newValue.y)] / 10
+                            character?.components[
+                                CharacterMovementComponent.self
+                            ]?.controllerDirection = movementVector
                         }
 
                     Spacer()
 
-                    // Jump button.
-                    Image(systemName: "arrow.up")
-                        .frame(width: 50, height: 50)
-                        .font(.system(size: 36))
-                        .glassEffect(.regular.interactive())
-                        .onLongPressGesture(minimumDuration: 0.0, perform: {}, onPressingChanged: { isPressed in
-                            character?.components[CharacterMovementComponent.self]?.jumpPressed = isPressed
-                        })
-                        .padding()
+                    ZStack(alignment: .bottomTrailing) {
+                        CameraThumbStickView(
+                            updatingValue: $cameraAngleThumbstick
+                        )
+                        .onChange(of: cameraAngleThumbstick) {
+                            _,
+                            newValue in
+                            let movementVector: SIMD2<Float> =
+                                [Float(newValue.x), Float(-newValue.y)] / 30
+                            appModel.gameRoot?.findEntity(named: "camera")?
+                                .components[WorldCameraComponent.self]?
+                                .updateWith(
+                                    continuousMotion: movementVector
+                                )
+
+                        }
+                        .background(Color.clear)
+
+                        // Jump button.
+                        Image(systemName: "arrow.up")
+                            .frame(width: 50, height: 50)
+                            .font(.system(size: 36))
+                            .glassEffect(.regular.interactive())
+                            .onLongPressGesture(
+                                minimumDuration: 0.0,
+                                perform: {},
+                                onPressingChanged: { isPressed in
+                                    character?.components[
+                                        CharacterMovementComponent.self
+                                    ]?.jumpPressed = isPressed
+                                }
+                            )
+                            .padding()
+                    }
                 }
             }
         }

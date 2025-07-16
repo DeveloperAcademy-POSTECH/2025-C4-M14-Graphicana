@@ -46,9 +46,9 @@ public struct ThumbStickView: View {
     @Binding private var updatingValue: CGPoint
     @State private var innerCircleOffset: CGPoint = .zero
 
-//    private var smallCircleCenter: CGPoint {
-//        CGPoint(x: largeRadius - smallerRadius, y: largeRadius - smallerRadius)
-//    }
+    //    private var smallCircleCenter: CGPoint {
+    //        CGPoint(x: largeRadius - smallerRadius, y: largeRadius - smallerRadius)
+    //    }
 
     // MARK: - Initializer
 
@@ -66,7 +66,7 @@ public struct ThumbStickView: View {
             Circle()
                 .foregroundColor(.clear)
                 .frame(width: outerRadius * 2, height: outerRadius * 2)
-//                .glassEffect(.clear, in: .circle)
+                .glassEffect(.clear, in: .circle)
 
             // 내부 움직이는 원
             Circle()
@@ -108,5 +108,76 @@ public struct ThumbStickView: View {
 
     private func resetThumbstick() {
         innerCircleOffset = .zero
+    }
+}
+
+public struct CameraThumbStickView: View {
+    // MARK: - Properties
+
+    private let width: CGFloat
+    private let height: CGFloat
+
+    @Binding private var updatingValue: CGPoint
+    @State private var innerLocation: CGPoint = .zero
+
+    private var center: CGPoint {
+        CGPoint(x: width / 2, y: height / 2)
+    }
+
+    // MARK: - Initializer
+
+    public init(
+        updatingValue: Binding<CGPoint>,
+        width: CGFloat = UIScreen.main.bounds.width / 2,  // width: 스크린의 절반
+        height: CGFloat = UIScreen.main.bounds.height
+    ) {
+        self.width = width
+        self.height = height
+        self._updatingValue = updatingValue
+    }
+
+    // MARK: - Body
+
+    public var body: some View {
+        ZStack {
+            Color.clear
+                // contentShape: hit testing 속성을 뷰에 적용하는 방법
+                .contentShape(Rectangle())
+                .foregroundColor(.clear)
+                .frame(width: width, height: height)
+                .gesture(CameraFingerDrag)
+        }
+        .onAppear { CameraResetThumbstick() }
+        .onChange(of: innerLocation) { _, newValue in
+            updatingValue = CGPoint(
+                x: newValue.x - center.x,
+                y: newValue.y - center.y
+            )
+        }
+    }
+
+    // MARK: - Gesture
+
+    private var CameraFingerDrag: some Gesture {
+        DragGesture(minimumDistance: 5)
+            .onChanged { value in
+                let translation = value.translation
+                let distance = hypot(translation.width, translation.height)
+                let angle = atan2(translation.height, translation.width)
+                let maxDistance = center.x
+                let clampedDistance = min(distance, maxDistance)
+
+                let newX = cos(angle) * clampedDistance + maxDistance
+                let newY = sin(angle) * clampedDistance + maxDistance
+
+                innerLocation = CGPoint(x: newX, y: newY)
+            }
+            .onEnded { _ in CameraResetThumbstick() }
+    }
+
+    // MARK: - Helpers
+
+    private func CameraResetThumbstick() {
+        innerLocation = center
     }
 }
