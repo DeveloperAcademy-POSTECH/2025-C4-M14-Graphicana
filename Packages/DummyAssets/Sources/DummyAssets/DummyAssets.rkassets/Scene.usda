@@ -10,7 +10,7 @@
 
 def Xform "Root"
 {
-    reorder nameChildren = ["DummyMap", "SphereMaterial", "DummyMap_Bouondary", "Ttouch_1"]
+    reorder nameChildren = ["DirectionalLight", "EnvironmentMap", "TtouchParent", "NewsPapaer", "Item", "DummyMaterial"]
     def Xform "DirectionalLight" (
         customData = {
             float3 rotationEulerHint = (-0.71140635, 1.556634e-7, -5.782976e-8)
@@ -34,7 +34,7 @@ def Xform "Root"
 
     def "EnvironmentMap" (
         active = true
-        prepend references = @EnvironmentMap/EnvironmentMap.usd@
+        references = @EnvironmentMap/EnvironmentMap.usd@
     )
     {
         quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
@@ -45,13 +45,77 @@ def Xform "Root"
 
     def "TtouchParent" (
         active = true
-        prepend references = @Character/TtouchParent.usd@
+        references = @Character/TtouchParent.usd@
     )
     {
         quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
         float3 xformOp:scale = (1, 1, 1)
         float3 xformOp:translate = (-77.907196, -0.7571563, -36.65532)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def "NewsPapaer" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-2.9042923, 0.7079655, -0.035237744)
+        }
+        references = @Newspaper/NewsPapaer.usd@
+    )
+    {
+        quatf xformOp:orient = (-0.11707966, 0.93053734, -0.057435095, -0.34218967)
+        float3 xformOp:scale = (1.5, 1.5, 1.5)
+        float3 xformOp:translate = (-73.12194, -0.67693365, -30.346209)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def Capsule "Item" (
+        active = true
+        prepend apiSchemas = ["MaterialBindingAPI"]
+        customData = {
+            float3 rotationEulerHint = (0.5235988, 0, 0)
+        }
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.2
+        rel material:binding = </Root/DummyMaterial> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        double radius = 0.1
+        quatf xformOp:orient = (0.9659258, 0.25881904, 0, 0)
+        float3 xformOp:translate = (-50.607067, -0.8, -25.379091)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def Material "DefaultMaterial"
+        {
+            token outputs:surface.connect = </Root/Item/DefaultMaterial/DefaultSurfaceShader.outputs:surface>
+
+            def Shader "DefaultSurfaceShader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (1, 1, 1)
+                float inputs:roughness = 0.75
+                token outputs:surface
+            }
+        }
+    }
+
+    def Material "DummyMaterial"
+    {
+        token outputs:mtlx:surface
+        token outputs:realitykit:vertex
+        token outputs:surface.connect = </Root/DummyMaterial/UsdPreviewSurface.outputs:surface>
+
+        def Shader "UsdPreviewSurface"
+        {
+            uniform token info:id = "UsdPreviewSurface"
+            color3f inputs:diffuseColor = (0.8365234, 0.7811884, 0.2966173) (
+                colorSpace = "srgb_displayp3"
+            )
+            float inputs:metallic = 0.5
+            float inputs:roughness = 0.2
+            token outputs:surface
+        }
     }
 }
 
