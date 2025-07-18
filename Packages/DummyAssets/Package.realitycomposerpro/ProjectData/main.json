@@ -1,10 +1,18 @@
 {
   "pathsToIds" : {
+    "\/DummyAssets\/Sources\/DummyAssets\/DummyAssets.rkassets\/EnvironmentMapV2\/Untitled%20Scene.usda" : "6BAE21A1-C2BC-4908-993B-C0FE86E72E20",
     "\/DummyAssets\/Sources\/DummyAssets\/DummyAssets.rkassets\/Scene.usda" : "BF616A53-3F86-423B-8A4F-704D6B816F8B",
-    "DummyAssets\/Sources\/DummyAssets\/DummyAssets.rkassets\/Scene.usda" : "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD"
+    "\/DummyAssets\/Sources\/DummyAssets\/DummyAssets.rkassets\/Untitled%20Scene.usda" : "CF57283A-64B4-4D99-94FF-F9C265F12A52",
+    "DummyAssets\/Sources\/DummyAssets\/DummyAssets.rkassets\/EnvironmentMapV2\/EnvironmentMap.usd" : "900BF84B-9475-42F6-9D58-56B53B507895",
+    "DummyAssets\/Sources\/DummyAssets\/DummyAssets.rkassets\/Scene.usda" : "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+    "DummyAssets\/Sources\/DummyAssets\/DummyAssets.rkassets\/SkyBox.usda" : "BAEDFABF-64E5-4C1F-A476-9F3FDCF0BA77"
   },
   "projectID" : 3357438129692444542,
   "uuidToIntID" : {
-    "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD" : -7132206839867872198
+    "6BAE21A1-C2BC-4908-993B-C0FE86E72E20" : -8858767720832536589,
+    "900BF84B-9475-42F6-9D58-56B53B507895" : 3580512536939429283,
+    "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD" : -7132206839867872198,
+    "BAEDFABF-64E5-4C1F-A476-9F3FDCF0BA77" : -1773133559074875619,
+    "CF57283A-64B4-4D99-94FF-F9C265F12A52" : 6127047519430334630
   }
 }

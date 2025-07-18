@@ -10,7 +10,7 @@
 
 def Xform "Root"
 {
-    reorder nameChildren = ["DirectionalLight", "EnvironmentMap", "TtouchParent", "NewsPapaer", "Item", "DummyMaterial"]
+    reorder nameChildren = ["DirectionalLight", "EnvironmentMap", "OceanPlane", "SkySphere", "SkyBoxMaterial", "TtouchParent", "NewsPapaer", "Item", "DummyMaterial"]
     def Xform "DirectionalLight" (
         customData = {
             float3 rotationEulerHint = (-0.71140635, 1.556634e-7, -5.782976e-8)
@@ -32,17 +32,6 @@ def Xform "Root"
         }
     }
 
-    def "EnvironmentMap" (
-        active = true
-        references = @EnvironmentMap/EnvironmentMap.usd@
-    )
-    {
-        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
-        float3 xformOp:scale = (1, 1, 1)
-        float3 xformOp:translate = (0, 0, 0)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-    }
-
     def "TtouchParent" (
         active = true
         references = @Character/TtouchParent.usd@
@@ -50,7 +39,7 @@ def Xform "Root"
     {
         quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
         float3 xformOp:scale = (1, 1, 1)
-        float3 xformOp:translate = (-77.907196, -0.7571563, -36.65532)
+        float3 xformOp:translate = (-70.364426, 0.19655618, -29.27386)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
     }
 
@@ -64,7 +53,7 @@ def Xform "Root"
     {
         quatf xformOp:orient = (-0.11707966, 0.93053734, -0.057435095, -0.34218967)
         float3 xformOp:scale = (1.5, 1.5, 1.5)
-        float3 xformOp:translate = (-73.12194, -0.67693365, -30.346209)
+        float3 xformOp:translate = (-69.53069, 0.48689896, -25.571339)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
     }
 
@@ -83,7 +72,7 @@ def Xform "Root"
         )
         double radius = 0.1
         quatf xformOp:orient = (0.9659258, 0.25881904, 0, 0)
-        float3 xformOp:translate = (-50.607067, -0.8, -25.379091)
+        float3 xformOp:translate = (-42.34864, 0.8049422, -14.419597)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
         def Material "DefaultMaterial"
@@ -114,6 +103,60 @@ def Xform "Root"
             )
             float inputs:metallic = 0.5
             float inputs:roughness = 0.2
+            token outputs:surface
+        }
+    }
+
+    def "EnvironmentMap" (
+        active = true
+        references = @EnvironmentMapV2/EnvironmentMap.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def "OceanPlane" (
+        active = true
+        references = @Ocean/OceanPlane.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def "SkySphere" (
+        active = true
+        prepend apiSchemas = ["MaterialBindingAPI"]
+        references = @SkySphere.usdz@
+    )
+    {
+        rel material:binding = </Root/SkyBoxMaterial> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        float3 xformOp:scale = (1, 1, 1)
+    }
+
+    def Material "SkyBoxMaterial"
+    {
+        token outputs:mtlx:surface
+        token outputs:realitykit:vertex
+        token outputs:surface.connect = </Root/SkyBoxMaterial/UsdPreviewSurface.outputs:surface>
+        float2 ui:nodegraph:realitykit:subgraphOutputs:pos = (0, 110.5)
+
+        def Shader "UsdPreviewSurface"
+        {
+            uniform token info:id = "UsdPreviewSurface"
+            color3f inputs:diffuseColor = (0.46264648, 0.6430664, 0.7216797) (
+                colorSpace = "srgb_displayp3"
+            )
+            color3f inputs:emissiveColor = (1, 1, 1) (
+                colorSpace = "srgb_displayp3"
+            )
             token outputs:surface
         }
     }
