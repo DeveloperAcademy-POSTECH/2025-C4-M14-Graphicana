@@ -37,6 +37,7 @@ let project = Project(
         .package(path: "Packages/CharacterMovement"),
         .package(path: "Packages/ThumbStickView"),
         .package(path: "Packages/WorldCamera"),
+        .package(path: "Packages/ControllerInput"),
     ],
     targets: [
         .target(
@@ -70,6 +71,7 @@ let project = Project(
                 .package(product: "CharacterMovement"),
                 .package(product: "ThumbStickView"),
                 .package(product: "WorldCamera"),
+                .package(product: "ControllerInput"),
             ]
 //            settings: settings
         ),
