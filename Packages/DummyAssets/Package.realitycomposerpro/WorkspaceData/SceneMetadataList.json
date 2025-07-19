@@ -3,6 +3,16 @@
     "objectMetadataList" : [
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "Ttouch",
+        "Ttouch"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root"
       ],
       {
@@ -21,8 +31,7 @@
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root",
-        "Ttouch",
-        "Ttouch"
+        "NewsPaper"
       ],
       {
         "isExpanded" : true,
