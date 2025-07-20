@@ -6,7 +6,7 @@ import ThumbStickView
 import WorldCamera
 
 struct GameView: View {
-    @Environment(AppModel.self) private var appModel
+    private var appModel: AppModel = .shared
 
     var character: Entity? {
         appModel.gameRoot?.findEntity(named: "TtouchParent")
@@ -55,7 +55,7 @@ struct GameView: View {
         }
 
         // 배경음 삽입
-        self.setupBackgroundMusic(root: game, content: content)
+        setupBackgroundMusic(root: game, content: content)
 
         // TODO: - 환경 충돌 설정
         await setupEnvironmentCollisions(on: game, content: content)
@@ -105,21 +105,35 @@ struct GameView: View {
                         }
                         .background(Color.clear)
 
-                        // Jump button.
-                        Image(systemName: "arrow.up")
-                            .frame(width: 50, height: 50)
-                            .font(.system(size: 36))
-                            .glassEffect(.regular.interactive())
-                            .onLongPressGesture(
-                                minimumDuration: 0.0,
-                                perform: {},
-                                onPressingChanged: { isPressed in
-                                    character?.components[
-                                        CharacterMovementComponent.self
-                                    ]?.jumpPressed = isPressed
+                        HStack {
+                            if appModel.isNearNewspaper {
+                                Button(action: {
+                                    // 신문 버튼 액션
+                                }) {
+                                    Image(systemName: "newspaper")
+                                        .frame(width: 50, height: 50)
+                                        .font(.system(size: 36))
+                                        .glassEffect(.regular.interactive())
                                 }
-                            )
-                            .padding()
+                                .padding(.trailing, 16)
+                            }
+
+                            // Jump button.
+                            Image(systemName: "arrow.up")
+                                .frame(width: 50, height: 50)
+                                .font(.system(size: 36))
+                                .glassEffect(.regular.interactive())
+                                .onLongPressGesture(
+                                    minimumDuration: 0.0,
+                                    perform: {},
+                                    onPressingChanged: { isPressed in
+                                        character?.components[
+                                            CharacterMovementComponent.self
+                                        ]?.jumpPressed = isPressed
+                                    }
+                                )
+                        }
+                        .padding()
                     }
                 }
                 .padding(.bottom, 30)
@@ -130,5 +144,4 @@ struct GameView: View {
 
 #Preview {
     GameView()
-        .environment(AppModel())
 }

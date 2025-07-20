@@ -6,11 +6,13 @@
 //  Copyright © 2025 Graphicana. All rights reserved.
 //
 
-import Foundation
 import RealityKit
 import simd
+import SwiftUI
 
 struct ItemSystem: System {
+    private var appModel: AppModel = .shared
+
     init(scene _: RealityKit.Scene) {}
 
     // 왜 Static으로 설정하는가?
@@ -31,6 +33,7 @@ struct ItemSystem: System {
             let characterPosition = target.transform.translation
             let distance = simd.distance(itemPosition, characterPosition)
 
+            appModel.isNearNewspaper = distance <= itemComponent.maxDistance
 
 //            // 2. 거리가 maxDistance 이내이면 1.0(최대 밝기), 아니면 0.0(꺼짐)을 반환
 //            let glowIntensity: Float = distance <= itemComponent.maxDistance ? 1.0 : 0.0

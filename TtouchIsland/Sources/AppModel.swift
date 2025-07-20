@@ -1,10 +1,9 @@
 import RealityKit
 import SwiftUI
 
-/// Maintains the app-wide state.
-@MainActor
-@Observable
 class AppModel {
+    static let shared = AppModel()
+
     var gameRoot: Entity?
     var gameAudioRoot: Entity? {
         gameRoot?.children.first(where: { $0.name == "Root" })
@@ -12,6 +11,8 @@ class AppModel {
 
     // 상태바 오버레이 표시여부
     var isCharacterInteractNewspaper = false
+
+    var isNearNewspaper = false
 
     let isPortrait = true
     var levelFinished = false
