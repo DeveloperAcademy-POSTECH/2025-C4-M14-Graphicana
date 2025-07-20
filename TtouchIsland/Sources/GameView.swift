@@ -122,6 +122,7 @@ struct GameView: View {
                             .padding()
                     }
                 }
+                .padding(.bottom, 30)
             }
         }
     }

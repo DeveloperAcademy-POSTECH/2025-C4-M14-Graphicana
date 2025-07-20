@@ -13,7 +13,6 @@ extension GameView {
     func setupItems(character: Entity, newspaper: Entity, content _: some RealityViewContentProtocol) {
         newspaper.components.set([
             ItemComponent(type: .newspaper, targetEntity: character),
-            ModelComponent(mesh: .generateSphere(radius: 0.1), materials: [PhysicallyBasedMaterial()]),
         ])
 
         // 필요없는거 같긴함

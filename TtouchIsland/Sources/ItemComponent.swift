@@ -17,7 +17,7 @@ struct ItemComponent: Component {
     // 아이템 종류
     var type: ItemType
     // 아이템 감지 거리
-    var maxDistance: Float = 2.0
+    var maxDistance: Float = 1.5
     // 아이템과의 거리를 추적할 엔티티
     var targetEntity: Entity?
 

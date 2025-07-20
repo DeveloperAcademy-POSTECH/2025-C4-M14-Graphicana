@@ -10,7 +10,7 @@
 
 def Xform "Root"
 {
-    reorder nameChildren = ["DirectionalLight", "EnvironmentMap", "OceanPlane", "SkySphere", "SkyBoxMaterial", "TtouchParent", "NewsPapaer", "Item", "DummyMaterial"]
+    reorder nameChildren = ["DirectionalLight", "EnvironmentMap", "OceanPlane", "SkySphere", "SkyBoxMaterial", "TtouchParent", "NewsPaper", "Item", "DummyMaterial"]
     def Xform "DirectionalLight" (
         customData = {
             float3 rotationEulerHint = (-0.71140635, 1.556634e-7, -5.782976e-8)
