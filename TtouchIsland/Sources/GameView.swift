@@ -53,6 +53,9 @@ struct GameView: View {
             await characterSetup(character)
         }
 
+        // 배경음 삽입
+        self.setupBackgroundMusic(root: game, content: content)
+
         // TODO: - 환경 충돌 설정
         await setupEnvironmentCollisions(on: game, content: content)
     }
