@@ -10,7 +10,7 @@ extension GameView {
         content: any RealityViewContentProtocol
     ) async {
         // 맵 바운더리에 대하여 설정
-        if let boundary = world.findEntity(named: "DummyMap_Bouondary") {
+        if let boundary = world.findEntity(named: "DummyMap_Boundary") {
             try? await boundary.generateStaticShapeResources(
                 recursive: true,
                 filter: GameCollisionFilters.terrainFilter
