@@ -204,7 +204,7 @@ def Xform "Root"
     }
 
     def "Ttouch_walk" (
-        active = true
+        active = false
         customData = {
             float3 rotationEulerHint = (0, 0, 0)
         }
@@ -215,6 +215,36 @@ def Xform "Root"
         float3 xformOp:scale = (1, 1, 1)
         float3 xformOp:translate = (-70, 0.3, -29)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def "Ttouch" (
+        active = true
+        prepend references = @TtouchV3/Ttouch.usd@
+    )
+    {
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (-69.30744, 0.29999995, -28.799633)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "Ttouch_root"
+        {
+            def RealityKitComponent "AnimationLibrary"
+            {
+                uniform token info:id = "RealityKit.AnimationLibrary"
+
+                def RealityKitAnimationFile "Ttouch_walk"
+                {
+                    uniform asset file = @TtouchV3/Ttouch_walk.usd@
+                    uniform string name = "Ttouch_walk"
+                }
+
+                def RealityKitAnimationFile "Ttouch_idle"
+                {
+                    uniform asset file = @TtouchV3/Ttouch_idle.usd@
+                    uniform string name = "Ttouch_idle"
+                }
+            }
+        }
     }
 }
 

@@ -18,7 +18,7 @@ extension GameView {
 
         // TODO: - 캐릭터 애니메이션 적용시 적용
         //        /// 맥스 엔티티 + 애니메이션 라이브러리를 찾아온다.
-                guard let ttouchRoot = character.findEntity(named: "Ttouch_Skeleton"),
+                guard let ttouchRoot = character.findEntity(named: "Ttouch_root"),
                       let animationLibrary = ttouchRoot.components[AnimationLibraryComponent.self]
                 else { return }
 
@@ -45,8 +45,8 @@ extension GameView {
         //        /// 오디오와 애니메이션 효과를 결합시킨다.
         //        anims[.jump] = jumpAnimation?.combineWithAudio(named: "jump")
         ////        anims[.spin] = animationLibrary.animations["spin"]?.combineWithAudio(named: "attack")
-        //        anims[.idle] = animationLibrary.animations["idle"]?.repeat()
-                anims[.walking] = animationLibrary.animations["default scene animation"]?.repeat()
+                anims[.idle] = animationLibrary.animations["Ttouch_idle"]?.repeat()
+                anims[.walking] = animationLibrary.animations["Ttouch_walk"]?.repeat()
 
         //        // 각 캐릭터 상태들(idle, walking, jump, spin)에 대해서 해당 애니메이션 상태들을 연결한다.
                 let characterStates = CharacterStateComponent(animations: anims)
@@ -95,7 +95,7 @@ extension GameView {
         // 이동 제어 설정
         /// 캐릭터 이동 관련 컴포넌트 생성
         var moveComponent = CharacterMovementComponent(
-            characterProxy: "Ttouch_Skeleton"
+            characterProxy: "Ttouch_root"
         )
         /// 이동 업데이트 함수
         moveComponent.update = characterMoveUpdated(entity:velocity:deltaTime:)
