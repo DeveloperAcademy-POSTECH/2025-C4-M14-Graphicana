@@ -6,7 +6,7 @@ import ThumbStickView
 import WorldCamera
 
 struct GameView: View {
-    @Environment(AppModel.self) private var appModel
+    private var appModel: AppModel = .shared
 
     var character: Entity? {
         appModel.gameRoot?.findEntity(named: "TtouchParent")
@@ -16,7 +16,6 @@ struct GameView: View {
 
     var body: some View {
         ZStack {
-
             Color.black
                 .ignoresSafeArea()
 
@@ -44,6 +43,8 @@ struct GameView: View {
         .allowedDynamicRange(.high)
     }
 
+    // MARK: - Game Initialization
+
     fileprivate func initializeGameSetting(
         _ game: Entity,
         _ content: some RealityViewContentProtocol
@@ -54,10 +55,14 @@ struct GameView: View {
         }
 
         // 배경음 삽입
-        self.setupBackgroundMusic(root: game, content: content)
+        setupBackgroundMusic(root: game, content: content)
 
         // TODO: - 환경 충돌 설정
         await setupEnvironmentCollisions(on: game, content: content)
+
+        if let newspaper = game.findEntity(named: "NewsPaper"), let character {
+            setupItems(character: character, newspaper: newspaper, content: content)
+        }
     }
 
     fileprivate struct PlatformerThumbControl: View {
@@ -89,7 +94,7 @@ struct GameView: View {
                         )
                         .onChange(of: cameraAngleThumbstick) {
                             _,
-                            newValue in
+                                newValue in
                             let movementVector: SIMD2<Float> =
                                 [Float(newValue.x), Float(-newValue.y)] / 30
                             appModel.gameRoot?.findEntity(named: "camera")?
@@ -97,27 +102,41 @@ struct GameView: View {
                                 .updateWith(
                                     continuousMotion: movementVector
                                 )
-
                         }
                         .background(Color.clear)
 
-                        // Jump button.
-                        Image(systemName: "arrow.up")
-                            .frame(width: 50, height: 50)
-                            .font(.system(size: 36))
-                            .glassEffect(.regular.interactive())
-                            .onLongPressGesture(
-                                minimumDuration: 0.0,
-                                perform: {},
-                                onPressingChanged: { isPressed in
-                                    character?.components[
-                                        CharacterMovementComponent.self
-                                    ]?.jumpPressed = isPressed
+                        HStack {
+                            if appModel.isNearNewspaper {
+                                Button(action: {
+                                    // 신문 버튼 액션
+                                }) {
+                                    Image(systemName: "newspaper")
+                                        .frame(width: 50, height: 50)
+                                        .font(.system(size: 36))
+                                        .glassEffect(.regular.interactive())
                                 }
-                            )
-                            .padding()
+                                .padding(.trailing, 16)
+                            }
+
+                            // Jump button.
+                            Image(systemName: "arrow.up")
+                                .frame(width: 50, height: 50)
+                                .font(.system(size: 36))
+                                .glassEffect(.regular.interactive())
+                                .onLongPressGesture(
+                                    minimumDuration: 0.0,
+                                    perform: {},
+                                    onPressingChanged: { isPressed in
+                                        character?.components[
+                                            CharacterMovementComponent.self
+                                        ]?.jumpPressed = isPressed
+                                    }
+                                )
+                        }
+                        .padding()
                     }
                 }
+                .padding(.bottom, 30)
             }
         }
     }
@@ -125,5 +144,4 @@ struct GameView: View {
 
 #Preview {
     GameView()
-        .environment(AppModel())
 }

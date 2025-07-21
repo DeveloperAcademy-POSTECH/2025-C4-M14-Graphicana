@@ -1,9 +1,8 @@
 import CharacterMovement
-//import ControllerInput
+import ControllerInput
 import RealityKit
 
 extension GameView {
-
     // 캐릭터 기본 설정을 해주는 함수
     func characterSetup(_ character: Entity) async {
         /// 캐릭터의 시각적 경계(bound)를 계산해준다.
@@ -74,7 +73,7 @@ extension GameView {
             height: bounds.extents.y,
             radius: collisionRadius,
         )
-        .offsetBy(translation: [0, bounds.extents.y, 0])  // 형상 중심점을 캐릭터 중심으로 조정
+        .offsetBy(translation: [0, bounds.extents.y, 0]) // 형상 중심점을 캐릭터 중심으로 조정
 
         // 물리 속성 설정하기: 동적 물리 바디 생성 (물리 시뮬레이션)
         var characterPhysicsBodyComponent = PhysicsBodyComponent(
@@ -87,7 +86,7 @@ extension GameView {
             PhysicsMaterialResource.generate(
                 friction: 0.2,
                 /// 마찰 계수 0.2 (약간 미끄러짐이 있음)
-                restitution: 0.0/// 반발 계수 0.0 (충돌 시 튕겨나가지 않음)
+                restitution: 0.0 /// 반발 계수 0.0 (충돌 시 튕겨나가지 않음)
             )
 
         /// 각운동 감쇠값을 높게 설정하여 회전 저항을 크게 함
@@ -103,10 +102,10 @@ extension GameView {
         //        moveComponent.handleKeypress = characterKeypress(keypress:)
 
         return [
-            CharacterComponent(),  // 히어로 마커 컴포넌트
-            moveComponent,  // 캐릭터 이동 로직
-            characterPhysicsBodyComponent,  // 물리 바디 컴포넌트
-            ControllerInputReceiver(update: controllerInputUpdater),  // 컨트롤러 입력 업데이트
+            CharacterComponent(), // 히어로 마커 컴포넌트
+            moveComponent, // 캐릭터 이동 로직
+            characterPhysicsBodyComponent, // 물리 바디 컴포넌트
+            ControllerInputReceiver(update: controllerInputUpdater), // 컨트롤러 입력 업데이트
             // 충돌 감지용 컴포넌트
             CollisionComponent(
                 shapes: [characterCollisionShape],
@@ -147,11 +146,11 @@ extension GameView {
         {
             //            character.stopAllAnimations()  // 진행 중인 애니메이션 중지
             //            character.stopAllAudio()  // 진행 중인 오디오 중지
-            characterStateComponent.currentState = .idle  // 캐릭터 상태를 idle로 설정
-            character.components.set(characterStateComponent)  // 상태 컴포넌트 업데이트
+            characterStateComponent.currentState = .idle // 캐릭터 상태를 idle로 설정
+            character.components.set(characterStateComponent) // 상태 컴포넌트 업데이트
 
-            characterMovementComponent.paused = true  // 이동 컴포넌트 일시 정지
-            character.components.set(characterMovementComponent)  // 이동 컴포넌트 업데이트
+            characterMovementComponent.paused = true // 이동 컴포넌트 일시 정지
+            character.components.set(characterMovementComponent) // 이동 컴포넌트 업데이트
         }
     }
 }

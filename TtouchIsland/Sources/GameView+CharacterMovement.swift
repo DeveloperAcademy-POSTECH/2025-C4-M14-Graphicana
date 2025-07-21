@@ -1,5 +1,5 @@
 import CharacterMovement
-//import ControllerInput
+import ControllerInput
 import RealityKit
 import SwiftUI
 import WorldCamera
@@ -32,7 +32,6 @@ extension GameView {
         _ component: inout ControllerInputReceiver,
         entity: Entity
     ) {
-
         // TODO: - 조이스틱 -> 화면 드래그로 카메라 조정
         //        if let camEntity = entity.scene?.findEntity(named: "camera"),
         //           var camComponent = camEntity.components[WorldCameraComponent.self]

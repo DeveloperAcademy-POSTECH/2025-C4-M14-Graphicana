@@ -10,7 +10,7 @@
 
 def Xform "Root"
 {
-    reorder nameChildren = ["DirectionalLight", "EnvironmentMap", "OceanPlane", "SkySphere", "SkyBoxMaterial", "TtouchParent", "NewsPapaer", "Item", "DummyMaterial"]
+    reorder nameChildren = ["DirectionalLight", "EnvironmentMap", "OceanPlane", "SkySphere", "SkyBoxMaterial", "TtouchParent", "NewsPaper", "Item", "DummyMaterial"]
     def Xform "DirectionalLight" (
         customData = {
             float3 rotationEulerHint = (-0.71140635, 1.556634e-7, -5.782976e-8)
@@ -43,7 +43,7 @@ def Xform "Root"
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
     }
 
-    def "NewsPapaer" (
+    def "NewsPaper" (
         active = true
         customData = {
             float3 rotationEulerHint = (-2.9042923, 0.7079655, -0.035237744)

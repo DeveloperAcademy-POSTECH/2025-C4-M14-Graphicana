@@ -25,6 +25,25 @@
     "objectMetadataList" : [
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "DummyMap_Bouondary"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "NewsPaper",
+        "_materials"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root"
       ],
       {
@@ -44,20 +63,30 @@
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root",
-        "SkySphere"
+        "NewsPaper"
       ],
       {
-        "disallowsFraming" : true,
         "isExpanded" : true,
         "isLocked" : false
       },
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root",
-        "DummyMap_Bouondary"
+        "NewsPaper",
+        "NewsPaper"
       ],
       {
         "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "SkySphere"
+      ],
+      {
+        "disallowsFraming" : true,
+        "isExpanded" : false,
         "isLocked" : false
       }
     ]

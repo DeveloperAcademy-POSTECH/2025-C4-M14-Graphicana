@@ -1,29 +1,29 @@
 import RealityKit
 import SwiftUI
 
-/// Maintains the app-wide state.
-@MainActor
-@Observable
 class AppModel {
+    static let shared = AppModel()
+
     var gameRoot: Entity?
     var gameAudioRoot: Entity? {
         gameRoot?.children.first(where: { $0.name == "Root" })
     }
-    
-    var displayOverlaysVisible = false
-    var collectedCoin = false
-    var collectedKey = false
+
+    // 상태바 오버레이 표시여부
+    var isCharacterInteractNewspaper = false
+
+    var isNearNewspaper = false
+
     let isPortrait = true
     var levelFinished = false
-    
+
     var metalDevice: MTLDevice? = MTLCreateSystemDefaultDevice()
-    
+
     func reset() {
         gameRoot?.removeFromParent()
         gameRoot = nil
-        displayOverlaysVisible = false
-        collectedCoin = false
-        collectedKey = false
+        isCharacterInteractNewspaper = false
+
         levelFinished = false
     }
 }

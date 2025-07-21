@@ -38,17 +38,6 @@ public struct CharacterMovementComponent: Component {
     }
 
     // TODO: - 추후 애니메이션 구현 시 추가 개발
-//    /// 애니메이션 적용할 하위 엔티티 이름
-//    /// 복잡한 계층 구조의 캐릭터 모델에서 특정 부분만 애니메이션 적용할 수 있다.
-//    public var characterProxy: String? // "character_model_offset"
-//
-//    /// 컴포넌트 초기화 시 비동기적으로 CharacterMovementSystem을 등록합니다.
-//    public init(characterProxy: String? = nil) {
-//        self.characterProxy = characterProxy
-//        Task { @MainActor in
-//            CharacterMovementSystem.registerSystem()
-//        }
-//    }
 
     public var characterProxy: String?
 

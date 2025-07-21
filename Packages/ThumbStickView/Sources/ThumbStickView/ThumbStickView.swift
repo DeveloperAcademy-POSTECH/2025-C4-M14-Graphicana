@@ -66,7 +66,7 @@ public struct ThumbStickView: View {
             Circle()
                 .foregroundColor(.clear)
                 .frame(width: outerRadius * 2, height: outerRadius * 2)
-//                .glassEffect(.clear, in: .circle)
+                .glassEffect(.clear, in: .circle)
 
             // 내부 움직이는 원
             Circle()
@@ -128,12 +128,12 @@ public struct CameraThumbStickView: View {
 
     public init(
         updatingValue: Binding<CGPoint>,
-        width: CGFloat = UIScreen.main.bounds.width / 2,  // width: 스크린의 절반
+        width: CGFloat = UIScreen.main.bounds.width / 2, // width: 스크린의 절반
         height: CGFloat = UIScreen.main.bounds.height
     ) {
         self.width = width
         self.height = height
-        self._updatingValue = updatingValue
+        _updatingValue = updatingValue
     }
 
     // MARK: - Body
