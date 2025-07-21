@@ -18,12 +18,12 @@ extension GameView {
 
         // TODO: - 캐릭터 애니메이션 적용시 적용
         //        /// 맥스 엔티티 + 애니메이션 라이브러리를 찾아온다.
-        //        guard let ttouchRoot = hero.findEntity(named: "Ttouch"),
-        //              let animationLibrary = ttouchRoot.components[AnimationLibraryComponent.self]
-        //        else { return }
+                guard let ttouchRoot = character.findEntity(named: "Ttouch_Skeleton"),
+                      let animationLibrary = ttouchRoot.components[AnimationLibraryComponent.self]
+                else { return }
 
         //        // 상태별 애니메이션을 설정한다.
-        //        var anims = [CharacterStateComponent.CharacterState: AnimationResource]()
+                var anims = [CharacterStateComponent.CharacterState: AnimationResource]()
 
         //        // 점프 애니메이션 특수 조정 부분
         //        var jumpAnimation = animationLibrary.animations["jump"]
@@ -46,12 +46,12 @@ extension GameView {
         //        anims[.jump] = jumpAnimation?.combineWithAudio(named: "jump")
         ////        anims[.spin] = animationLibrary.animations["spin"]?.combineWithAudio(named: "attack")
         //        anims[.idle] = animationLibrary.animations["idle"]?.repeat()
-        //        anims[.walking] = animationLibrary.animations["walk"]?.repeat()
+                anims[.walking] = animationLibrary.animations["default scene animation"]?.repeat()
 
         //        // 각 캐릭터 상태들(idle, walking, jump, spin)에 대해서 해당 애니메이션 상태들을 연결한다.
-        //        let characterStates = CharacterStateComponent(animations: anims)
+                let characterStates = CharacterStateComponent(animations: anims)
         // 생성된 컴포넌트를 히어로 엔티티에 부착한다.
-        //        hero.components.set(characterStates)
+                character.components.set(characterStates)
 
         //        // Register the attack actions.
         //        HeroAttackAction.registerAction()
@@ -95,7 +95,7 @@ extension GameView {
         // 이동 제어 설정
         /// 캐릭터 이동 관련 컴포넌트 생성
         var moveComponent = CharacterMovementComponent(
-            characterProxy: "Cube_027"
+            characterProxy: "Ttouch_Skeleton"
         )
         /// 이동 업데이트 함수
         moveComponent.update = characterMoveUpdated(entity:velocity:deltaTime:)

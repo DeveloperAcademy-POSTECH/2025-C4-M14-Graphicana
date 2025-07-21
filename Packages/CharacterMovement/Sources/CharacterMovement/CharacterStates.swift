@@ -18,7 +18,7 @@ public struct CharacterStateComponent: Component {
     /// 각 상태들은 애니메이션의 파일명들과 연결된다.
     public enum CharacterState: String, CaseIterable {
         case idle
-        case walking = "walk"
+        case walking = "default scene animation"
         case jump
 
         @MainActor public static var prefix: String = ""

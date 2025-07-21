@@ -3,19 +3,19 @@
     "objectMetadataList" : [
       [
         "6BAE21A1-C2BC-4908-993B-C0FE86E72E20",
-        "Root",
-        "SkySphere"
+        "Root"
       ],
       {
-        "disallowsFraming" : true,
         "isExpanded" : true,
         "isLocked" : false
       },
       [
         "6BAE21A1-C2BC-4908-993B-C0FE86E72E20",
-        "Root"
+        "Root",
+        "SkySphere"
       ],
       {
+        "disallowsFraming" : true,
         "isExpanded" : true,
         "isLocked" : false
       }
@@ -35,16 +35,9 @@
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root",
-        "NewsPaper",
-        "_materials"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
-        "Root"
+        "Ttouch_walk",
+        "Ttouch_Skeleton",
+        "Ttouch_Rigged"
       ],
       {
         "isExpanded" : true,
@@ -63,7 +56,17 @@
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root",
-        "NewsPaper"
+        "_7000",
+        "Ttouch_Skeleton",
+        "Ttouch_Rigged"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root"
       ],
       {
         "isExpanded" : true,
@@ -72,8 +75,17 @@
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root",
-        "NewsPaper",
-        "NewsPaper"
+        "Ttouch_walk",
+        "Ttouch_Skeleton"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "Ttouch_walk"
       ],
       {
         "isExpanded" : true,
@@ -87,6 +99,16 @@
       {
         "disallowsFraming" : true,
         "isExpanded" : false,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "_7000",
+        "Ttouch_Skeleton"
+      ],
+      {
+        "isExpanded" : true,
         "isLocked" : false
       }
     ]

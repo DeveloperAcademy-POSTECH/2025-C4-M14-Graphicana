@@ -10,7 +10,7 @@
 
 def Xform "Root"
 {
-    reorder nameChildren = ["DirectionalLight", "EnvironmentMap", "OceanPlane", "SkySphere", "SkyBoxMaterial", "TtouchParent", "NewsPaper", "Item", "DummyMaterial"]
+    reorder nameChildren = ["DirectionalLight", "EnvironmentMap", "OceanPlane", "SkySphere", "SkyBoxMaterial", "TtouchParent", "Ttouch_walk", "Ttouch_parent", "NewsPaper_2", "NewsPaper", "Item", "DummyMaterial"]
     def Xform "DirectionalLight" (
         customData = {
             float3 rotationEulerHint = (-0.71140635, 1.556634e-7, -5.782976e-8)
@@ -32,17 +32,6 @@ def Xform "Root"
         }
     }
 
-    def "TtouchParent" (
-        active = true
-        references = @Character/TtouchParent.usd@
-    )
-    {
-        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
-        float3 xformOp:scale = (1, 1, 1)
-        float3 xformOp:translate = (-70.364426, 0.19655618, -29.27386)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-    }
-
     def "NewsPaper" (
         active = true
         customData = {
@@ -53,8 +42,27 @@ def Xform "Root"
     {
         quatf xformOp:orient = (-0.11707966, 0.93053734, -0.057435095, -0.34218967)
         float3 xformOp:scale = (1.5, 1.5, 1.5)
-        float3 xformOp:translate = (-69.53069, 0.48689896, -25.571339)
+        float3 xformOp:translate = (-67.219635, 0.32238805, -27.579752)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "NewsPaper"
+        {
+            def RealityKitComponent "VFXEmitter"
+            {
+                uniform token info:id = "RealityKit.VFXEmitter"
+
+                def RealityKitStruct "currentState"
+                {
+                    def RealityKitStruct "mainEmitter"
+                    {
+                    }
+
+                    def RealityKitStruct "spawnedEmitter"
+                    {
+                    }
+                }
+            }
+        }
     }
 
     def Capsule "Item" (
@@ -72,7 +80,7 @@ def Xform "Root"
         )
         double radius = 0.1
         quatf xformOp:orient = (0.9659258, 0.25881904, 0, 0)
-        float3 xformOp:translate = (-42.34864, 0.8049422, -14.419597)
+        float3 xformOp:translate = (-45.52171, 0.5, -19.271076)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
         def Material "DefaultMaterial"
@@ -107,28 +115,6 @@ def Xform "Root"
         }
     }
 
-    def "EnvironmentMap" (
-        active = true
-        references = @EnvironmentMapV2/EnvironmentMap.usd@
-    )
-    {
-        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
-        float3 xformOp:scale = (1, 1, 1)
-        float3 xformOp:translate = (0, 0, 0)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-    }
-
-    def "OceanPlane" (
-        active = true
-        references = @Ocean/OceanPlane.usd@
-    )
-    {
-        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
-        float3 xformOp:scale = (1, 1, 1)
-        float3 xformOp:translate = (0, 0, 0)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-    }
-
     def "SkySphere" (
         active = true
         prepend apiSchemas = ["MaterialBindingAPI"]
@@ -138,6 +124,7 @@ def Xform "Root"
         rel material:binding = </Root/SkyBoxMaterial> (
             bindMaterialAs = "weakerThanDescendants"
         )
+        quatf xformOp:orient = (1, 0, 0, 0)
         float3 xformOp:scale = (1, 1, 1)
     }
 
@@ -159,6 +146,75 @@ def Xform "Root"
             )
             token outputs:surface
         }
+    }
+
+    def "TtouchParent" (
+        active = false
+        customData = {
+            float3 rotationEulerHint = (-1.5707964, 0, 0)
+        }
+        references = @Character/TtouchParent.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (-70.364426, 0.19655618, -29.27386)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "Ttouch"
+        {
+            quatf xformOp:orient = (0.7058013, 0.70580125, 0.04294868, 0.04294868)
+            float3 xformOp:scale = (0.1, 0.1, 0.1)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+            over "Cube_027"
+            {
+                float3 xformOp:translate = (0, 0, 0)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+        }
+    }
+
+    def "OceanPlane" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707964, 0, 0)
+        }
+        references = @EnvironmentMapV3/OceanPlane.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def "EnvironmentMap" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707964, 0, 0)
+        }
+        references = @EnvironmentMapV3/EnvironmentMap.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def "Ttouch_walk" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (0, 0, 0)
+        }
+        references = @TtouchV3/Ttouch_walk.usd@
+    )
+    {
+        quatf xformOp:orient = (1, 0, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (-70, 0.3, -29)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
     }
 }
 
