@@ -87,16 +87,32 @@ struct ItemSystem: System {
             characterPosition
         )
 
+        var collectedItem: [ItemComponent] = []
+
         // ItemComponent가 있는 모든 엔티티 중 isCollectedItem이 true인지 확인
         // ItemComponent인 모든 entity를 불러옴
-        let isCollectedAllItem = context.entities(
+        let itemEntity = context.entities(
             matching: Self.query,
             updatingSystemWhen: .rendering
         )
         // compactMap: nil이 아닌 것을 반환, ItemComponent 목록만 남게
-        .compactMap { $0.components[ItemComponent.self] }
+        //        .compactMap { $0.components[ItemComponent.self] }
+        for entity in itemEntity {
+            if let item = entity.components[ItemComponent.self] {
+                collectedItem.append(item)
+            }
+        }
         // 모든 아이템이 isCollectedItem = true인지 검사(1나라도 false면 false)
-        .allSatisfy { $0.isCollectedItem }
+        //        .allSatisfy { $0.isCollectedItem }
+
+        var isCollectedAllItem = true
+
+        for item in collectedItem {
+            if !item.isCollectedItem {
+                isCollectedAllItem = false
+                break
+            }
+        }
 
         // 모든 조건 충족하면 애니메이션 재생(TO DO)
         if isCollectedAllItem && endPointDistance < 1.5 {
@@ -106,6 +122,5 @@ struct ItemSystem: System {
                 // TO DO: 물 차오르는 애니메이션 재생 구현}
             }
         }
-
     }
 }
