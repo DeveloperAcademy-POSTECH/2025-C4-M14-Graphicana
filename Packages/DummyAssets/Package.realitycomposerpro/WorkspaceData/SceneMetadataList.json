@@ -25,6 +25,35 @@
     "objectMetadataList" : [
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "Ttouch"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "Ttouch",
+        "Ttouch"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "_7000",
+        "Ttouch_Skeleton"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root"
       ],
       {
@@ -44,18 +73,7 @@
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root",
-        "Ttouch"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
-        "Root",
-        "_7000",
-        "Ttouch_Skeleton",
-        "Ttouch_Rigged"
+        "DummyMap_Bouondary"
       ],
       {
         "isExpanded" : true,
@@ -74,27 +92,9 @@
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root",
-        "Ttouch",
-        "Ttouch"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
-        "Root",
-        "DummyMap_Bouondary"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
-        "Root",
         "_7000",
-        "Ttouch_Skeleton"
+        "Ttouch_Skeleton",
+        "Ttouch_Rigged"
       ],
       {
         "isExpanded" : true,

@@ -177,7 +177,6 @@ def Xform "Root"
     }
 
     def "OceanPlane" (
-        active = true
         customData = {
             float3 rotationEulerHint = (-1.5707964, 0, 0)
         }
