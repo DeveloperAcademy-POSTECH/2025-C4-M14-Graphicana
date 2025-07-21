@@ -9,7 +9,7 @@ struct GameView: View {
     private var appModel: AppModel = .shared
 
     var character: Entity? {
-        appModel.gameRoot?.findEntity(named: "TtouchParent")
+        appModel.gameRoot?.findEntity(named: "Ttouch")
     }
 
     @State var showJoystick: Bool = false

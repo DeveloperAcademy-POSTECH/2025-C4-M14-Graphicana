@@ -26,25 +26,7 @@
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root",
-        "DummyMap_Bouondary"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
-        "Root",
-        "NewsPaper",
-        "_materials"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
-        "Root"
+        "NewsPaper"
       ],
       {
         "isExpanded" : true,
@@ -63,7 +45,7 @@
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root",
-        "NewsPaper"
+        "Ttouch"
       ],
       {
         "isExpanded" : true,
@@ -72,8 +54,17 @@
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root",
-        "NewsPaper",
-        "NewsPaper"
+        "DummyMap_Bouondary"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "Ttouch",
+        "Ttouch_root"
       ],
       {
         "isExpanded" : true,
@@ -87,6 +78,35 @@
       {
         "disallowsFraming" : true,
         "isExpanded" : false,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "_7000",
+        "Ttouch_Skeleton"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "_7000",
+        "Ttouch_Skeleton",
+        "Ttouch_Rigged"
+      ],
+      {
+        "isExpanded" : true,
         "isLocked" : false
       }
     ]
