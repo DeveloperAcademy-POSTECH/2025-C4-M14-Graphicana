@@ -73,8 +73,6 @@ struct ItemSystem: System {
     // endPint에서 모든 아이템을 수집했는지 확인
     func checkItemAtEndPoint(context: SceneUpdateContext) {
 
-        var isCompleted = false
-
         guard let character = appModel.gameRoot?.findEntity(named: "Ttouch"),
             let endPoint = appModel.gameRoot?.findEntity(named: "Item")
         else { return }
@@ -115,12 +113,33 @@ struct ItemSystem: System {
         }
 
         // 모든 조건 충족하면 애니메이션 재생(TO DO)
-        if isCollectedAllItem && endPointDistance < 1.5 {
-            if !isCompleted {
-                isCompleted = true
-                print("complete")
-                // TO DO: 물 차오르는 애니메이션 재생 구현}
-            }
+        if isCollectedAllItem && endPointDistance < 1.5
+            && !appModel.levelFinished
+        {
+            appModel.levelFinished = true
+            print("complete")
+            // TO DO: 물 차오르는 애니메이션 재생 구현}
+            floodTtouchIsland()
         }
+    }
+
+    func floodTtouchIsland() {
+        guard let ocean = appModel.gameRoot?.findEntity(named: "OceanPlane"),
+            let character = appModel.gameRoot?.findEntity(named: "Ttouch")
+        else { return }
+
+        // 땃쥐 y좌표 가져오기
+        let characterPosition = character.transform.translation.y
+        // OceanPlane의 현재 transform(위치 등등) 저장
+        var oceanPosition = ocean.transform
+
+        // OceanPlane의 y를 땃쥐 높이까지 올릴거야
+        oceanPosition.translation.y = characterPosition
+
+        ocean.move(
+            to: oceanPosition,
+            relativeTo: nil,
+            duration: 5.0
+        )
     }
 }

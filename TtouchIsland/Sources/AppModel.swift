@@ -13,6 +13,8 @@ class AppModel {
     var isCharacterInteractNewspaper = false
 
     var isNearNewspaper = false
+    
+    var isGameFinished = false
 
     let isPortrait = true
     var levelFinished = false
