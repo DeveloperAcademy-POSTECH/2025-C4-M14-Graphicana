@@ -10,7 +10,7 @@
 
 def Xform "Root"
 {
-    reorder nameChildren = ["DirectionalLight", "EnvironmentMap", "OceanPlane", "SkySphere", "SkyBoxMaterial", "TtouchParent", "Ttouch_walk", "Ttouch_parent", "NewsPaper", "Item", "DummyMaterial"]
+    reorder nameChildren = ["DirectionalLight", "EnvironmentMap", "OceanPlane", "SkySphere", "SkyBoxMaterial", "TtouchParent", "Ttouch_walk", "Ttouch", "Cube", "TtouchParent_2", "NewsPaper", "Item", "DummyMaterial"]
     def Xform "DirectionalLight" (
         customData = {
             float3 rotationEulerHint = (-0.71140635, 1.556634e-7, -5.782976e-8)
@@ -42,7 +42,7 @@ def Xform "Root"
     {
         quatf xformOp:orient = (-0.11707966, 0.93053734, -0.057435095, -0.34218967)
         float3 xformOp:scale = (1.5, 1.5, 1.5)
-        float3 xformOp:translate = (-67.219635, 0.32238805, -27.579752)
+        float3 xformOp:translate = (-67.219635, 0.6, -27.579752)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
         over "NewsPaper"
@@ -158,7 +158,7 @@ def Xform "Root"
     {
         quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
         float3 xformOp:scale = (1, 1, 1)
-        float3 xformOp:translate = (-70.364426, 0.19655618, -29.27386)
+        float3 xformOp:translate = (-70.364426, 0.3, -29.27386)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
         over "Ttouch"
@@ -188,20 +188,6 @@ def Xform "Root"
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
     }
 
-    def "EnvironmentMap" (
-        active = true
-        customData = {
-            float3 rotationEulerHint = (-1.5707964, 0, 0)
-        }
-        references = @EnvironmentMapV3/EnvironmentMap.usd@
-    )
-    {
-        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
-        float3 xformOp:scale = (1, 1, 1)
-        float3 xformOp:translate = (0, 0, 0)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-    }
-
     def "Ttouch_walk" (
         active = false
         customData = {
@@ -217,12 +203,11 @@ def Xform "Root"
     }
 
     def "Ttouch" (
-        active = true
-        prepend references = @TtouchV3/Ttouch.usd@
+        references = @TtouchV3/Ttouch.usd@
     )
     {
         float3 xformOp:scale = (1, 1, 1)
-        float3 xformOp:translate = (-69.30744, 0.29999995, -28.799633)
+        float3 xformOp:translate = (-69.30744, 0.37, -28.799633)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
         over "Ttouch_root"
@@ -244,6 +229,20 @@ def Xform "Root"
                 }
             }
         }
+    }
+
+    def "EnvironmentMap" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707963, 0, 0)
+        }
+        prepend references = @EnvironmentMapV3/EnvironmentMap.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (0, -0.3, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
     }
 }
 
