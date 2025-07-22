@@ -114,9 +114,9 @@ struct ItemSystem: System {
 
         // 모든 조건 충족하면 애니메이션 재생(TO DO)
         if isCollectedAllItem && endPointDistance < 1.5
-            && !appModel.levelFinished
+            && !appModel.isGameFinished
         {
-            appModel.levelFinished = true
+            appModel.isGameFinished = true
             print("complete")
             // TO DO: 물 차오르는 애니메이션 재생 구현}
             floodTtouchIsland()
