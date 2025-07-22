@@ -40,7 +40,7 @@ struct ItemSystem: System {
 
             // 거리 안에 들어오면 isCollectedItem(수집 상태) true로
             if distance <= itemComponent.maxDistance {
-                itemComponent.isCollectedItem = true
+                itemComponent.isCollected = true
                 print("get \(itemComponent.type)")
             }
 
@@ -108,7 +108,7 @@ struct ItemSystem: System {
         var isCollectedAllItem = true
 
         for item in collectedItem {
-            if !item.isCollectedItem {
+            if !item.isCollected {
                 isCollectedAllItem = false
                 break
             }

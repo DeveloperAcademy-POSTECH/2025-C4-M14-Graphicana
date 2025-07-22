@@ -22,7 +22,7 @@ struct ItemComponent: Component {
     var targetEntity: Entity?
 
     // 수집되었는지 여부
-    var isCollectedItem: Bool = false
+    var isCollected: Bool = false
 
     public init(type: ItemType, targetEntity: Entity? = nil) {
         self.type = type
