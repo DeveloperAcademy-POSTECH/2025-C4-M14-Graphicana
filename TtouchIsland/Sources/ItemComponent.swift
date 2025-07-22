@@ -21,6 +21,9 @@ struct ItemComponent: Component {
     // 아이템과의 거리를 추적할 엔티티
     var targetEntity: Entity?
 
+    // 수집되었는지 여부
+    var isCollected: Bool = false
+
     public init(type: ItemType, targetEntity: Entity? = nil) {
         self.type = type
         self.targetEntity = targetEntity

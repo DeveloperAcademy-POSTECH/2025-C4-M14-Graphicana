@@ -7,7 +7,7 @@ extension GameView {
         content: some RealityViewContentProtocol  // realityKit 씬을 구성하고 연결하는 역할의 프로토콜(?)
     ) {
         // TtouchParent를 사운드의 재생 위치로 할거다~
-        if let background = root.findEntity(named: "TtouchParent") {
+        if let background = root.findEntity(named: "EnvironmentMap") {
             Task {
                 // background.wav 파일을 가져와서 realitykit에서 사용할 수 있게함(비동기)
                 let backgroundMusic = try! await AudioFileResource(
