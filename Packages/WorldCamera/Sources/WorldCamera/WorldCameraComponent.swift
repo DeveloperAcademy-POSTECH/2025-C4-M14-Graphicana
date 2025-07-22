@@ -79,10 +79,10 @@ public struct WorldCameraComponent: Component {
         elevation -= joystickMotion.y / 50
         if let bounds {
             if let azimuthBounds = bounds.azimuth {
-                azimuth = min(max(azimuthBounds.lowerBound, azimuth), azimuthBounds.upperBound)
+                self.azimuth = min(max(azimuthBounds.lowerBound, azimuth), azimuthBounds.upperBound)
             }
             if let elevationBounds = bounds.elevation {
-                elevation = min(max(elevationBounds.lowerBound, elevation), elevationBounds.upperBound)
+                self.elevation = min(max(elevationBounds.lowerBound, elevation), elevationBounds.upperBound)
             }
         }
     }
