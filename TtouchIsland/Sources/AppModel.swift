@@ -14,6 +14,7 @@ class AppModel {
 
     var isNearNewspaper = false
 
+    var isGameFinished = false
     let isPortrait = true
     var levelFinished = false
 
@@ -23,7 +24,7 @@ class AppModel {
         gameRoot?.removeFromParent()
         gameRoot = nil
         isCharacterInteractNewspaper = false
-
+        isGameFinished = false
         levelFinished = false
     }
 }

@@ -61,7 +61,11 @@ struct GameView: View {
         await setupEnvironmentCollisions(on: game, content: content)
 
         if let newspaper = game.findEntity(named: "NewsPaper"), let character {
-            setupItems(character: character, newspaper: newspaper, content: content)
+            setupItems(
+                character: character,
+                newspaper: newspaper,
+                content: content
+            )
         }
     }
 
@@ -94,7 +98,7 @@ struct GameView: View {
                         )
                         .onChange(of: cameraAngleThumbstick) {
                             _,
-                                newValue in
+                            newValue in
                             let movementVector: SIMD2<Float> =
                                 [Float(newValue.x), Float(-newValue.y)] / 30
                             appModel.gameRoot?.findEntity(named: "camera")?
@@ -120,7 +124,7 @@ struct GameView: View {
 
                             // Jump button.
                             Image(systemName: "arrow.up")
-                                .frame(width: 50, height: 50)
+                                .frame(width: 70, height: 70)
                                 .font(.system(size: 36))
                                 .glassEffect(.regular.interactive())
                                 .onLongPressGesture(
@@ -136,7 +140,7 @@ struct GameView: View {
                         .padding()
                     }
                 }
-                .padding(.bottom, 30)
+                .padding(.bottom, 60)
             }
         }
     }
