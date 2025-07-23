@@ -112,18 +112,18 @@ struct ItemSystem: System {
             }
         }
 
-        // 모든 조건 충족하면 애니메이션 재생(TO DO)
+        // 모든 조건 충족하면 애니메이션 재생
         if isCollectedAllItem && endPointDistance < 1.5
             && !appModel.isGameFinished
         {
             appModel.isGameFinished = true
             print("complete")
-            // TO DO: 물 차오르는 애니메이션 재생 구현}
-            floodTtouchIsland()
+            // 엔딩 애니메이션: 물 차오르는 애니메이션 재생
+            playMapEndingAnimation()
         }
     }
 
-    func floodTtouchIsland() {
+    func playMapEndingAnimation() {
         guard let ocean = appModel.gameRoot?.findEntity(named: "OceanPlane"),
             let character = appModel.gameRoot?.findEntity(named: "Ttouch")
         else { return }
@@ -141,5 +141,6 @@ struct ItemSystem: System {
             relativeTo: nil,
             duration: 5.0
         )
+        // TO DO: 카메라 페이드 아웃되고 땃쥐가 떠나는 애니메이션 구현
     }
 }
