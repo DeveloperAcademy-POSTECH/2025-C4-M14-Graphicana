@@ -244,5 +244,75 @@ def Xform "Root"
         float3 xformOp:translate = (0, -0.3, 0)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
     }
+
+    def "Backpack" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.570796, 2.1936502, 2.3841858e-7)
+        }
+        prepend references = @Items/Backpack.usd@
+    )
+    {
+        quatf xformOp:orient = (0.32273993, -0.3227399, 0.62915736, 0.62915736)
+        float3 xformOp:scale = (0.50000006, 0.50000006, 0.50000006)
+        float3 xformOp:translate = (-67.95084, 0.6, -25.019018)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def "Bottle" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.0471975, 0, 0)
+        }
+        prepend references = @Items/Bottle.usd@
+    )
+    {
+        quatf xformOp:orient = (0.8660254, -0.49999997, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (-59.716408, 0.6003629, -27.349688)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def "Cheese" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707963, 0, 0)
+        }
+        prepend references = @Items/Cheese.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
+        float3 xformOp:scale = (0.5, 0.5, 0.5)
+        float3 xformOp:translate = (-63.207767, 0.3000002, -26.076021)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def "Flashlight" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707963, 0, 0)
+        }
+        prepend references = @Items/Flashlight.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
+        float3 xformOp:scale = (0.7, 0.7, 0.7)
+        float3 xformOp:translate = (-70.312775, 0.49999985, -26.90945)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def "MapCompass" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (1.570796, -0.6930334, -3.1415923)
+        }
+        prepend references = @Items/MapCompass.usd@
+    )
+    {
+        quatf xformOp:orient = (-0.24015021, 0.24015011, 0.66507727, 0.6650774)
+        float3 xformOp:scale = (0.19999996, 0.19999994, 0.19999993)
+        float3 xformOp:translate = (-60.078693, 0.54014134, -25.4429)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
 }
 
