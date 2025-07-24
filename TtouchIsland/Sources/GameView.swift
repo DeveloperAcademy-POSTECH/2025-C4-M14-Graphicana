@@ -24,7 +24,7 @@ struct GameView: View {
                     let game = try? await Entity(
                         named: "Scene",
                         in: dummyAssetsBundle
-                    )
+                    ) 
                 else { return }
 
                 appModel.gameRoot = game
