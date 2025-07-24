@@ -44,6 +44,7 @@ struct GameView: View {
                 } else { GameStatusView() }
 
                 PlatformerThumbControl(
+                    appModel: appModel,
                     character: character,
                     newspaperAction: { newspaper, camera in
                         if appModel.isFocusedOnItem { try? returnToPlayerView(camera: camera) }
@@ -72,20 +73,31 @@ struct GameView: View {
         // TODO: - 환경 충돌 설정
         await setupEnvironmentCollisions(on: game, content: content)
 
-        if let newspaper = game.findEntity(named: "NewsPaper"), let character {
+        if let character,
+           let newspaper = game.findEntity(named: "NewsPaper"),
+           let backpack = game.findEntity(named: "Backpack"),
+           let cheese = game.findEntity(named: "Cheese"),
+           let bottle = game.findEntity(named: "Bottle"),
+           let flashlight = game.findEntity(named: "Flashlight"),
+           let mapCompass = game.findEntity(named: "MapCompass")
+        {
             setupItems(
                 character: character,
                 newspaper: newspaper,
+                backpack: backpack,
+                cheese: cheese,
+                bottle: bottle,
+                flashlight: flashlight,
+                mapCompass: mapCompass,
                 content: content
             )
         }
     }
 
     fileprivate struct PlatformerThumbControl: View {
+        let appModel: AppModel
         let character: Entity?
         let newspaperAction: (_ newspaper: Entity, _ camera: Entity) -> Void
-
-        var appModel = AppModel.shared
 
         @State var characterJoystick: CGPoint = .zero
         @State var cameraAngleThumbstick: CGPoint = .zero
@@ -123,9 +135,9 @@ struct GameView: View {
                             .onChange(of: characterJoystick) { _, newValue in
                                 let movementVector: SIMD3<Float> =
                                     [Float(newValue.x), 0, Float(newValue.y)] / 10
-                                character?.components[
-                                    CharacterMovementComponent.self
-                                ]?.controllerDirection = movementVector
+                                character?
+                                    .components[CharacterMovementComponent.self]?
+                                    .controllerDirection = movementVector
                             }
 
                         Spacer()
@@ -139,9 +151,7 @@ struct GameView: View {
 
                                 appModel.gameRoot?.findEntity(named: "camera")?
                                     .components[WorldCameraComponent.self]?
-                                    .updateWith(
-                                        continuousMotion: movementVector
-                                    )
+                                    .updateWith(continuousMotion: movementVector)
                             }
                             .background(Color.clear)
 
@@ -172,11 +182,14 @@ struct GameView: View {
                                         minimumDuration: 0.0,
                                         perform: {},
                                         onPressingChanged: { isPressed in
-                                            character?.components[
-                                                CharacterMovementComponent.self
-                                            ]?.jumpPressed = isPressed
+                                            character?
+                                                .components[CharacterMovementComponent.self]?
+                                                .jumpPressed = isPressed
                                         }
                                     )
+                                    .onChange(of: appModel.nearItem) { _, newValue in
+                                        print("✅ Near item changed: \(String(describing: newValue))")
+                                    }
                             }
                             .padding()
                         }

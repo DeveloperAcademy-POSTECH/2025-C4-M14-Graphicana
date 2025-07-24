@@ -11,7 +11,11 @@ import RealityKit
 struct ItemComponent: Component {
     enum ItemType {
         case newspaper
-        case food
+        case backpack
+        case cheese
+        case bottle
+        case flashlight
+        case mapCompass
     }
 
     // 아이템 종류

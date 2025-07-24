@@ -12,14 +12,38 @@ import SwiftUI
 import WorldCamera
 
 extension GameView {
-    func setupItems(character: Entity, newspaper: Entity, content _: some RealityViewContentProtocol) {
+    func setupItems(
+        character: Entity,
+        newspaper: Entity,
+        backpack: Entity,
+        cheese: Entity,
+        bottle: Entity,
+        flashlight: Entity,
+        mapCompass: Entity,
+        content _: some RealityViewContentProtocol
+    ) {
         newspaper.components.set([
             ItemComponent(type: .newspaper, targetEntity: character),
         ])
+        backpack.components.set([
+            ItemComponent(type: .backpack, targetEntity: character),
+        ])
+        cheese.components.set([
+            ItemComponent(type: .cheese, targetEntity: character),
+        ])
+        bottle.components.set([
+            ItemComponent(type: .bottle, targetEntity: character),
+        ])
+        flashlight.components.set([
+            ItemComponent(type: .flashlight, targetEntity: character),
+        ])
+        mapCompass.components.set([
+            ItemComponent(type: .mapCompass, targetEntity: character),
+        ])
 
-        // 필요없는거 같긴함
-        newspaper.components[CollisionComponent.self]?.mode = .trigger
-        newspaper.components[CollisionComponent.self]?.filter = GameCollisionFilters.itemFilter
+//        // 필요없는거 같긴함
+//        newspaper.components[CollisionComponent.self]?.mode = .trigger
+//        newspaper.components[CollisionComponent.self]?.filter = GameCollisionFilters.itemFilter
     }
 
     /// 신문을 클로즈업하는 함수
