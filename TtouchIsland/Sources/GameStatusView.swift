@@ -14,6 +14,8 @@ struct GameStatusView: View {
     var body: some View {
         ZStack {
             VStack {
+                Spacer().frame(height: 32)
+
                 HStack(alignment: .center, spacing: 20) {
                     statusIcon(
                         solidImageName: "backpack",
