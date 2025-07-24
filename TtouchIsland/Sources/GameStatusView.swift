@@ -12,35 +12,31 @@ struct GameStatusView: View {
     let appModel: AppModel = .shared
 
     var body: some View {
-        ZStack {
-            VStack {
-                Spacer().frame(height: 32)
-
-                HStack(alignment: .center, spacing: 20) {
+        VStack {
+            HStack(alignment: .center, spacing: 20) {
+                statusIcon(
+                    solidImageName: "backpack",
+                    size: CGSize(width: 80, height: 80)
+                )
+                if appModel.displayAllItemsVisible && !appModel.isFocusedOnItem {
                     statusIcon(
                         solidImageName: "backpack",
-                        size: CGSize(width: 80, height: 80)
+                        outlinedImageName: "backpack",
+                        size: CGSize(width: 70, height: 70),
+                        isSolid: false
                     )
-                    if appModel.displayAllItemsVisible {
-                        statusIcon(
-                            solidImageName: "backpack",
-                            outlinedImageName: "backpack",
-                            size: CGSize(width: 70, height: 70),
-                            isSolid: false
-                        )
-                        statusIcon(
-                            solidImageName: "backpack",
-                            outlinedImageName: "backpack",
-                            size: CGSize(width: 70, height: 70),
-                            isSolid: false
-                        )
-                    }
-                    Spacer()
+                    statusIcon(
+                        solidImageName: "backpack",
+                        outlinedImageName: "backpack",
+                        size: CGSize(width: 70, height: 70),
+                        isSolid: false
+                    )
                 }
                 Spacer()
             }
-            .padding()
+            Spacer()
         }
+        .padding(.vertical)
     }
 
     fileprivate func statusIcon(solidImageName: String, outlinedImageName: String? = nil, size: CGSize, isSolid: Bool = true) -> some View {
