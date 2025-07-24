@@ -34,10 +34,9 @@ extension Entity {
     ) async throws {
         var shapes: [ShapeResource] = []
         if let meshResource = self.components[ModelComponent.self]?.mesh {
-            // mesh 생성
-            try await shapes.append(
-                ShapeResource.generateStaticMesh(from: meshResource)
-            )
+            let shape = try await ShapeResource.generateStaticMesh(from: meshResource)
+            let shiftedShape = shape.offsetBy(translation: [0, 0, -0.065])
+            shapes.append(shiftedShape)
         }
         self.components.set([
             // collision 적용, static

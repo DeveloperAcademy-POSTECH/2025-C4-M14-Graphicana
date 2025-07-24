@@ -12,11 +12,7 @@ struct GameView: View {
         appModel.gameRoot?.findEntity(named: "Ttouch")
     }
 
-    @State var showJoystick: Bool = false
-    @State var isViewingNewspaper: Bool = false
-
-    // 1. 애니메이션 컨트롤러를 저장할 State 변수 추가
-    @State private var activeAnimation: AnimationPlaybackController?
+    @State var showInterface: Bool = false
 
     var body: some View {
         ZStack {
@@ -36,27 +32,22 @@ struct GameView: View {
                 await initializeGameSetting(game, content)
                 content.add(game)
 
-                showJoystick = true
+                showInterface = true
             }
             .ignoresSafeArea()
+            .zIndex(0)
 
-            if showJoystick {
+            if showInterface {
+                if !appModel.isFocusedOnItem {
+                    GameStatusView()
+                        .padding(.top, 26)
+                } else { GameStatusView() }
+
                 PlatformerThumbControl(
                     character: character,
-                    isViewingNewspaper: $isViewingNewspaper,
                     newspaperAction: { newspaper, camera in
-                        // 현재 신문 보기 모드인지에 따라 다른 함수를 호출
-                        if isViewingNewspaper {
-                            try? returnToPlayerView(camera: camera)
-                            //                            try? stopCameraLockAction(camera: camera)
-
-                        } else {
-                            try? closeupNewspaper(
-                                newspaper: newspaper,
-                                camera: camera
-                            )
-                            //                            try? triggerCameraLockAction(newspaper: newspaper, camera: camera)
-                        }
+                        if appModel.isFocusedOnItem { try? returnToPlayerView(camera: camera) }
+                        else { try? closeupNewspaper(newspaper: newspaper, camera: camera) }
                     }
                 )
             }
@@ -92,7 +83,6 @@ struct GameView: View {
 
     fileprivate struct PlatformerThumbControl: View {
         let character: Entity?
-        @Binding var isViewingNewspaper: Bool
         let newspaperAction: (_ newspaper: Entity, _ camera: Entity) -> Void
 
         var appModel = AppModel.shared
@@ -102,7 +92,7 @@ struct GameView: View {
 
         var body: some View {
             VStack {
-                if isViewingNewspaper {
+                if appModel.isFocusedOnItem {
                     HStack {
                         Spacer()
 
@@ -112,11 +102,12 @@ struct GameView: View {
                                 let camera = appModel.gameCamera
                             {
                                 newspaperAction(newspaper, camera)
-                                isViewingNewspaper.toggle()
+                                appModel.isFocusedOnItem.toggle()
                             }
                         }) {
-                            Image(systemName: "chevron.left")
+                            Image(systemName: "xmark")
                                 .frame(width: 50, height: 50)
+                                .foregroundColor(.black)
                                 .font(.system(size: 36))
                                 .glassEffect(.regular.interactive())
                         }
@@ -126,7 +117,7 @@ struct GameView: View {
 
                 Spacer()
 
-                if !isViewingNewspaper {
+                if !appModel.isFocusedOnItem {
                     HStack(alignment: .bottom) {
                         ThumbStickView(updatingValue: $characterJoystick)
                             .onChange(of: characterJoystick) { _, newValue in
@@ -165,12 +156,12 @@ struct GameView: View {
                                             let camera = appModel.gameCamera
                                         {
                                             newspaperAction(newspaper, camera)
-                                            isViewingNewspaper.toggle()
+                                            appModel.isFocusedOnItem.toggle()
                                         }
 
                                     } label: {
-                                        Image(systemName: "newspaper")
-                                            .frame(width: 50, height: 50)
+                                        Image(systemName: "eye.fill")
+                                            .frame(width: 70, height: 70)
                                             .font(.system(size: 36))
                                             .glassEffect(.regular.interactive())
                                     }
@@ -198,7 +189,7 @@ struct GameView: View {
                             .padding()
                         }
                     }
-                    .padding(.bottom, 60)
+                    .padding(.bottom, 24)
                 }
             }
         }
