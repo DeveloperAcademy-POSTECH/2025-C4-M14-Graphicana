@@ -128,7 +128,7 @@ public struct CameraThumbStickView: View {
 
     public init(
         updatingValue: Binding<CGPoint>,
-        width: CGFloat = UIScreen.main.bounds.width / 2, // width: 스크린의 절반
+        width: CGFloat = UIScreen.main.bounds.width / 2,  // width: 스크린의 절반
         height: CGFloat = UIScreen.main.bounds.height
     ) {
         self.width = width

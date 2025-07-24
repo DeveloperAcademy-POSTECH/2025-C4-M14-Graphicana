@@ -24,6 +24,7 @@ class AppModel {
     // 상태바 오버레이 표시여부
     var displayAllItemsVisible = false
 
+    var isGameFinished = false
     let isPortrait = true
     var levelFinished = false
 
@@ -32,8 +33,10 @@ class AppModel {
     func reset() {
         gameRoot?.removeFromParent()
         gameRoot = nil
+
         displayAllItemsVisible = false
 
+        isGameFinished = false
         levelFinished = false
     }
 }

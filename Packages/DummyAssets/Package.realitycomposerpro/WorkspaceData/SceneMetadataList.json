@@ -25,17 +25,36 @@
     "objectMetadataList" : [
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
-        "Root",
-        "SkySphere"
+        "Root"
       ],
       {
-        "disallowsFraming" : true,
-        "isExpanded" : false,
+        "isExpanded" : true,
         "isLocked" : false
       },
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
-        "Root"
+        "Root",
+        "OceanPlane"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "OceanPlane",
+        "Sea"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "Ttouch",
+        "Ttouch"
       ],
       {
         "isExpanded" : true,
@@ -53,11 +72,11 @@
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root",
-        "_7000",
-        "Ttouch_Skeleton"
+        "SkySphere"
       ],
       {
-        "isExpanded" : true,
+        "disallowsFraming" : true,
+        "isExpanded" : false,
         "isLocked" : false
       },
       [
@@ -74,8 +93,8 @@
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root",
-        "Ttouch",
-        "Ttouch"
+        "_7000",
+        "Ttouch_Skeleton"
       ],
       {
         "isExpanded" : true,
