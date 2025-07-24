@@ -17,6 +17,7 @@ class AppModel {
 
     // 아이템 관련
     var nearItem: Entity?
+    var isFocusedOnItem = false
 
     // 신문 관련
     var savedCameraState: WorldCameraComponent?
