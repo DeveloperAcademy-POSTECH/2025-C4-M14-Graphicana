@@ -56,6 +56,10 @@ let project = Project(
                         "UIInterfaceOrientationLandscapeLeft",
                         "UIInterfaceOrientationLandscapeRight",
                     ],
+                    "UISupportedInterfaceOrientations~ipad": [
+                        "UIInterfaceOrientationLandscapeLeft",
+                        "UIInterfaceOrientationLandscapeRight",
+                    ],
                     "CFBundleDisplayName": "Ttouch Island",
                     "LSApplicationCategoryType": "public.app-category.adventure-games",
                     // Version (앱 스토어에 표시될 버전, 예: 1.0.0)
