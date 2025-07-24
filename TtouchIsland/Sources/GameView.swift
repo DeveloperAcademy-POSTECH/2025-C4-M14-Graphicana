@@ -202,9 +202,6 @@ struct GameView: View {
                                                 .jumpPressed = isPressed
                                         }
                                     )
-                                    .onChange(of: appModel.nearItem) { _, newValue in
-                                        print("✅ Near item changed: \(String(describing: newValue))")
-                                    }
                             }
                             .padding()
                         }
