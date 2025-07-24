@@ -67,7 +67,7 @@ struct GameView: View {
         }
 
         // 배경음 삽입
-        setupBackgroundMusic(root: game, content: content)
+        AudioManager.setupBackgroundMusic(root: game, content: content)
 
         // TODO: - 환경 충돌 설정
         await setupEnvironmentCollisions(on: game, content: content)
@@ -99,7 +99,7 @@ struct GameView: View {
                         Button(action: {
                             // 뒤로가기 액션 호출
                             if let newspaper = appModel.nearItem,
-                               let camera = appModel.gameCamera
+                                let camera = appModel.gameCamera
                             {
                                 newspaperAction(newspaper, camera)
                                 appModel.isFocusedOnItem.toggle()
@@ -122,7 +122,8 @@ struct GameView: View {
                         ThumbStickView(updatingValue: $characterJoystick)
                             .onChange(of: characterJoystick) { _, newValue in
                                 let movementVector: SIMD3<Float> =
-                                    [Float(newValue.x), 0, Float(newValue.y)] / 10
+                                    [Float(newValue.x), 0, Float(newValue.y)]
+                                    / 10
                                 character?.components[
                                     CharacterMovementComponent.self
                                 ]?.controllerDirection = movementVector
@@ -134,8 +135,11 @@ struct GameView: View {
                             CameraThumbStickView(
                                 updatingValue: $cameraAngleThumbstick
                             )
-                            .onChange(of: cameraAngleThumbstick) { _, newValue in
-                                let movementVector: SIMD2<Float> = [Float(newValue.x), Float(-newValue.y)] / 30
+                            .onChange(of: cameraAngleThumbstick) {
+                                _,
+                                newValue in
+                                let movementVector: SIMD2<Float> =
+                                    [Float(newValue.x), Float(-newValue.y)] / 30
 
                                 appModel.gameRoot?.findEntity(named: "camera")?
                                     .components[WorldCameraComponent.self]?
@@ -149,11 +153,12 @@ struct GameView: View {
                                 if appModel.nearItem != nil {
                                     Button {
                                         if let newspaper = appModel.nearItem,
-                                           let camera = appModel.gameCamera
+                                            let camera = appModel.gameCamera
                                         {
                                             newspaperAction(newspaper, camera)
                                             appModel.isFocusedOnItem.toggle()
                                         }
+
                                     } label: {
                                         Image(systemName: "eye.fill")
                                             .frame(width: 70, height: 70)
@@ -175,6 +180,9 @@ struct GameView: View {
                                             character?.components[
                                                 CharacterMovementComponent.self
                                             ]?.jumpPressed = isPressed
+                                            AudioManager.playJumpSound(
+                                                root: character!
+                                            )
                                         }
                                     )
                             }
