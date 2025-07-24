@@ -1,14 +1,16 @@
 /*
-See the LICENSE.txt file for this sample’s licensing information.
+ See the LICENSE.txt file for this sample’s licensing information.
 
-Abstract:
-Implements a RealityKit action for camera orientations in space.
-*/
+ Abstract:
+ Implements a RealityKit action for camera orientations in space.
+ */
 
-import RealityKit
 import Foundation
+import RealityKit
 
+// EntityAction : 특정 엔티티(Entity)에 대해 실행할 수 있는 액션
 public struct CameraOrientAction: EntityAction {
+    // 애니메이션 가능한 값의 타입 지정
     public var animatedValueType: (any AnimatableData.Type)? { Float.self }
 
     var azimuth: Float?
@@ -40,23 +42,25 @@ public struct CameraOrientAction: EntityAction {
 }
 
 extension ActionEvent where ActionType: EntityAction {
+    // 현재 액션의 진행 상태를 0~1 사이의 값으로 반환
     @MainActor
     var timeNormal: Float {
-        min(1, Float(self.playbackController.time / self.playbackController.duration))
+        min(1, Float(playbackController.time / playbackController.duration))
     }
 }
 
 @MainActor
-extension ActionEvent where ActionType == CameraOrientAction {
-    fileprivate enum Stage {
+private extension ActionEvent where ActionType == CameraOrientAction {
+    enum Stage {
         case transitionIn(TimeInterval)
         case waiting
         case transitionOut(TimeInterval)
     }
 
-    fileprivate var currentStage: Stage {
-        let currentTime = self.playbackController.time
-        let totalDuration = self.playbackController.duration
+    // transitionIn/transitionOut의 합이 전체 duration보다 크면 비율로 조정(adjustmentFactor)
+    var currentStage: Stage {
+        let currentTime = playbackController.time
+        let totalDuration = playbackController.duration
 
         // Calculate adjusted durations, in case transitions are too long.
         let totalTransitionDuration = action.transitionIn + action.transitionOut
@@ -89,32 +93,36 @@ public struct CameraOrientActionHandler: @preconcurrency ActionHandlerProtocol {
 
     public init() {}
 
+    // 액션이 시작될때 호출
     @MainActor
-    mutating public func actionStarted(event: EventType) {
+    public mutating func actionStarted(event: EventType) {
         guard let targetEntity = event.playbackController.entity else {
             return
         }
 
         if let originalComponent = targetEntity.components[WorldCameraComponent.self] {
-            self.originalAzimuth = originalComponent.azimuth
-            self.originalElevation = originalComponent.elevation
-            self.originalRadius = originalComponent.radius
-            self.originalTargetOffset = originalComponent.targetOffset
-            self.originalTarget = targetEntity.components[
-                FollowComponent.self]?.targetId
+            originalAzimuth = originalComponent.azimuth
+            originalElevation = originalComponent.elevation
+            originalRadius = originalComponent.radius
+            originalTargetOffset = originalComponent.targetOffset
+            originalTarget = targetEntity.components[
+                FollowComponent.self
+            ]?.targetId
         } else {
             print("""
             Handler for \(String(describing: ActionType.self)) failed to obtain
             original world camera component
             """)
         }
+
+        // 액션에 타겟이 지정되어 있으면, 카메라가 해당 타겟을 바라보도록 설정합니다.
         if let target = event.action.target {
             targetEntity.components[FollowComponent.self]?.targetOverride = target
         }
     }
 
     @MainActor
-    mutating public func actionUpdated(event: EventType) {
+    public mutating func actionUpdated(event: EventType) {
         let action = event.action
 
         guard let targetEntity = event.playbackController.entity else {
@@ -132,11 +140,11 @@ public struct CameraOrientActionHandler: @preconcurrency ActionHandlerProtocol {
 
         let stagedNorm: Float
         switch event.currentStage {
-        case .transitionIn(let norm):
+        case let .transitionIn(norm):
             stagedNorm = Float(norm)
         case .waiting:
             stagedNorm = 1
-        case .transitionOut(let norm):
+        case let .transitionOut(norm):
             if event.playbackController.entity?.components[FollowComponent.self]?.targetOverride != nil {
                 event.playbackController.entity?.components[FollowComponent.self]?.targetOverride = nil
             }
@@ -145,19 +153,23 @@ public struct CameraOrientActionHandler: @preconcurrency ActionHandlerProtocol {
 
         if let azimuth = action.azimuth, let originalAzimuth {
             component.azimuth = lerpAngleShortestPath(
-                originalAzimuth, azimuth, t: stagedNorm)
+                originalAzimuth, azimuth, t: stagedNorm
+            )
         }
         if let elevation = action.elevation, let originalElevation {
             component.elevation = lerpFloat(
-                originalElevation, elevation, t: stagedNorm)
+                originalElevation, elevation, t: stagedNorm
+            )
         }
         if let radius = action.radius, let originalRadius {
             component.radius = lerpFloat(
-                originalRadius, radius, t: stagedNorm)
+                originalRadius, radius, t: stagedNorm
+            )
         }
         if let targetOffset = action.targetOffset, let originalTargetOffset {
             component.targetOffset = mix(
-                originalTargetOffset, targetOffset, t: stagedNorm)
+                originalTargetOffset, targetOffset, t: stagedNorm
+            )
         }
 
         targetEntity.components.set(component)
@@ -182,5 +194,5 @@ public struct CameraOrientActionHandler: @preconcurrency ActionHandlerProtocol {
     }
 
     @MainActor
-    mutating public func actionEnded(event: EventType) {}
+    public mutating func actionEnded(event _: EventType) {}
 }

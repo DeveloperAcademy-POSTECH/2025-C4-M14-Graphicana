@@ -1,6 +1,8 @@
 import RealityKit
 import SwiftUI
+import WorldCamera
 
+@Observable
 class AppModel {
     static let shared = AppModel()
 
@@ -9,10 +11,18 @@ class AppModel {
         gameRoot?.children.first(where: { $0.name == "Root" })
     }
 
-    // 상태바 오버레이 표시여부
-    var isCharacterInteractNewspaper = false
+    var gameCamera: Entity? {
+        gameRoot?.findEntity(named: "camera")
+    }
 
-    var isNearNewspaper = false
+    // 아이템 관련
+    var nearItem: Entity?
+
+    // 신문 관련
+    var savedCameraState: WorldCameraComponent?
+
+    // 상태바 오버레이 표시여부
+    var displayAllItemsVisible = false
 
     var isGameFinished = false
     let isPortrait = true
@@ -23,7 +33,9 @@ class AppModel {
     func reset() {
         gameRoot?.removeFromParent()
         gameRoot = nil
-        isCharacterInteractNewspaper = false
+
+        displayAllItemsVisible = false
+
         isGameFinished = false
         levelFinished = false
     }
