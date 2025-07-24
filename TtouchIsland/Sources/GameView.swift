@@ -28,7 +28,7 @@ struct GameView: View {
                     let game = try? await Entity(
                         named: "Scene",
                         in: dummyAssetsBundle
-                    ) 
+                    )
                 else { return }
 
                 appModel.gameRoot = game
@@ -48,11 +48,14 @@ struct GameView: View {
                         // 현재 신문 보기 모드인지에 따라 다른 함수를 호출
                         if isViewingNewspaper {
                             try? returnToPlayerView(camera: camera)
-//                            try? stopCameraLockAction(camera: camera)
+                            //                            try? stopCameraLockAction(camera: camera)
 
                         } else {
-                            try? closeupNewspaper(newspaper: newspaper, camera: camera)
-//                            try? triggerCameraLockAction(newspaper: newspaper, camera: camera)
+                            try? closeupNewspaper(
+                                newspaper: newspaper,
+                                camera: camera
+                            )
+                            //                            try? triggerCameraLockAction(newspaper: newspaper, camera: camera)
                         }
                     }
                 )
@@ -97,6 +100,30 @@ struct GameView: View {
         @State var characterJoystick: CGPoint = .zero
         @State var cameraAngleThumbstick: CGPoint = .zero
 
+        func jumpSound(
+            root: Entity
+        ) {
+            // Ttouch를 재생위치로 설정
+            if let ttouchJumpSound = root.findEntity(named: "Ttouch") {
+                Task {
+                    // jump.wav 파일을 가져와서 AudioFileResource을 통해 realitykit에서 사용할 수 있게함
+                    let jumpSound = try! await AudioFileResource(
+                        named: "jump.wav",
+                        configuration: AudioFileResource.Configuration(
+                            // 일회성 재생
+                            shouldLoop: false,
+                        )
+                    )
+                    // ttouchJumpSound에서 jumpSound를 재생
+                    ttouchJumpSound.playAudio(jumpSound)
+                }
+            }
+        }
+
+        func getItemSound(root: Entity) {
+            // TO DO: 추후에 구현 예정~
+        }
+
         var body: some View {
             VStack {
                 if isViewingNewspaper {
@@ -106,7 +133,7 @@ struct GameView: View {
                         Button(action: {
                             // 뒤로가기 액션 호출
                             if let newspaper = appModel.nearItem,
-                               let camera = appModel.gameCamera
+                                let camera = appModel.gameCamera
                             {
                                 newspaperAction(newspaper, camera)
                                 isViewingNewspaper.toggle()
@@ -128,7 +155,8 @@ struct GameView: View {
                         ThumbStickView(updatingValue: $characterJoystick)
                             .onChange(of: characterJoystick) { _, newValue in
                                 let movementVector: SIMD3<Float> =
-                                    [Float(newValue.x), 0, Float(newValue.y)] / 10
+                                    [Float(newValue.x), 0, Float(newValue.y)]
+                                    / 10
                                 character?.components[
                                     CharacterMovementComponent.self
                                 ]?.controllerDirection = movementVector
@@ -140,8 +168,11 @@ struct GameView: View {
                             CameraThumbStickView(
                                 updatingValue: $cameraAngleThumbstick
                             )
-                            .onChange(of: cameraAngleThumbstick) { _, newValue in
-                                let movementVector: SIMD2<Float> = [Float(newValue.x), Float(-newValue.y)] / 30
+                            .onChange(of: cameraAngleThumbstick) {
+                                _,
+                                newValue in
+                                let movementVector: SIMD2<Float> =
+                                    [Float(newValue.x), Float(-newValue.y)] / 30
 
                                 appModel.gameRoot?.findEntity(named: "camera")?
                                     .components[WorldCameraComponent.self]?
@@ -155,11 +186,12 @@ struct GameView: View {
                                 if appModel.nearItem != nil {
                                     Button {
                                         if let newspaper = appModel.nearItem,
-                                           let camera = appModel.gameCamera
+                                            let camera = appModel.gameCamera
                                         {
                                             newspaperAction(newspaper, camera)
                                             isViewingNewspaper.toggle()
                                         }
+
                                     } label: {
                                         Image(systemName: "newspaper")
                                             .frame(width: 50, height: 50)
@@ -181,6 +213,7 @@ struct GameView: View {
                                             character?.components[
                                                 CharacterMovementComponent.self
                                             ]?.jumpPressed = isPressed
+                                            jumpSound(root: character!)
                                         }
                                     )
                             }

@@ -12,7 +12,7 @@ extension GameView {
                 // background.wav 파일을 가져와서 realitykit에서 사용할 수 있게함(비동기)
                 let backgroundMusic = try! await AudioFileResource(
                     // AudioFileResource: RealityKit에서 외부에서 가져온 오디오파일을 사용할수있게 해주는 객체(.wav, .mp3 파일을 취급)
-                    named: "background.wav",
+                    named: "backgroundMusic.wav",
                     configuration: AudioFileResource.Configuration(
                         // 끝나면 자동으로 반복 재생 true
                         shouldLoop: true,
