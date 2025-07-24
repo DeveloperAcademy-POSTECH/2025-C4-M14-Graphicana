@@ -76,7 +76,7 @@ struct GameView: View {
         }
 
         // 배경음 삽입
-        setupBackgroundMusic(root: game, content: content)
+        AudioManager.setupBackgroundMusic(root: game, content: content)
 
         // TODO: - 환경 충돌 설정
         await setupEnvironmentCollisions(on: game, content: content)
@@ -99,30 +99,6 @@ struct GameView: View {
 
         @State var characterJoystick: CGPoint = .zero
         @State var cameraAngleThumbstick: CGPoint = .zero
-
-        func jumpSound(
-            root: Entity
-        ) {
-            // Ttouch를 재생위치로 설정
-            if let ttouchJumpSound = root.findEntity(named: "Ttouch") {
-                Task {
-                    // jump.wav 파일을 가져와서 AudioFileResource을 통해 realitykit에서 사용할 수 있게함
-                    let jumpSound = try! await AudioFileResource(
-                        named: "jump.wav",
-                        configuration: AudioFileResource.Configuration(
-                            // 일회성 재생
-                            shouldLoop: false,
-                        )
-                    )
-                    // ttouchJumpSound에서 jumpSound를 재생
-                    ttouchJumpSound.playAudio(jumpSound)
-                }
-            }
-        }
-
-        func getItemSound(root: Entity) {
-            // TO DO: 추후에 구현 예정~
-        }
 
         var body: some View {
             VStack {
@@ -213,7 +189,9 @@ struct GameView: View {
                                             character?.components[
                                                 CharacterMovementComponent.self
                                             ]?.jumpPressed = isPressed
-                                            jumpSound(root: character!)
+                                            AudioManager.playJumpSound(
+                                                root: character!
+                                            )
                                         }
                                     )
                             }
