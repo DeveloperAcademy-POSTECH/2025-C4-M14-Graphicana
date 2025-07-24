@@ -65,24 +65,29 @@ public struct WorldCameraComponent: Component {
         }
     }
 
+    // azimuth, elevation 값을 이용해 카메라의 회전(quaternion) 반환
+    // (y축으로 azimuth, x축으로 elevation 회전)
     public func cameraAxisOrientation() -> simd_quatf {
         simd_quatf(angle: -azimuth, axis: [0, 1, 0]) *
             simd_quatf(angle: -elevation, axis: [1, 0, 0])
     }
 
+    // 지속적인 입력값을 저장(실제 각도 변경은 아님)
     public mutating func updateWith(continuousMotion: SIMD2<Float>) {
         self.continuousMotion = continuousMotion
     }
 
+    // 조이스틱 입력에 따라 azimuth, elevation 값을 변경
+    // bounds가 있으면 각도를 제한
     public mutating func updateWith(joystickMotion: SIMD2<Float>) {
         azimuth += joystickMotion.x / 50
         elevation -= joystickMotion.y / 50
         if let bounds {
             if let azimuthBounds = bounds.azimuth {
-                self.azimuth = min(max(azimuthBounds.lowerBound, azimuth), azimuthBounds.upperBound)
+                azimuth = min(max(azimuthBounds.lowerBound, azimuth), azimuthBounds.upperBound)
             }
             if let elevationBounds = bounds.elevation {
-                self.elevation = min(max(elevationBounds.lowerBound, elevation), elevationBounds.upperBound)
+                elevation = min(max(elevationBounds.lowerBound, elevation), elevationBounds.upperBound)
             }
         }
     }

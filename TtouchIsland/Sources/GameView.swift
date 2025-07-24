@@ -6,13 +6,17 @@ import ThumbStickView
 import WorldCamera
 
 struct GameView: View {
-    private var appModel: AppModel = .shared
+    @State var appModel = AppModel.shared
 
     var character: Entity? {
         appModel.gameRoot?.findEntity(named: "Ttouch")
     }
 
     @State var showJoystick: Bool = false
+    @State var isViewingNewspaper: Bool = false
+
+    // 1. 애니메이션 컨트롤러를 저장할 State 변수 추가
+    @State private var activeAnimation: AnimationPlaybackController?
 
     var body: some View {
         ZStack {
@@ -37,7 +41,21 @@ struct GameView: View {
             .ignoresSafeArea()
 
             if showJoystick {
-                PlatformerThumbControl(character: character, appModel: appModel)
+                PlatformerThumbControl(
+                    character: character,
+                    isViewingNewspaper: $isViewingNewspaper,
+                    newspaperAction: { newspaper, camera in
+                        // 현재 신문 보기 모드인지에 따라 다른 함수를 호출
+                        if isViewingNewspaper {
+                            try? returnToPlayerView(camera: camera)
+//                            try? stopCameraLockAction(camera: camera)
+
+                        } else {
+                            try? closeupNewspaper(newspaper: newspaper, camera: camera)
+//                            try? triggerCameraLockAction(newspaper: newspaper, camera: camera)
+                        }
+                    }
+                )
             }
         }
         .allowedDynamicRange(.high)
@@ -67,76 +85,106 @@ struct GameView: View {
 
     fileprivate struct PlatformerThumbControl: View {
         let character: Entity?
-        let appModel: AppModel
+        @Binding var isViewingNewspaper: Bool
+        let newspaperAction: (_ newspaper: Entity, _ camera: Entity) -> Void
+
+        var appModel = AppModel.shared
 
         @State var characterJoystick: CGPoint = .zero
         @State var cameraAngleThumbstick: CGPoint = .zero
 
         var body: some View {
             VStack {
-                Spacer()
+                if isViewingNewspaper {
+                    HStack {
+                        Spacer()
 
-                HStack(alignment: .bottom) {
-                    ThumbStickView(updatingValue: $characterJoystick)
-                        .onChange(of: characterJoystick) { _, newValue in
-                            let movementVector: SIMD3<Float> =
-                                [Float(newValue.x), 0, Float(newValue.y)] / 10
-                            character?.components[
-                                CharacterMovementComponent.self
-                            ]?.controllerDirection = movementVector
-                        }
-
-                    Spacer()
-
-                    ZStack(alignment: .bottomTrailing) {
-                        CameraThumbStickView(
-                            updatingValue: $cameraAngleThumbstick
-                        )
-                        .onChange(of: cameraAngleThumbstick) {
-                            _,
-                                newValue in
-                            let movementVector: SIMD2<Float> =
-                                [Float(newValue.x), Float(-newValue.y)] / 30
-                            appModel.gameRoot?.findEntity(named: "camera")?
-                                .components[WorldCameraComponent.self]?
-                                .updateWith(
-                                    continuousMotion: movementVector
-                                )
-                        }
-                        .background(Color.clear)
-
-                        HStack {
-                            if appModel.isNearNewspaper {
-                                Button(action: {
-                                    // 신문 버튼 액션
-                                }) {
-                                    Image(systemName: "newspaper")
-                                        .frame(width: 50, height: 50)
-                                        .font(.system(size: 36))
-                                        .glassEffect(.regular.interactive())
-                                }
-                                .padding(.trailing, 16)
+                        Button(action: {
+                            // 뒤로가기 액션 호출
+                            if let newspaper = appModel.nearItem,
+                               let camera = appModel.gameCamera
+                            {
+                                newspaperAction(newspaper, camera)
+                                isViewingNewspaper.toggle()
                             }
-
-                            // Jump button.
-                            Image(systemName: "arrow.up")
+                        }) {
+                            Image(systemName: "chevron.left")
                                 .frame(width: 50, height: 50)
                                 .font(.system(size: 36))
                                 .glassEffect(.regular.interactive())
-                                .onLongPressGesture(
-                                    minimumDuration: 0.0,
-                                    perform: {},
-                                    onPressingChanged: { isPressed in
-                                        character?.components[
-                                            CharacterMovementComponent.self
-                                        ]?.jumpPressed = isPressed
-                                    }
-                                )
                         }
                         .padding()
                     }
                 }
-                .padding(.bottom, 30)
+
+                Spacer()
+
+                if !isViewingNewspaper {
+                    HStack(alignment: .bottom) {
+                        ThumbStickView(updatingValue: $characterJoystick)
+                            .onChange(of: characterJoystick) { _, newValue in
+                                let movementVector: SIMD3<Float> =
+                                    [Float(newValue.x), 0, Float(newValue.y)] / 10
+                                character?.components[
+                                    CharacterMovementComponent.self
+                                ]?.controllerDirection = movementVector
+                            }
+
+                        Spacer()
+
+                        ZStack(alignment: .bottomTrailing) {
+                            CameraThumbStickView(
+                                updatingValue: $cameraAngleThumbstick
+                            )
+                            .onChange(of: cameraAngleThumbstick) { _, newValue in
+                                let movementVector: SIMD2<Float> = [Float(newValue.x), Float(-newValue.y)] / 30
+
+                                appModel.gameRoot?.findEntity(named: "camera")?
+                                    .components[WorldCameraComponent.self]?
+                                    .updateWith(
+                                        continuousMotion: movementVector
+                                    )
+                            }
+                            .background(Color.clear)
+
+                            HStack {
+                                if appModel.nearItem != nil {
+                                    Button {
+                                        if let newspaper = appModel.nearItem,
+                                           let camera = appModel.gameCamera
+                                        {
+                                            newspaperAction(newspaper, camera)
+                                            isViewingNewspaper.toggle()
+                                        }
+                                    } label: {
+                                        Image(systemName: "newspaper")
+                                            .frame(width: 50, height: 50)
+                                            .font(.system(size: 36))
+                                            .glassEffect(.regular.interactive())
+                                    }
+                                    .padding(.trailing, 16)
+                                }
+
+                                // Jump button.
+                                Image(systemName: "arrow.up")
+                                    .frame(width: 50, height: 50)
+                                    .font(.system(size: 36))
+                                    .glassEffect(.regular.interactive())
+                                    .onLongPressGesture(
+                                        minimumDuration: 0.0,
+                                        perform: {},
+                                        onPressingChanged: { isPressed in
+                                            character?.components[
+                                                CharacterMovementComponent.self
+                                            ]?.jumpPressed = isPressed
+                                        }
+                                    )
+                            }
+                            .padding()
+                        }
+                    }
+                    .padding(.bottom, 30)
+                }
             }
         }
     }

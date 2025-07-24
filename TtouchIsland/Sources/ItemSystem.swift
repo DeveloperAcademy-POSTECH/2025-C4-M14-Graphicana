@@ -7,8 +7,8 @@
 //
 
 import RealityKit
-import SwiftUI
 import simd
+import SwiftUI
 
 struct ItemSystem: System {
     private var appModel: AppModel = .shared
@@ -27,7 +27,7 @@ struct ItemSystem: System {
             updatingSystemWhen: .rendering
         ) {
             guard var itemComponent = entity.components[ItemComponent.self],
-                let target = itemComponent.targetEntity  // 상호작용하려는 캐릭터 엔티티
+                  let target = itemComponent.targetEntity // 상호작용하려는 캐릭터 엔티티
             //                  var modelComponent = entity.components[ModelComponent.self] // 현재 엔티티의 ModelComponent
             else { continue }
 
@@ -36,12 +36,15 @@ struct ItemSystem: System {
             let characterPosition = target.transform.translation
             let distance = simd.distance(itemPosition, characterPosition)
 
-            appModel.isNearNewspaper = distance <= itemComponent.maxDistance
+            if distance <= itemComponent.maxDistance {
+                appModel.nearItem = entity
+            } else {
+                appModel.nearItem = nil
+            }
 
             // 거리 안에 들어오면 isCollectedItem(수집 상태) true로
             if distance <= itemComponent.maxDistance {
                 itemComponent.isCollected = true
-                print("get \(itemComponent.type)")
             }
 
             // 업데이트된 itemComponent 다시 설정
@@ -72,11 +75,10 @@ struct ItemSystem: System {
 
     // endPint에서 모든 아이템을 수집했는지 확인
     func checkItemAtEndPoint(context: SceneUpdateContext) {
-
         var isCompleted = false
 
         guard let character = appModel.gameRoot?.findEntity(named: "Ttouch"),
-            let endPoint = appModel.gameRoot?.findEntity(named: "Item")
+              let endPoint = appModel.gameRoot?.findEntity(named: "Item")
         else { return }
 
         // 1. 캐릭터와 아이템 사이 거리 계산
