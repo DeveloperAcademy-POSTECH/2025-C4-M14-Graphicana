@@ -28,6 +28,7 @@ def Xform "Root"
 
             def RealityKitStruct "Shadow"
             {
+                bool isEnabled = 1
             }
         }
     }
