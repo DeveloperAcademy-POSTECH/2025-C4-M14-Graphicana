@@ -46,9 +46,26 @@ struct GameView: View {
                 PlatformerThumbControl(
                     appModel: appModel,
                     character: character,
-                    newspaperAction: { newspaper, camera in
-                        if appModel.isFocusedOnItem { try? returnToPlayerView(camera: camera) }
-                        else { try? closeupNewspaper(newspaper: newspaper, camera: camera) }
+                    itemAction: { item, camera in
+                        if item.components[ItemComponent.self]?.type == .newspaper {
+                            print("📰")
+                            handleNewspaperItem(item: item, camera: camera)
+                        }
+                        if item.components[ItemComponent.self]?.type == .cheese {
+                            print("🧀")
+                        }
+                        if item.components[ItemComponent.self]?.type == .bottle {
+                            print("🍶")
+                        }
+                        if item.components[ItemComponent.self]?.type == .flashlight {
+                            print("🔦")
+                        }
+                        if item.components[ItemComponent.self]?.type == .mapCompass {
+                            print("🗺️")
+                        }
+                        if item.components[ItemComponent.self]?.type == .backpack {
+                            print("🎒")
+                        }
                     }
                 )
             }
@@ -97,7 +114,7 @@ struct GameView: View {
     fileprivate struct PlatformerThumbControl: View {
         let appModel: AppModel
         let character: Entity?
-        let newspaperAction: (_ newspaper: Entity, _ camera: Entity) -> Void
+        let itemAction: (_ item: Entity, _ camera: Entity) -> Void
 
         @State var characterJoystick: CGPoint = .zero
         @State var cameraAngleThumbstick: CGPoint = .zero
@@ -110,11 +127,10 @@ struct GameView: View {
 
                         Button(action: {
                             // 뒤로가기 액션 호출
-                            if let newspaper = appModel.nearItem,
+                            if let item = appModel.nearItem,
                                let camera = appModel.gameCamera
                             {
-                                newspaperAction(newspaper, camera)
-                                appModel.isFocusedOnItem.toggle()
+                                itemAction(item, camera)
                             }
                         }) {
                             Image(systemName: "xmark")
@@ -158,11 +174,10 @@ struct GameView: View {
                             HStack {
                                 if appModel.nearItem != nil {
                                     Button {
-                                        if let newspaper = appModel.nearItem,
+                                        if let item = appModel.nearItem,
                                            let camera = appModel.gameCamera
                                         {
-                                            newspaperAction(newspaper, camera)
-                                            appModel.isFocusedOnItem.toggle()
+                                            itemAction(item, camera)
                                         }
                                     } label: {
                                         Image(systemName: "eye.fill")

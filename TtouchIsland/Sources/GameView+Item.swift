@@ -22,32 +22,18 @@ extension GameView {
         mapCompass: Entity,
         content _: some RealityViewContentProtocol
     ) {
-        newspaper.components.set([
-            ItemComponent(type: .newspaper, targetEntity: character),
-        ])
-        backpack.components.set([
-            ItemComponent(type: .backpack, targetEntity: character),
-        ])
-        cheese.components.set([
-            ItemComponent(type: .cheese, targetEntity: character),
-        ])
-        bottle.components.set([
-            ItemComponent(type: .bottle, targetEntity: character),
-        ])
-        flashlight.components.set([
-            ItemComponent(type: .flashlight, targetEntity: character),
-        ])
-        mapCompass.components.set([
-            ItemComponent(type: .mapCompass, targetEntity: character),
-        ])
-
-//        // 필요없는거 같긴함
-//        newspaper.components[CollisionComponent.self]?.mode = .trigger
-//        newspaper.components[CollisionComponent.self]?.filter = GameCollisionFilters.itemFilter
+        newspaper.components.set([ItemComponent(type: .newspaper, targetEntity: character)])
+        backpack.components.set([ItemComponent(type: .backpack, targetEntity: character)])
+        cheese.components.set([ItemComponent(type: .cheese, targetEntity: character)])
+        bottle.components.set([ItemComponent(type: .bottle, targetEntity: character)])
+        flashlight.components.set([ItemComponent(type: .flashlight, targetEntity: character)])
+        mapCompass.components.set([ItemComponent(type: .mapCompass, targetEntity: character)])
     }
 
     /// 신문을 클로즈업하는 함수
     func closeupNewspaper(newspaper: Entity, camera: Entity) throws {
+        appModel.isFocusedOnItem.toggle()
+
         // 카메라 상태 수동 저장
         if let worldCameraComponent = camera.components[WorldCameraComponent.self] {
             appModel.savedCameraState = worldCameraComponent
@@ -89,6 +75,8 @@ extension GameView {
 
     /// 플레이어 시점으로 카메라를 되돌리는 함수
     func returnToPlayerView(camera: Entity) throws {
+        appModel.isFocusedOnItem.toggle()
+
         camera.stopAllAnimations()
 
         // 카메라의 FollowComponent를 캐릭터로 다시 설정
@@ -118,5 +106,19 @@ extension GameView {
         }
 
         appModel.displayAllItemsVisible = true
+    }
+
+    // MARK: - 신문 아이템 상호작용 함수
+
+    func handleNewspaperItem(item: Entity, camera: Entity) {
+        do {
+            if appModel.isFocusedOnItem {
+                try returnToPlayerView(camera: camera)
+            } else {
+                try closeupNewspaper(newspaper: item, camera: camera)
+            }
+        } catch {
+            print("Error during newspaper interaction: \(error)")
+        }
     }
 }
