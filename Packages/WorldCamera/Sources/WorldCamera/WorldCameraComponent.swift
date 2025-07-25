@@ -21,6 +21,7 @@ public struct WorldCameraComponent: Component {
     /// The containing scene that the system for this component moves.
     var worldParentId: Entity.ID?
 
+    // SIMD3는 3차원 벡터를 표현하는 구조체로, 주로 3D 그래픽스에서 위치, 방향 등을 나타내는 데 사용됩니다.
     public internal(set) var continuousMotion: SIMD2<Float> = .zero
 
     public internal(set) var cameraVelocity: (linear: SIMD3<Float>, angular: SIMD3<Float>) = (.zero, .zero)

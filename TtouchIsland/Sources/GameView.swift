@@ -21,7 +21,7 @@ struct GameView: View {
 
             RealityView { content in
                 guard
-                    let game = try? await Entity(
+                    let game: Entity = try? await Entity(
                         named: "Scene",
                         in: dummyAssetsBundle
                     )
