@@ -44,10 +44,28 @@ struct GameView: View {
                 } else { GameStatusView() }
 
                 PlatformerThumbControl(
+                    appModel: appModel,
                     character: character,
-                    newspaperAction: { newspaper, camera in
-                        if appModel.isFocusedOnItem { try? returnToPlayerView(camera: camera) }
-                        else { try? closeupNewspaper(newspaper: newspaper, camera: camera) }
+                    itemAction: { item, camera in
+                        if item.components[ItemComponent.self]?.type == .newspaper {
+                            print("📰")
+                            handleNewspaperItem(item: item, camera: camera)
+                        }
+                        if item.components[ItemComponent.self]?.type == .cheese {
+                            print("🧀")
+                        }
+                        if item.components[ItemComponent.self]?.type == .bottle {
+                            print("🍶")
+                        }
+                        if item.components[ItemComponent.self]?.type == .flashlight {
+                            print("🔦")
+                        }
+                        if item.components[ItemComponent.self]?.type == .mapCompass {
+                            print("🗺️")
+                        }
+                        if item.components[ItemComponent.self]?.type == .backpack {
+                            print("🎒")
+                        }
                     }
                 )
             }
@@ -72,20 +90,31 @@ struct GameView: View {
         // TODO: - 환경 충돌 설정
         await setupEnvironmentCollisions(on: game, content: content)
 
-        if let newspaper = game.findEntity(named: "NewsPaper"), let character {
+        if let character,
+           let newspaper = game.findEntity(named: "NewsPaper"),
+           let backpack = game.findEntity(named: "Backpack"),
+           let cheese = game.findEntity(named: "Cheese"),
+           let bottle = game.findEntity(named: "Bottle"),
+           let flashlight = game.findEntity(named: "Flashlight"),
+           let mapCompass = game.findEntity(named: "MapCompass")
+        {
             setupItems(
                 character: character,
                 newspaper: newspaper,
+                backpack: backpack,
+                cheese: cheese,
+                bottle: bottle,
+                flashlight: flashlight,
+                mapCompass: mapCompass,
                 content: content
             )
         }
     }
 
     fileprivate struct PlatformerThumbControl: View {
+        let appModel: AppModel
         let character: Entity?
-        let newspaperAction: (_ newspaper: Entity, _ camera: Entity) -> Void
-
-        var appModel = AppModel.shared
+        let itemAction: (_ item: Entity, _ camera: Entity) -> Void
 
         @State var characterJoystick: CGPoint = .zero
         @State var cameraAngleThumbstick: CGPoint = .zero
@@ -98,11 +127,10 @@ struct GameView: View {
 
                         Button(action: {
                             // 뒤로가기 액션 호출
-                            if let newspaper = appModel.nearItem,
-                                let camera = appModel.gameCamera
+                            if let item = appModel.nearItem,
+                               let camera = appModel.gameCamera
                             {
-                                newspaperAction(newspaper, camera)
-                                appModel.isFocusedOnItem.toggle()
+                                itemAction(item, camera)
                             }
                         }) {
                             Image(systemName: "xmark")
@@ -122,12 +150,10 @@ struct GameView: View {
                         ThumbStickView(updatingValue: $characterJoystick)
                             .onChange(of: characterJoystick) { _, newValue in
                                 let movementVector: SIMD3<Float> =
-                                    [Float(newValue.x), 0, Float(newValue.y)]
-                                    / 10
-                                character?.components[
-                                    CharacterMovementComponent.self
-                                ]?.controllerDirection = movementVector
-                            }
+                                    [Float(newValue.x), 0, Float(newValue.y)] / 10
+                                character?
+                                    .components[CharacterMovementComponent.self]?
+                                    .controllerDirection = movementVector
 
                         Spacer()
 
@@ -143,20 +169,17 @@ struct GameView: View {
 
                                 appModel.gameRoot?.findEntity(named: "camera")?
                                     .components[WorldCameraComponent.self]?
-                                    .updateWith(
-                                        continuousMotion: movementVector
-                                    )
+                                    .updateWith(continuousMotion: movementVector)
                             }
                             .background(Color.clear)
 
                             HStack {
                                 if appModel.nearItem != nil {
                                     Button {
-                                        if let newspaper = appModel.nearItem,
-                                            let camera = appModel.gameCamera
+                                        if let item = appModel.nearItem,
+                                           let camera = appModel.gameCamera
                                         {
-                                            newspaperAction(newspaper, camera)
-                                            appModel.isFocusedOnItem.toggle()
+                                            itemAction(item, camera)
                                         }
 
                                     } label: {
@@ -177,9 +200,9 @@ struct GameView: View {
                                         minimumDuration: 0.0,
                                         perform: {},
                                         onPressingChanged: { isPressed in
-                                            character?.components[
-                                                CharacterMovementComponent.self
-                                            ]?.jumpPressed = isPressed
+                                            character?
+                                                .components[CharacterMovementComponent.self]?
+                                                .jumpPressed = isPressed
                                             AudioManager.playJumpSound(
                                                 root: character!
                                             )

@@ -11,7 +11,7 @@ import simd
 import SwiftUI
 
 struct ItemSystem: System {
-    private var appModel: AppModel = .shared
+    @State var appModel = AppModel.shared
 
     init(scene _: RealityKit.Scene) {}
 
@@ -22,13 +22,31 @@ struct ItemSystem: System {
     private static let query = EntityQuery(where: .has(ItemComponent.self))
 
     func update(context: SceneUpdateContext) {
+        // 현재 nearItem이 설정되어 있다면 해당 엔티티와의 거리만 확인
+        if let currentNearItem = appModel.nearItem,
+           let currentItemComponent = currentNearItem.components[ItemComponent.self],
+           let target = currentItemComponent.targetEntity
+        {
+            let itemPosition = currentNearItem.transform.translation
+            let characterPosition = target.transform.translation
+            let distance = simd.distance(itemPosition, characterPosition)
+
+            // 현재 nearItem이 여전히 유효한 거리 내에 있다면 유지
+            if distance <= currentItemComponent.maxDistance {
+                return
+            } else {
+                // 유효 거리에서 벗어나면 nil로 설정
+                appModel.nearItem = nil
+            }
+        }
+
+        // nearItem이 nil인 경우, 모든 엔티티를 순회하며 아이템을 찾는다.
         for entity in context.entities(
             matching: Self.query,
             updatingSystemWhen: .rendering
         ) {
             guard var itemComponent = entity.components[ItemComponent.self],
                   let target = itemComponent.targetEntity // 상호작용하려는 캐릭터 엔티티
-            //                  var modelComponent = entity.components[ModelComponent.self] // 현재 엔티티의 ModelComponent
             else { continue }
 
             // 1. 캐릭터와 아이템 사이 거리 계산
@@ -38,36 +56,10 @@ struct ItemSystem: System {
 
             if distance <= itemComponent.maxDistance {
                 appModel.nearItem = entity
-            } else {
-                appModel.nearItem = nil
-            }
-
-            // 거리 안에 들어오면 isCollectedItem(수집 상태) true로
-            if distance <= itemComponent.maxDistance {
                 itemComponent.isCollected = true
+                entity.components.set(itemComponent)
+                break // 가까운 엔티티를 찾으면 루프 종료
             }
-
-            // 업데이트된 itemComponent 다시 설정
-            entity.components.set(itemComponent)
-
-            //            // 2. 거리가 maxDistance 이내이면 1.0(최대 밝기), 아니면 0.0(꺼짐)을 반환
-            //            let glowIntensity: Float = distance <= itemComponent.maxDistance ? 1.0 : 0.0
-
-            //            // 3. EmissiveColor 속성 업데이트
-            //            let emissiveColor = Material.Color.white.withAlphaComponent(CGFloat(glowIntensity))
-
-            //            // 3. 모든 모델컴포넌트에 대해 EmissiveColor 업데이트
-            //            for i in 0 ..< modelComponent.materials.count {
-            //                if var pbrMaterial = modelComponent.materials[i] as? PhysicallyBasedMaterial {
-            //                    // 발광색 설정
-            //                    pbrMaterial.emissiveColor = .init(color: emissiveColor)
-            //
-            //                    // 수정된 메터리얼 할당
-            //                    modelComponent.materials[i] = pbrMaterial
-            //                }
-            //            }
-            //
-            //            entity.components.set(modelComponent)
         }
         // 루프 밖에서 다 모았는지 확인
         checkItemAtEndPoint(context: context)
@@ -75,7 +67,6 @@ struct ItemSystem: System {
 
     // endPint에서 모든 아이템을 수집했는지 확인
     func checkItemAtEndPoint(context: SceneUpdateContext) {
-
         guard let character = appModel.gameRoot?.findEntity(named: "Ttouch"),
               let endPoint = appModel.gameRoot?.findEntity(named: "Item")
         else { return }
@@ -128,7 +119,7 @@ struct ItemSystem: System {
 
     func playMapEndingAnimation() {
         guard let ocean = appModel.gameRoot?.findEntity(named: "OceanPlane"),
-            let character = appModel.gameRoot?.findEntity(named: "Ttouch")
+              let character = appModel.gameRoot?.findEntity(named: "Ttouch")
         else { return }
 
         // 땃쥐 y좌표 가져오기
