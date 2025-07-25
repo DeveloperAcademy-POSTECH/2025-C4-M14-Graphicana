@@ -85,7 +85,7 @@ struct GameView: View {
         }
 
         // 배경음 삽입
-        setupBackgroundMusic(root: game, content: content)
+        AudioManager.setupBackgroundMusic(root: game, content: content)
 
         // TODO: - 환경 충돌 설정
         await setupEnvironmentCollisions(on: game, content: content)
@@ -154,7 +154,6 @@ struct GameView: View {
                                 character?
                                     .components[CharacterMovementComponent.self]?
                                     .controllerDirection = movementVector
-                            }
 
                         Spacer()
 
@@ -162,8 +161,11 @@ struct GameView: View {
                             CameraThumbStickView(
                                 updatingValue: $cameraAngleThumbstick
                             )
-                            .onChange(of: cameraAngleThumbstick) { _, newValue in
-                                let movementVector: SIMD2<Float> = [Float(newValue.x), Float(-newValue.y)] / 30
+                            .onChange(of: cameraAngleThumbstick) {
+                                _,
+                                newValue in
+                                let movementVector: SIMD2<Float> =
+                                    [Float(newValue.x), Float(-newValue.y)] / 30
 
                                 appModel.gameRoot?.findEntity(named: "camera")?
                                     .components[WorldCameraComponent.self]?
@@ -179,6 +181,7 @@ struct GameView: View {
                                         {
                                             itemAction(item, camera)
                                         }
+
                                     } label: {
                                         Image(systemName: "eye.fill")
                                             .frame(width: 70, height: 70)
@@ -200,6 +203,9 @@ struct GameView: View {
                                             character?
                                                 .components[CharacterMovementComponent.self]?
                                                 .jumpPressed = isPressed
+                                            AudioManager.playJumpSound(
+                                                root: character!
+                                            )
                                         }
                                     )
                             }
