@@ -21,7 +21,7 @@ struct GameView: View {
 
             RealityView { content in
                 guard
-                    let game = try? await Entity(
+                    let game: Entity = try? await Entity(
                         named: "Scene",
                         in: dummyAssetsBundle
                     )
@@ -155,64 +155,65 @@ struct GameView: View {
                                     .components[CharacterMovementComponent.self]?
                                     .controllerDirection = movementVector
 
-                        Spacer()
+                                Spacer()
 
-                        ZStack(alignment: .bottomTrailing) {
-                            CameraThumbStickView(
-                                updatingValue: $cameraAngleThumbstick
-                            )
-                            .onChange(of: cameraAngleThumbstick) {
-                                _,
-                                newValue in
-                                let movementVector: SIMD2<Float> =
-                                    [Float(newValue.x), Float(-newValue.y)] / 30
+                                ZStack(alignment: .bottomTrailing) {
+                                    CameraThumbStickView(
+                                        updatingValue: $cameraAngleThumbstick
+                                    )
+                                    .onChange(of: cameraAngleThumbstick) {
+                                        _,
+                                            newValue in
+                                        let movementVector: SIMD2<Float> =
+                                            [Float(newValue.x), Float(-newValue.y)] / 30
 
-                                appModel.gameRoot?.findEntity(named: "camera")?
-                                    .components[WorldCameraComponent.self]?
-                                    .updateWith(continuousMotion: movementVector)
-                            }
-                            .background(Color.clear)
+                                        appModel.gameRoot?.findEntity(named: "camera")?
+                                            .components[WorldCameraComponent.self]?
+                                            .updateWith(continuousMotion: movementVector)
+                                    }
+                                    .background(Color.clear)
 
-                            HStack {
-                                if appModel.nearItem != nil {
-                                    Button {
-                                        if let item = appModel.nearItem,
-                                           let camera = appModel.gameCamera
-                                        {
-                                            itemAction(item, camera)
+                                    HStack {
+                                        if appModel.nearItem != nil {
+                                            Button {
+                                                if let item = appModel.nearItem,
+                                                   let camera = appModel.gameCamera
+                                                {
+                                                    itemAction(item, camera)
+                                                }
+
+                                            } label: {
+                                                Image(systemName: "eye.fill")
+                                                    .frame(width: 70, height: 70)
+                                                    .font(.system(size: 36))
+                                                    .glassEffect(.regular.interactive())
+                                            }
+                                            .padding(.trailing, 16)
                                         }
 
-                                    } label: {
-                                        Image(systemName: "eye.fill")
+                                        // Jump button.
+                                        Image(systemName: "arrow.up")
                                             .frame(width: 70, height: 70)
                                             .font(.system(size: 36))
                                             .glassEffect(.regular.interactive())
-                                    }
-                                    .padding(.trailing, 16)
-                                }
-
-                                // Jump button.
-                                Image(systemName: "arrow.up")
-                                    .frame(width: 70, height: 70)
-                                    .font(.system(size: 36))
-                                    .glassEffect(.regular.interactive())
-                                    .onLongPressGesture(
-                                        minimumDuration: 0.0,
-                                        perform: {},
-                                        onPressingChanged: { isPressed in
-                                            character?
-                                                .components[CharacterMovementComponent.self]?
-                                                .jumpPressed = isPressed
-                                            AudioManager.playJumpSound(
-                                                root: character!
+                                            .onLongPressGesture(
+                                                minimumDuration: 0.0,
+                                                perform: {},
+                                                onPressingChanged: { isPressed in
+                                                    character?
+                                                        .components[CharacterMovementComponent.self]?
+                                                        .jumpPressed = isPressed
+                                                    AudioManager.playJumpSound(
+                                                        root: character!
+                                                    )
+                                                }
                                             )
-                                        }
-                                    )
+                                    }
+                                    .padding()
+                                }
                             }
-                            .padding()
-                        }
+                            .padding(.bottom, 24)
                     }
-                    .padding(.bottom, 24)
                 }
             }
         }

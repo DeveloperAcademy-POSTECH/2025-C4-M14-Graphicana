@@ -27,7 +27,7 @@ extension GameView {
 }
 
 extension Entity {
-    // 충돌 모양(?)을 생성하고 Collision, Physicsbody를 적용하는 함수
+    // 충돌 모양을 생성하고 Collision, Physicsbody를 적용하는 함수
     func generateStaticShapeResources(
         recursive: Bool = true,
         filter: CollisionFilter
