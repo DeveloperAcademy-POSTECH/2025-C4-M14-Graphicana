@@ -6,10 +6,10 @@ import ThumbStickView
 import WorldCamera
 
 struct GameView: View {
-    @State var appModel = AppModel.shared
+    @State var manager = GameManager.shared
 
     var character: Entity? {
-        appModel.gameRoot?.findEntity(named: "Ttouch")
+        manager.gameRoot?.findEntity(named: "Ttouch")
     }
 
     @State var showInterface: Bool = false
@@ -20,7 +20,7 @@ struct GameView: View {
                 .ignoresSafeArea()
 
             RealityView { content in
-                
+
                 guard
                     let game: Entity = try? await Entity(
                         named: "Scene",
@@ -28,7 +28,7 @@ struct GameView: View {
                     )
                 else { return }
 
-                appModel.gameRoot = game
+                manager.gameRoot = game
 
                 await initializeGameSetting(game, content)
                 content.add(game)
@@ -39,18 +39,22 @@ struct GameView: View {
             .zIndex(0)
 
             if showInterface {
-                if !appModel.isFocusedOnItem {
+                if !manager.isFocusedOnItem {
                     GameStatusView()
                         .padding(.top, 26)
                 } else { GameStatusView() }
 
                 PlatformerThumbControl(
-                    appModel: appModel,
+                    appModel: manager,
                     character: character,
                     itemAction: { item, camera in
                         if item.components[ItemComponent.self]?.type == .newspaper {
                             print("📰")
                             handleNewspaperItem(item: item, camera: camera)
+                        }
+                        if item.components[ItemComponent.self]?.type == .backpack {
+                            print("🎒")
+                            manager.setAllItemsAvailable()
                         }
                         if item.components[ItemComponent.self]?.type == .cheese {
                             print("🧀")
@@ -63,9 +67,6 @@ struct GameView: View {
                         }
                         if item.components[ItemComponent.self]?.type == .mapCompass {
                             print("🗺️")
-                        }
-                        if item.components[ItemComponent.self]?.type == .backpack {
-                            print("🎒")
                         }
                     }
                 )
@@ -113,7 +114,7 @@ struct GameView: View {
     }
 
     fileprivate struct PlatformerThumbControl: View {
-        let appModel: AppModel
+        let appModel: GameManager
         let character: Entity?
         let itemAction: (_ item: Entity, _ camera: Entity) -> Void
 
@@ -151,73 +152,73 @@ struct GameView: View {
                         ThumbStickView(updatingValue: $characterJoystick)
                             .onChange(of: characterJoystick) { _, newValue in
                                 let movementVector: SIMD3<Float> =
-                                [Float(newValue.x), 0, Float(newValue.y)] / 10
+                                    [Float(newValue.x), 0, Float(newValue.y)] / 10
                                 character?
                                     .components[CharacterMovementComponent.self]?
                                     .controllerDirection = movementVector
                             }
-                                Spacer()
+                        Spacer()
 
-                                ZStack(alignment: .bottomTrailing) {
-                                    CameraThumbStickView(
-                                        updatingValue: $cameraAngleThumbstick
-                                    )
-                                    .onChange(of: cameraAngleThumbstick) {
-                                        _,
-                                            newValue in
-                                        let movementVector: SIMD2<Float> =
-                                            [Float(newValue.x), Float(-newValue.y)] / 30
+                        ZStack(alignment: .bottomTrailing) {
+                            CameraThumbStickView(
+                                updatingValue: $cameraAngleThumbstick
+                            )
+                            .onChange(of: cameraAngleThumbstick) {
+                                _,
+                                    newValue in
+                                let movementVector: SIMD2<Float> =
+                                    [Float(newValue.x), Float(-newValue.y)] / 30
 
-                                        appModel.gameRoot?.findEntity(named: "camera")?
-                                            .components[WorldCameraComponent.self]?
-                                            .updateWith(continuousMotion: movementVector)
-                                    }
-                                    .background(Color.clear)
+                                appModel.gameRoot?.findEntity(named: "camera")?
+                                    .components[WorldCameraComponent.self]?
+                                    .updateWith(continuousMotion: movementVector)
+                            }
+                            .background(Color.clear)
 
-                                    HStack {
-                                        if appModel.nearItem != nil {
-                                            Button {
-                                                if let item = appModel.nearItem,
-                                                   let camera = appModel.gameCamera
-                                                {
-                                                    itemAction(item, camera)
-                                                }
-
-                                            } label: {
-                                                Image(systemName: "eye.fill")
-                                                    .frame(width: 70, height: 70)
-                                                    .font(.system(size: 36))
-                                                    .glassEffect(.regular.interactive())
-                                            }
-                                            .padding(.trailing, 16)
+                            HStack {
+                                if appModel.nearItem != nil {
+                                    Button {
+                                        if let item = appModel.nearItem,
+                                           let camera = appModel.gameCamera
+                                        {
+                                            itemAction(item, camera)
                                         }
 
-                                        // Jump button.
-                                        Image(systemName: "arrow.up")
+                                    } label: {
+                                        Image(systemName: "eye.fill")
                                             .frame(width: 70, height: 70)
                                             .font(.system(size: 36))
                                             .glassEffect(.regular.interactive())
-                                            .onLongPressGesture(
-                                                minimumDuration: 0.0,
-                                                perform: {},
-                                                onPressingChanged: { isPressed in
-                                                    character?
-                                                        .components[CharacterMovementComponent.self]?
-                                                        .jumpPressed = isPressed
-                                                    AudioManager.playJumpSound(
-                                                        root: character!
-                                                    )
-                                                }
-                                            )
                                     }
-                                    .padding()
+                                    .padding(.trailing, 16)
                                 }
+
+                                // Jump button.
+                                Image(systemName: "arrow.up")
+                                    .frame(width: 70, height: 70)
+                                    .font(.system(size: 36))
+                                    .glassEffect(.regular.interactive())
+                                    .onLongPressGesture(
+                                        minimumDuration: 0.0,
+                                        perform: {},
+                                        onPressingChanged: { isPressed in
+                                            character?
+                                                .components[CharacterMovementComponent.self]?
+                                                .jumpPressed = isPressed
+                                            AudioManager.playJumpSound(
+                                                root: character!
+                                            )
+                                        }
+                                    )
                             }
-                            .padding(.bottom, 24)
+                            .padding()
+                        }
                     }
+                    .padding(.bottom, 24)
                 }
             }
         }
+    }
 }
 
 #Preview {
