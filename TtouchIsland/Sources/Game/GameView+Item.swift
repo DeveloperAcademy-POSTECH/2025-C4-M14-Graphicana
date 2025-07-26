@@ -7,6 +7,7 @@
 //
 
 import CharacterMovement
+import ControllerInput
 import RealityKit
 import SwiftUI
 import WorldCamera
@@ -120,5 +121,32 @@ extension GameView {
         } catch {
             print("Error during newspaper interaction: \(error)")
         }
+    }
+
+    // MARK: - 치즈 아이템 상호작용 메소드
+
+    func setCharacterScaleUp() async {
+        guard let character = character else { return }
+
+        print("⚙️ Previous Collision Height: \(character.visualBounds(relativeTo: character.parent).extents.y)")
+        let bounds = character.visualBounds(relativeTo: character.parent)
+        print("🛠 충돌 영역 크기: \(bounds.extents)")
+        print("🛠 충돌 영역 위치: \(bounds.center)")
+
+        character.setScale([2.0, 2.0, 2.0], relativeTo: character.parent)
+
+        // 충돌 형상 생성
+        let collisionRadius = bounds.extents.x / 2 - 0.2
+        let collisionHeight = bounds.extents.y
+
+        character.components.set(
+            [
+                CharacterControllerComponent(
+                    radius: collisionRadius,
+                    height: collisionHeight,
+                    collisionFilter: characterCollisionFilter
+                ),
+            ]
+        )
     }
 }

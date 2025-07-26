@@ -18,12 +18,12 @@ extension GameView {
 
         // TODO: - 캐릭터 애니메이션 적용시 적용
         //        /// 맥스 엔티티 + 애니메이션 라이브러리를 찾아온다.
-                guard let ttouchRoot = character.findEntity(named: "Ttouch_root"),
-                      let animationLibrary = ttouchRoot.components[AnimationLibraryComponent.self]
-                else { return }
+        guard let ttouchRoot = character.findEntity(named: "Ttouch_root"),
+              let animationLibrary = ttouchRoot.components[AnimationLibraryComponent.self]
+        else { return }
 
         //        // 상태별 애니메이션을 설정한다.
-                var anims = [CharacterStateComponent.CharacterState: AnimationResource]()
+        var anims = [CharacterStateComponent.CharacterState: AnimationResource]()
 
         //        // 점프 애니메이션 특수 조정 부분
         //        var jumpAnimation = animationLibrary.animations["jump"]
@@ -45,13 +45,13 @@ extension GameView {
         //        /// 오디오와 애니메이션 효과를 결합시킨다.
         //        anims[.jump] = jumpAnimation?.combineWithAudio(named: "jump")
         ////        anims[.spin] = animationLibrary.animations["spin"]?.combineWithAudio(named: "attack")
-                anims[.idle] = animationLibrary.animations["Ttouch_idle"]?.repeat()
-                anims[.walking] = animationLibrary.animations["Ttouch_walk"]?.repeat()
+        anims[.idle] = animationLibrary.animations["Ttouch_idle"]?.repeat()
+        anims[.walking] = animationLibrary.animations["Ttouch_walk"]?.repeat()
 
         //        // 각 캐릭터 상태들(idle, walking, jump, spin)에 대해서 해당 애니메이션 상태들을 연결한다.
-                let characterStates = CharacterStateComponent(animations: anims)
+        let characterStates = CharacterStateComponent(animations: anims)
         // 생성된 컴포넌트를 히어로 엔티티에 부착한다.
-                character.components.set(characterStates)
+        character.components.set(characterStates)
 
         //        // Register the attack actions.
         //        HeroAttackAction.registerAction()
@@ -106,12 +106,6 @@ extension GameView {
             moveComponent, // 캐릭터 이동 로직
             characterPhysicsBodyComponent, // 물리 바디 컴포넌트
             ControllerInputReceiver(update: controllerInputUpdater), // 컨트롤러 입력 업데이트
-            // 충돌 감지용 컴포넌트
-            CollisionComponent(
-                shapes: [characterCollisionShape],
-                mode: .default,
-                filter: characterCollisionFilter
-            ),
             // 물리 캐릭터 제어
             CharacterControllerComponent(
                 radius: collisionRadius,

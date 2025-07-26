@@ -52,22 +52,44 @@ struct GameView: View {
                             print("📰")
                             handleNewspaperItem(item: item, camera: camera)
                         }
-                        if item.components[ItemComponent.self]?.type == .backpack {
-                            print("🎒")
-                            manager.setAllItemsAvailable()
+                        if manager.visibleItems.count == 1 {
+                            if item.components[ItemComponent.self]?.type == .backpack {
+                                print("🎒")
+                                manager.visibleItems[0].isSolid = true
+                                manager.setAllItemsAvailable()
+                                item.removeFromParent()
+                                manager.nearItem = nil
+                            }
                         }
-                        if item.components[ItemComponent.self]?.type == .cheese {
-                            print("🧀")
+                        if manager.visibleItems.count > 1 {
+                            if item.components[ItemComponent.self]?.type == .cheese {
+                                print("🧀")
+                                Task { await setCharacterScaleUp() }
+                                manager.visibleItems[1].isSolid = true
+                                item.removeFromParent()
+                                manager.nearItem = nil
+                            }
+                            if item.components[ItemComponent.self]?.type == .bottle {
+                                print("🍶")
+                                manager.visibleItems[2].isSolid = true
+                                item.removeFromParent()
+                                manager.nearItem = nil
+                            }
+                            if item.components[ItemComponent.self]?.type == .flashlight {
+                                print("🔦")
+                                manager.visibleItems[3].isSolid = true
+                                manager.setMapCompassAvailable()
+                                item.removeFromParent()
+                                manager.nearItem = nil
+                            }
                         }
-                        if item.components[ItemComponent.self]?.type == .bottle {
-                            print("🍶")
-                        }
-                        if item.components[ItemComponent.self]?.type == .flashlight {
-                            print("🔦")
-                            manager.setMapCompassAvailable()
-                        }
-                        if item.components[ItemComponent.self]?.type == .mapCompass {
-                            print("🗺️")
+                        if manager.visibleItems.last?.outlinedImageName == "Map_Outline" {
+                            if item.components[ItemComponent.self]?.type == .mapCompass {
+                                print("🗺️")
+                                manager.visibleItems[4].isSolid = true
+                                item.removeFromParent()
+                                manager.nearItem = nil
+                            }
                         }
                     }
                 )
