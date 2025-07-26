@@ -64,6 +64,7 @@ struct GameView: View {
                         }
                         if item.components[ItemComponent.self]?.type == .flashlight {
                             print("🔦")
+                            manager.setMapCompassAvailable()
                         }
                         if item.components[ItemComponent.self]?.type == .mapCompass {
                             print("🗺️")
