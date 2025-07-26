@@ -6,10 +6,10 @@ import ThumbStickView
 import WorldCamera
 
 struct GameView: View {
-    @State var appModel = AppModel.shared
+    @State var manager = GameManager.shared
 
     var character: Entity? {
-        appModel.gameRoot?.findEntity(named: "Ttouch")
+        manager.gameRoot?.findEntity(named: "Ttouch")
     }
 
     @State var showInterface: Bool = false
@@ -28,7 +28,7 @@ struct GameView: View {
                     )
                 else { return }
 
-                appModel.gameRoot = game
+                manager.gameRoot = game
 
                 await initializeGameSetting(game, content)
                 content.add(game)
@@ -39,18 +39,22 @@ struct GameView: View {
             .zIndex(0)
 
             if showInterface {
-                if !appModel.isFocusedOnItem {
+                if !manager.isFocusedOnItem {
                     GameStatusView()
                         .padding(.top, 26)
                 } else { GameStatusView() }
 
                 PlatformerThumbControl(
-                    appModel: appModel,
+                    appModel: manager,
                     character: character,
                     itemAction: { item, camera in
                         if item.components[ItemComponent.self]?.type == .newspaper {
                             print("📰")
                             handleNewspaperItem(item: item, camera: camera)
+                        }
+                        if item.components[ItemComponent.self]?.type == .backpack {
+                            print("🎒")
+                            manager.setAllItemsAvailable()
                         }
                         if item.components[ItemComponent.self]?.type == .cheese {
                             print("🧀")
@@ -60,12 +64,10 @@ struct GameView: View {
                         }
                         if item.components[ItemComponent.self]?.type == .flashlight {
                             print("🔦")
+                            manager.setMapCompassAvailable()
                         }
                         if item.components[ItemComponent.self]?.type == .mapCompass {
                             print("🗺️")
-                        }
-                        if item.components[ItemComponent.self]?.type == .backpack {
-                            print("🎒")
                         }
                     }
                 )
@@ -113,7 +115,7 @@ struct GameView: View {
     }
 
     fileprivate struct PlatformerThumbControl: View {
-        let appModel: AppModel
+        let appModel: GameManager
         let character: Entity?
         let itemAction: (_ item: Entity, _ camera: Entity) -> Void
 
@@ -193,30 +195,22 @@ struct GameView: View {
                                 }
 
                                 // Jump button.
-                                ZStack {
-                                    // 배경
-                                    Color.clear
-                                        .frame(width: 70, height: 70)
-                                        .glassEffect(.regular.interactive())
-
-                                    // 이미지
-                                    Image("JumpIcon")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 50, height: 50) // 이미지 크기 조정
-                                }
-                                .onLongPressGesture(
-                                    minimumDuration: 0.0,
-                                    perform: {},
-                                    onPressingChanged: { isPressed in
-                                        character?
-                                            .components[CharacterMovementComponent.self]?
-                                            .jumpPressed = isPressed
-                                        AudioManager.playJumpSound(
-                                            root: character!
-                                        )
-                                    }
-                                )
+                                Image(systemName: "arrow.up")
+                                    .frame(width: 70, height: 70)
+                                    .font(.system(size: 36))
+                                    .glassEffect(.regular.interactive())
+                                    .onLongPressGesture(
+                                        minimumDuration: 0.0,
+                                        perform: {},
+                                        onPressingChanged: { isPressed in
+                                            character?
+                                                .components[CharacterMovementComponent.self]?
+                                                .jumpPressed = isPressed
+                                            AudioManager.playJumpSound(
+                                                root: character!
+                                            )
+                                        }
+                                    )
                             }
                             .padding()
                         }
