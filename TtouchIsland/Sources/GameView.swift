@@ -20,7 +20,7 @@ struct GameView: View {
                 .ignoresSafeArea()
 
             RealityView { content in
-                
+
                 guard
                     let game: Entity = try? await Entity(
                         named: "Scene",
@@ -151,73 +151,81 @@ struct GameView: View {
                         ThumbStickView(updatingValue: $characterJoystick)
                             .onChange(of: characterJoystick) { _, newValue in
                                 let movementVector: SIMD3<Float> =
-                                [Float(newValue.x), 0, Float(newValue.y)] / 10
+                                    [Float(newValue.x), 0, Float(newValue.y)] / 10
                                 character?
                                     .components[CharacterMovementComponent.self]?
                                     .controllerDirection = movementVector
                             }
-                                Spacer()
+                        Spacer()
 
-                                ZStack(alignment: .bottomTrailing) {
-                                    CameraThumbStickView(
-                                        updatingValue: $cameraAngleThumbstick
-                                    )
-                                    .onChange(of: cameraAngleThumbstick) {
-                                        _,
-                                            newValue in
-                                        let movementVector: SIMD2<Float> =
-                                            [Float(newValue.x), Float(-newValue.y)] / 30
+                        ZStack(alignment: .bottomTrailing) {
+                            CameraThumbStickView(
+                                updatingValue: $cameraAngleThumbstick
+                            )
+                            .onChange(of: cameraAngleThumbstick) {
+                                _,
+                                    newValue in
+                                let movementVector: SIMD2<Float> =
+                                    [Float(newValue.x), Float(-newValue.y)] / 30
 
-                                        appModel.gameRoot?.findEntity(named: "camera")?
-                                            .components[WorldCameraComponent.self]?
-                                            .updateWith(continuousMotion: movementVector)
-                                    }
-                                    .background(Color.clear)
+                                appModel.gameRoot?.findEntity(named: "camera")?
+                                    .components[WorldCameraComponent.self]?
+                                    .updateWith(continuousMotion: movementVector)
+                            }
+                            .background(Color.clear)
 
-                                    HStack {
-                                        if appModel.nearItem != nil {
-                                            Button {
-                                                if let item = appModel.nearItem,
-                                                   let camera = appModel.gameCamera
-                                                {
-                                                    itemAction(item, camera)
-                                                }
-
-                                            } label: {
-                                                Image(systemName: "eye.fill")
-                                                    .frame(width: 70, height: 70)
-                                                    .font(.system(size: 36))
-                                                    .glassEffect(.regular.interactive())
-                                            }
-                                            .padding(.trailing, 16)
+                            HStack {
+                                if appModel.nearItem != nil {
+                                    Button {
+                                        if let item = appModel.nearItem,
+                                           let camera = appModel.gameCamera
+                                        {
+                                            itemAction(item, camera)
                                         }
 
-                                        // Jump button.
-                                        Image(systemName: "arrow.up")
+                                    } label: {
+                                        Image(systemName: "eye.fill")
                                             .frame(width: 70, height: 70)
                                             .font(.system(size: 36))
                                             .glassEffect(.regular.interactive())
-                                            .onLongPressGesture(
-                                                minimumDuration: 0.0,
-                                                perform: {},
-                                                onPressingChanged: { isPressed in
-                                                    character?
-                                                        .components[CharacterMovementComponent.self]?
-                                                        .jumpPressed = isPressed
-                                                    AudioManager.playJumpSound(
-                                                        root: character!
-                                                    )
-                                                }
-                                            )
                                     }
-                                    .padding()
+                                    .padding(.trailing, 16)
                                 }
+
+                                // Jump button.
+                                ZStack {
+                                    // 배경
+                                    Color.clear
+                                        .frame(width: 70, height: 70)
+                                        .glassEffect(.regular.interactive())
+
+                                    // 이미지
+                                    Image("JumpIcon")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 50, height: 50) // 이미지 크기 조정
+                                }
+                                .onLongPressGesture(
+                                    minimumDuration: 0.0,
+                                    perform: {},
+                                    onPressingChanged: { isPressed in
+                                        character?
+                                            .components[CharacterMovementComponent.self]?
+                                            .jumpPressed = isPressed
+                                        AudioManager.playJumpSound(
+                                            root: character!
+                                        )
+                                    }
+                                )
                             }
-                            .padding(.bottom, 24)
+                            .padding()
+                        }
                     }
+                    .padding(.bottom, 24)
                 }
             }
         }
+    }
 }
 
 #Preview {
