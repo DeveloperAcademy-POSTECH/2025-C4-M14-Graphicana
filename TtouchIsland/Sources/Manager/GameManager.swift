@@ -100,6 +100,7 @@ extension GameManager {
 
     func setMapCompassAvailable() {
         if visibleItems.count == 5, visibleItems[4].outlinedImageName == "Mystery_Outline" {
+            visibleItems[3].isSolid = true
             visibleItems[4] = StatusItem(
                 solidImageName: "Map",
                 outlinedImageName: "Map_Outline",

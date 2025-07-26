@@ -137,9 +137,9 @@ struct GameView: View {
                             }
                         }) {
                             Image(systemName: "xmark")
-                                .frame(width: 50, height: 50)
+                                .frame(width: 36, height: 36)
                                 .foregroundColor(.black)
-                                .font(.system(size: 36))
+                                .font(.system(size: 24))
                                 .glassEffect(.regular.interactive())
                         }
                         .padding()
@@ -180,37 +180,25 @@ struct GameView: View {
                                 if appModel.nearItem != nil {
                                     Button {
                                         if let item = appModel.nearItem,
-                                           let camera = appModel.gameCamera
+                                           let camera = appModel.gameCamera,
+                                           let character = character
                                         {
                                             itemAction(item, camera)
+                                            AudioManager.playGetItemSound(root: character)
                                         }
 
                                     } label: {
-                                        Image(systemName: "eye.fill")
-                                            .frame(width: 70, height: 70)
-                                            .font(.system(size: 36))
-                                            .glassEffect(.regular.interactive())
+                                        ActionButton(name: "GetIcon")
                                     }
                                     .padding(.trailing, 16)
                                 }
 
                                 // Jump button.
-                                Image(systemName: "arrow.up")
-                                    .frame(width: 70, height: 70)
-                                    .font(.system(size: 36))
-                                    .glassEffect(.regular.interactive())
-                                    .onLongPressGesture(
-                                        minimumDuration: 0.0,
-                                        perform: {},
-                                        onPressingChanged: { isPressed in
-                                            character?
-                                                .components[CharacterMovementComponent.self]?
-                                                .jumpPressed = isPressed
-                                            AudioManager.playJumpSound(
-                                                root: character!
-                                            )
-                                        }
-                                    )
+                                ActionButton(name: "JumpIcon")
+                                    .onLongPressGesture(minimumDuration: 0.0, pressing: { isPressed in
+                                        character?.components[CharacterMovementComponent.self]?.jumpPressed = isPressed
+                                        AudioManager.playJumpSound(root: character!)
+                                    }, perform: {})
                             }
                             .padding()
                         }
