@@ -32,11 +32,11 @@ extension GameView {
 
     /// 신문을 클로즈업하는 함수
     func closeupNewspaper(newspaper: Entity, camera: Entity) throws {
-        appModel.isFocusedOnItem.toggle()
+        manager.isFocusedOnItem.toggle()
 
         // 카메라 상태 수동 저장
         if let worldCameraComponent = camera.components[WorldCameraComponent.self] {
-            appModel.savedCameraState = worldCameraComponent
+            manager.savedCameraState = worldCameraComponent
             print("✅ Camera state saved: \(worldCameraComponent)")
         }
 
@@ -75,7 +75,7 @@ extension GameView {
 
     /// 플레이어 시점으로 카메라를 되돌리는 함수
     func returnToPlayerView(camera: Entity) throws {
-        appModel.isFocusedOnItem.toggle()
+        manager.isFocusedOnItem.toggle()
 
         camera.stopAllAnimations()
 
@@ -83,13 +83,13 @@ extension GameView {
         if let character = character {
             if let followComponent = camera.components[FollowComponent.self] {
                 followComponent.targetOverride = character.id
-                followComponent.cameraComponent = appModel.savedCameraState
+                followComponent.cameraComponent = manager.savedCameraState
                 camera.components.set(followComponent)
             } else {
                 // FollowComponent가 없으면 새로 추가
                 let followComponent = FollowComponent(
                     targetId: character.id,
-                    cameraComponent: appModel.savedCameraState
+                    cameraComponent: manager.savedCameraState
                 )
                 camera.components.set(followComponent)
             }
@@ -105,14 +105,14 @@ extension GameView {
             }
         }
 
-        appModel.displayAllItemsVisible = true
+        manager.setBackpackAvailable()
     }
 
     // MARK: - 신문 아이템 상호작용 함수
 
     func handleNewspaperItem(item: Entity, camera: Entity) {
         do {
-            if appModel.isFocusedOnItem {
+            if manager.isFocusedOnItem {
                 try returnToPlayerView(camera: camera)
             } else {
                 try closeupNewspaper(newspaper: item, camera: camera)

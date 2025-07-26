@@ -11,7 +11,7 @@ import simd
 import SwiftUI
 
 struct ItemSystem: System {
-    @State var appModel = AppModel.shared
+    @State var appModel = GameManager.shared
 
     init(scene _: RealityKit.Scene) {}
 
