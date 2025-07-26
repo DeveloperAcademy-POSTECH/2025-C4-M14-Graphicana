@@ -3,19 +3,19 @@
     "objectMetadataList" : [
       [
         "6BAE21A1-C2BC-4908-993B-C0FE86E72E20",
-        "Root"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "6BAE21A1-C2BC-4908-993B-C0FE86E72E20",
         "Root",
         "SkySphere"
       ],
       {
         "disallowsFraming" : true,
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "6BAE21A1-C2BC-4908-993B-C0FE86E72E20",
+        "Root"
+      ],
+      {
         "isExpanded" : true,
         "isLocked" : false
       }
@@ -25,35 +25,8 @@
     "objectMetadataList" : [
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
-        "Root"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root",
-        "DummyMap_Bouondary"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
-        "Root",
-        "Ttouch",
-        "Ttouch"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
-        "Root",
-        "NewsPaper"
+        "EmissiveNewspaper"
       ],
       {
         "isExpanded" : true,
@@ -73,17 +46,16 @@
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root",
-        "SkySphere"
+        "DummyMap_Bouondary"
       ],
       {
-        "disallowsFraming" : true,
-        "isExpanded" : false,
+        "isExpanded" : true,
         "isLocked" : false
       },
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root",
-        "OceanPlane"
+        "NewsPaper"
       ],
       {
         "isExpanded" : true,
@@ -102,7 +74,7 @@
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root",
-        "EnvironmentMap"
+        "EmissiveMap"
       ],
       {
         "isExpanded" : true,
@@ -111,8 +83,45 @@
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root",
-        "OceanPlane",
-        "Sea"
+        "Ttouch",
+        "Ttouch"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "SkySphere"
+      ],
+      {
+        "disallowsFraming" : true,
+        "isExpanded" : false,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "NewsPaper",
+        "NewsPaper"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "EmissiveMaterial"
       ],
       {
         "isExpanded" : true,

@@ -20,6 +20,7 @@ struct GameView: View {
                 .ignoresSafeArea()
 
             RealityView { content in
+                
                 guard
                     let game: Entity = try? await Entity(
                         named: "Scene",
@@ -150,11 +151,11 @@ struct GameView: View {
                         ThumbStickView(updatingValue: $characterJoystick)
                             .onChange(of: characterJoystick) { _, newValue in
                                 let movementVector: SIMD3<Float> =
-                                    [Float(newValue.x), 0, Float(newValue.y)] / 10
+                                [Float(newValue.x), 0, Float(newValue.y)] / 10
                                 character?
                                     .components[CharacterMovementComponent.self]?
                                     .controllerDirection = movementVector
-
+                            }
                                 Spacer()
 
                                 ZStack(alignment: .bottomTrailing) {
@@ -217,7 +218,6 @@ struct GameView: View {
                 }
             }
         }
-    }
 }
 
 #Preview {
