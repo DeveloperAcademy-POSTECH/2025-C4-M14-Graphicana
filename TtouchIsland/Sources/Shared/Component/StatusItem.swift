@@ -12,7 +12,7 @@ struct StatusItem: View {
     let solidImageName: String
     let outlinedImageName: String
     let size: CGFloat
-    let isSolid: Bool
+    var isSolid: Bool
 
     init(solidImageName: String, outlinedImageName: String, size: CGFloat = 50.0, isSolid: Bool) {
         self.solidImageName = solidImageName
