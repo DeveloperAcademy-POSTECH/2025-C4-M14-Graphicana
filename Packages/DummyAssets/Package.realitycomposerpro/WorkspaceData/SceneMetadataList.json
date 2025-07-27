@@ -26,7 +26,8 @@
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root",
-        "MapBoundary"
+        "_7000",
+        "Ttouch_Skeleton"
       ],
       {
         "isExpanded" : true,
@@ -36,15 +37,6 @@
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root",
         "EmissiveMap"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
-        "Root",
-        "EmissiveNewspaper"
       ],
       {
         "isExpanded" : true,
@@ -63,7 +55,19 @@
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root",
+        "SkySphere"
+      ],
+      {
+        "disallowsFraming" : true,
+        "isExpanded" : false,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+
         "DummyMap_Bouondary"
+        "NewsPaper"
       ],
       {
         "isExpanded" : true,
@@ -71,11 +75,31 @@
       },
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
-        "Root"
+        "Root",
+        "NewsPaper"
       ],
       {
         "disallowsFraming" : true,
         "isExpanded" : false,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "NewsPapaer",
+        "NewsPaper"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "DummyMap_Bouondary"
+      ],
+      {
+        "isExpanded" : true,
         "isLocked" : false
       },
       [
@@ -90,8 +114,16 @@
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root",
-        "MapBoundary",
+        "NewsPaper",
         "_materials"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root"
       ],
       {
         "isExpanded" : true,
@@ -111,17 +143,7 @@
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root",
-        "SkySphere"
-      ],
-      {
-        "disallowsFraming" : true,
-        "isExpanded" : false,
-        "isLocked" : false
-      },
-      [
-        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
-        "Root",
-        "DummyMap_Bouondary"
+        "EmissiveNewspaper"
       ],
       {
         "isExpanded" : true,
