@@ -10,14 +10,14 @@ import Lottie
 import SwiftUI
 
 struct GameStatusView: View {
-    let appModel: GameManager = .shared
+    let manager: GameManager = .shared
 
     var body: some View {
         VStack {
             HStack(alignment: .top, spacing: 0) {
-                StatusAnimationIcon(file: "TtouchMouse_Basic")
+                StatusAnimationIcon(file: manager.currentStatus.filename, isLoop: manager.currentStatus.isLoop)
 
-                if !appModel.isFocusedOnItem {
+                if !manager.isFocusedOnItem {
                     StatusAnimationItems()
                 }
 

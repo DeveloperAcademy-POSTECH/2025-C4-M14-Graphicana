@@ -114,8 +114,10 @@ extension GameView {
     func handleNewspaperItem(item: Entity, camera: Entity) {
         do {
             if manager.isFocusedOnItem {
+                manager.updateStatus(to: .common)
                 try returnToPlayerView(camera: camera)
             } else {
+                manager.updateStatus(to: .read)
                 try closeupNewspaper(newspaper: item, camera: camera)
             }
         } catch {

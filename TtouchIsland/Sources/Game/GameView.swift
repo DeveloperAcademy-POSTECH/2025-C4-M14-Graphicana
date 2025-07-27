@@ -50,7 +50,7 @@ struct GameView: View {
                 }
 
                 PlatformerThumbControl(
-                    appModel: manager,
+                    manager: manager,
                     character: character,
                     itemAction: { item, camera in
                         if item.components[ItemComponent.self]?.type
@@ -62,6 +62,10 @@ struct GameView: View {
                         if manager.visibleItems.count == 1 {
                             if item.components[ItemComponent.self]?.type == .backpack {
                                 print("🎒")
+
+                                // 땃쥐 행복해하는 로티 애니메이션 플레이
+                                manager.updateStatus(to: .getItem)
+
                                 manager.visibleItems[0].isSolid = true
                                 manager.setAllItemsAvailable()
                                 item.removeFromParent()
@@ -71,6 +75,10 @@ struct GameView: View {
                         if manager.visibleItems.count > 1 {
                             if item.components[ItemComponent.self]?.type == .cheese {
                                 print("🧀")
+
+                                // 땃쥐 행복해하는 로티 애니메이션 플레이
+                                manager.updateStatus(to: .getItem)
+
                                 Task { await setCharacterScaleUp() }
                                 manager.visibleItems[1].isSolid = true
                                 item.removeFromParent()
@@ -78,12 +86,20 @@ struct GameView: View {
                             }
                             if item.components[ItemComponent.self]?.type == .bottle {
                                 print("🍶")
+
+                                // 땃쥐 행복해하는 로티 애니메이션 플레이
+                                manager.updateStatus(to: .getItem)
+
                                 manager.visibleItems[2].isSolid = true
                                 item.removeFromParent()
                                 manager.nearItem = nil
                             }
                             if item.components[ItemComponent.self]?.type == .flashlight {
                                 print("🔦")
+
+                                // 땃쥐 행복해하는 로티 애니메이션 플레이
+                                manager.updateStatus(to: .getItem)
+
                                 manager.visibleItems[3].isSolid = true
                                 manager.setMapCompassAvailable()
                                 item.removeFromParent()
@@ -93,6 +109,10 @@ struct GameView: View {
                         if manager.visibleItems.last?.outlinedImageName == "Map_Outline" {
                             if item.components[ItemComponent.self]?.type == .mapCompass {
                                 print("🗺️")
+
+                                // 땃쥐 행복해하는 로티 애니메이션 플레이
+                                manager.updateStatus(to: .getItem)
+
                                 manager.visibleItems[4].isSolid = true
                                 item.removeFromParent()
                                 manager.nearItem = nil
@@ -121,7 +141,6 @@ struct GameView: View {
                     // 한마디로.. 누적 안되게 초기화
                     lastScale = 1.0
                 }
-
         )
         .allowedDynamicRange(.high)
     }
@@ -144,12 +163,12 @@ struct GameView: View {
         await setupEnvironmentCollisions(on: game, content: content)
 
         if let character,
-            let newspaper = game.findEntity(named: "NewsPaper"),
-            let backpack = game.findEntity(named: "Backpack"),
-            let cheese = game.findEntity(named: "Cheese"),
-            let bottle = game.findEntity(named: "Bottle"),
-            let flashlight = game.findEntity(named: "Flashlight"),
-            let mapCompass = game.findEntity(named: "MapCompass")
+           let newspaper = game.findEntity(named: "NewsPaper"),
+           let backpack = game.findEntity(named: "Backpack"),
+           let cheese = game.findEntity(named: "Cheese"),
+           let bottle = game.findEntity(named: "Bottle"),
+           let flashlight = game.findEntity(named: "Flashlight"),
+           let mapCompass = game.findEntity(named: "MapCompass")
         {
             setupItems(
                 character: character,
@@ -165,7 +184,7 @@ struct GameView: View {
     }
 
     fileprivate struct PlatformerThumbControl: View {
-        let appModel: GameManager
+        let manager: GameManager
         let character: Entity?
         let itemAction: (_ item: Entity, _ camera: Entity) -> Void
 
@@ -174,14 +193,14 @@ struct GameView: View {
 
         var body: some View {
             VStack {
-                if appModel.isFocusedOnItem {
+                if manager.isFocusedOnItem {
                     HStack {
                         Spacer()
 
                         Button(action: {
                             // 뒤로가기 액션 호출
-                            if let item = appModel.nearItem,
-                                let camera = appModel.gameCamera
+                            if let item = manager.nearItem,
+                               let camera = manager.gameCamera
                             {
                                 itemAction(item, camera)
                             }
@@ -198,13 +217,13 @@ struct GameView: View {
 
                 Spacer()
 
-                if !appModel.isFocusedOnItem {
+                if !manager.isFocusedOnItem {
                     HStack(alignment: .bottom) {
                         ThumbStickView(updatingValue: $characterJoystick)
                             .onChange(of: characterJoystick) { _, newValue in
                                 let movementVector: SIMD3<Float> =
                                     [Float(newValue.x), 0, Float(newValue.y)]
-                                    / 10
+                                        / 10
                                 character?
                                     .components[
                                         CharacterMovementComponent.self
@@ -219,11 +238,11 @@ struct GameView: View {
                             )
                             .onChange(of: cameraAngleThumbstick) {
                                 _,
-                                newValue in
+                                    newValue in
                                 let movementVector: SIMD2<Float> =
                                     [Float(newValue.x), Float(-newValue.y)] / 30
 
-                                appModel.gameRoot?.findEntity(named: "camera")?
+                                manager.gameRoot?.findEntity(named: "camera")?
                                     .components[WorldCameraComponent.self]?
                                     .updateWith(
                                         continuousMotion: movementVector
@@ -232,11 +251,11 @@ struct GameView: View {
                             .background(Color.clear)
 
                             HStack {
-                                if appModel.nearItem != nil {
+                                if manager.nearItem != nil {
                                     Button {
-                                        if let item = appModel.nearItem,
-                                            let camera = appModel.gameCamera,
-                                            let character = character
+                                        if let item = manager.nearItem,
+                                           let camera = manager.gameCamera,
+                                           let character = character
                                         {
                                             itemAction(item, camera)
                                             AudioManager.playGetItemSound(
@@ -261,6 +280,7 @@ struct GameView: View {
                                             AudioManager.playJumpSound(
                                                 root: character!
                                             )
+                                            manager.updateStatus(to: .jump)
                                         },
                                         perform: {}
                                     )
