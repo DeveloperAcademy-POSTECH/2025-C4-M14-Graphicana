@@ -209,20 +209,6 @@ def Xform "Root"
         }
     }
 
-    def "EnvironmentMap" (
-        active = true
-        customData = {
-            float3 rotationEulerHint = (-1.5707963, 0, 0)
-        }
-        references = @EnvironmentMapV3/EnvironmentMap.usd@
-    )
-    {
-        quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
-        float3 xformOp:scale = (1, 1, 1)
-        float3 xformOp:translate = (0, -0.3, 0)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-    }
-
     def "Backpack" (
         active = true
         customData = {
@@ -702,6 +688,54 @@ def Xform "Root"
             float2 ui:nodegraph:node:pos = (-180.9125, 149.24414)
             int ui:nodegraph:node:stackingOrder = 499
         }
+    }
+
+    def "MapBoundary" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707964, 0, 0)
+        }
+        prepend references = @MapBoundary/MapBoundary.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "_materials"
+        {
+            over "Transparent"
+            {
+                token outputs:mtlx:surface
+                token outputs:realitykit:vertex
+
+                over "Principled_BSDF"
+                {
+                    float inputs:opacityThreshold = 1
+                }
+            }
+        }
+
+        over "SeaWall"
+        {
+            quatf xformOp:orient = (0.9999955, -0.0004442352, -0.0020393047, 0.00214269)
+            float3 xformOp:scale = (150, 150.00003, 1)
+            double3 xformOp:translate = (0.04505950212478638, -0.005868434906005859, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+        }
+    }
+
+    def "EnvironmentMap" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707964, 0, 0)
+        }
+        prepend references = @EnvironmentMapV4/EnvironmentMap.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
     }
 }
 
