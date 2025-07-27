@@ -35,12 +35,14 @@ class GameManager {
 
     var metalDevice: MTLDevice? = MTLCreateSystemDefaultDevice()
 
-    func reset() {
+    func resetGame() {
         gameRoot?.removeFromParent()
         gameRoot = nil
 
         visibleItems = []
-
+        nearItem = nil
+        isFocusedOnItem = false
+        savedCameraState = nil
         isGameFinished = false
         levelFinished = false
     }
@@ -111,17 +113,5 @@ extension GameManager {
         } else {
             print("⚠️ Warning: MapCompass is not available yet.")
         }
-    }
-
-    func resetGame() {
-        gameRoot?.removeFromParent()
-        gameRoot = nil
-
-        visibleItems = []
-        nearItem = nil
-        isFocusedOnItem = false
-        savedCameraState = nil
-        isGameFinished = false
-        levelFinished = false
     }
 }
