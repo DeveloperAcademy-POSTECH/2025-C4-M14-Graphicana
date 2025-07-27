@@ -15,11 +15,10 @@ struct StatusAnimationItems: View {
         ZStack {
             // 배경 사각형
             if !manager.visibleItems.isEmpty {
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(.white, lineWidth: 2)
-                    .fill(.gray)
-                    .opacity(0.5) // 배경 투명도 설정
-                    .frame(width: CGFloat(manager.visibleItems.count) * 54.0 + 20, height: 60)
+                RoundedRectangle(cornerRadius: 15)
+                    .stroke(.white, lineWidth: 1)
+                    .fill(.white.opacity(0.3))
+                    .frame(width: CGFloat(manager.visibleItems.count) * 54.0 + 8, height: 60)
             }
 
             // 아이템들
@@ -27,7 +26,7 @@ struct StatusAnimationItems: View {
                 ForEach(manager.visibleItems, id: \.solidImageName) { item in item }
             }
         }
-        .padding(.top)
+        .padding(.top, 22)
     }
 }
 

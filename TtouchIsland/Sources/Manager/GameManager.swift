@@ -17,6 +17,12 @@ class GameManager {
         gameRoot?.findEntity(named: "camera")
     }
 
+    var currentStatus: CharacterStatus = .common
+
+    func updateStatus(to updatedStatus: CharacterStatus) {
+        currentStatus = updatedStatus
+    }
+
     // MARK: - 아이템 상태 변수
 
     var visibleItems: [StatusItem] = []
