@@ -56,7 +56,7 @@ extension GameManager {
                     solidImageName: "Backpack",
                     outlinedImageName: "Backpack_Outline",
                     isSolid: false
-                ),
+                )
             ]
         } else {
             print("⚠️ Warning: Backpack is already available.")
@@ -99,7 +99,9 @@ extension GameManager {
     }
 
     func setMapCompassAvailable() {
-        if visibleItems.count == 5, visibleItems[4].outlinedImageName == "Mystery_Outline" {
+        if visibleItems.count == 5,
+            visibleItems[4].outlinedImageName == "Mystery_Outline"
+        {
             visibleItems[3].isSolid = true
             visibleItems[4] = StatusItem(
                 solidImageName: "Map",
@@ -109,5 +111,17 @@ extension GameManager {
         } else {
             print("⚠️ Warning: MapCompass is not available yet.")
         }
+    }
+
+    func resetGame() {
+        gameRoot?.removeFromParent()
+        gameRoot = nil
+
+        visibleItems = []
+        nearItem = nil
+        isFocusedOnItem = false
+        savedCameraState = nil
+        isGameFinished = false
+        levelFinished = false
     }
 }

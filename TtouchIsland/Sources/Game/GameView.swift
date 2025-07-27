@@ -8,6 +8,9 @@ import WorldCamera
 struct GameView: View {
     @State var manager = GameManager.shared
 
+    // realityview를 완전히 다시 시작하기 위한 트리거
+    @State private var gameId = UUID()
+
     @State private var currentScale: CGFloat = 1.0
     @State private var lastScale: CGFloat = 1.0
 
@@ -16,6 +19,7 @@ struct GameView: View {
     }
 
     @State var showInterface: Bool = false
+    @State private var showResetAlert = false
 
     var body: some View {
         ZStack {
@@ -40,6 +44,8 @@ struct GameView: View {
             }
             .ignoresSafeArea()
             .zIndex(0)
+            // id가 변경되면 뷰를 새로 그림
+            .id(gameId)
 
             if showInterface {
                 if !manager.isFocusedOnItem {
@@ -88,6 +94,29 @@ struct GameView: View {
                 )
                 .zIndex(1)
             }
+            // 초기화 버튼
+            // TO DO: UI 변경
+            VStack {
+                HStack {
+                    Spacer()
+                    Button("Reset") {
+                        showResetAlert = true
+                    }
+                }.padding(.top, 50)
+                Spacer()
+                // 우선순위 위로!
+            }.zIndex(2)
+        }
+        .alert("게임 리셋", isPresented: $showResetAlert) {
+            Button("취소", role: .cancel) {}
+            Button("네", role: .confirm) {
+                manager.resetGame()
+                showInterface = false
+                // 새로운 게임 아이디를 설정해줘서 realityview를 다시 그리게 한다
+                gameId = UUID()
+            }
+        } message: {
+            Text("게임을 다시 시작하시겠습니까?")
         }
         .gesture(
             // 핀치 인아웃(두 손가락 벌리기, 오므리기) 제스처를 감지
