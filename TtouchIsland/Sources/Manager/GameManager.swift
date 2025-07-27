@@ -3,8 +3,10 @@ import SwiftUI
 import WorldCamera
 
 @Observable
-class GameManager {
+class GameManager: ObservableObject {
     static let shared = GameManager()
+
+    var isGameReady = false
 
     // MARK: - 초기 게임 세팅
 
