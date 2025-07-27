@@ -8,6 +8,9 @@ import WorldCamera
 struct GameView: View {
     @State var manager = GameManager.shared
 
+    @State private var currentScale: CGFloat = 1.0
+    @State private var lastScale: CGFloat = 1.0
+
     var character: Entity? {
         manager.gameRoot?.findEntity(named: "Ttouch")
     }
@@ -42,37 +45,70 @@ struct GameView: View {
                 if !manager.isFocusedOnItem {
                     GameStatusView()
                         .padding(.top, 26)
-                } else { GameStatusView() }
+                } else {
+                    GameStatusView()
+                }
 
                 PlatformerThumbControl(
                     appModel: manager,
                     character: character,
                     itemAction: { item, camera in
-                        if item.components[ItemComponent.self]?.type == .newspaper {
+                        if item.components[ItemComponent.self]?.type
+                            == .newspaper
+                        {
                             print("📰")
                             handleNewspaperItem(item: item, camera: camera)
                         }
-                        if item.components[ItemComponent.self]?.type == .backpack {
+                        if item.components[ItemComponent.self]?.type
+                            == .backpack
+                        {
                             print("🎒")
                             manager.setAllItemsAvailable()
                         }
-                        if item.components[ItemComponent.self]?.type == .cheese {
+                        if item.components[ItemComponent.self]?.type == .cheese
+                        {
                             print("🧀")
                         }
-                        if item.components[ItemComponent.self]?.type == .bottle {
+                        if item.components[ItemComponent.self]?.type == .bottle
+                        {
                             print("🍶")
                         }
-                        if item.components[ItemComponent.self]?.type == .flashlight {
+                        if item.components[ItemComponent.self]?.type
+                            == .flashlight
+                        {
                             print("🔦")
                             manager.setMapCompassAvailable()
                         }
-                        if item.components[ItemComponent.self]?.type == .mapCompass {
+                        if item.components[ItemComponent.self]?.type
+                            == .mapCompass
+                        {
                             print("🗺️")
                         }
                     }
                 )
+                .zIndex(1)
             }
         }
+        .gesture(
+            // 핀치 인아웃(두 손가락 벌리기, 오므리기) 제스처를 감지
+            MagnificationGesture()
+                .onChanged { newValue in
+                    // 얼마나 크기가 변했는지 비율 계산
+                    let delta = newValue / lastScale
+                    // 다음을 위해.. 업뎃
+                    lastScale = newValue
+                    cameraZoomInOut(delta: Float(delta))
+                }
+                // 제스처가 끝났을 때 호출
+                .onEnded { _ in
+                    // 핀치 제스처는 newValue 값을 1.0을 기준으로 연속적으로 누적된 배율을 전달하기 때문에..
+                    // 그래서 매번 delta = scale / lastScale 으로 계산해 변화량만 반영하고 그 다음 lastScale을 업데이트헤야함
+                    // 제스처가 끝났을 때 lastScale을 1.0으로 초기화, 이는 다음 핀치 제스처가 시작될 때 올바른 delta 계산을 위해 필요
+                    // 한마디로.. 누적 안되게 초기화
+                    lastScale = 1.0
+                }
+
+        )
         .allowedDynamicRange(.high)
     }
 
@@ -94,12 +130,12 @@ struct GameView: View {
         await setupEnvironmentCollisions(on: game, content: content)
 
         if let character,
-           let newspaper = game.findEntity(named: "NewsPaper"),
-           let backpack = game.findEntity(named: "Backpack"),
-           let cheese = game.findEntity(named: "Cheese"),
-           let bottle = game.findEntity(named: "Bottle"),
-           let flashlight = game.findEntity(named: "Flashlight"),
-           let mapCompass = game.findEntity(named: "MapCompass")
+            let newspaper = game.findEntity(named: "NewsPaper"),
+            let backpack = game.findEntity(named: "Backpack"),
+            let cheese = game.findEntity(named: "Cheese"),
+            let bottle = game.findEntity(named: "Bottle"),
+            let flashlight = game.findEntity(named: "Flashlight"),
+            let mapCompass = game.findEntity(named: "MapCompass")
         {
             setupItems(
                 character: character,
@@ -131,7 +167,7 @@ struct GameView: View {
                         Button(action: {
                             // 뒤로가기 액션 호출
                             if let item = appModel.nearItem,
-                               let camera = appModel.gameCamera
+                                let camera = appModel.gameCamera
                             {
                                 itemAction(item, camera)
                             }
@@ -153,9 +189,12 @@ struct GameView: View {
                         ThumbStickView(updatingValue: $characterJoystick)
                             .onChange(of: characterJoystick) { _, newValue in
                                 let movementVector: SIMD3<Float> =
-                                    [Float(newValue.x), 0, Float(newValue.y)] / 10
+                                    [Float(newValue.x), 0, Float(newValue.y)]
+                                    / 10
                                 character?
-                                    .components[CharacterMovementComponent.self]?
+                                    .components[
+                                        CharacterMovementComponent.self
+                                    ]?
                                     .controllerDirection = movementVector
                             }
                         Spacer()
@@ -166,13 +205,15 @@ struct GameView: View {
                             )
                             .onChange(of: cameraAngleThumbstick) {
                                 _,
-                                    newValue in
+                                newValue in
                                 let movementVector: SIMD2<Float> =
                                     [Float(newValue.x), Float(-newValue.y)] / 30
 
                                 appModel.gameRoot?.findEntity(named: "camera")?
                                     .components[WorldCameraComponent.self]?
-                                    .updateWith(continuousMotion: movementVector)
+                                    .updateWith(
+                                        continuousMotion: movementVector
+                                    )
                             }
                             .background(Color.clear)
 
@@ -180,11 +221,13 @@ struct GameView: View {
                                 if appModel.nearItem != nil {
                                     Button {
                                         if let item = appModel.nearItem,
-                                           let camera = appModel.gameCamera,
-                                           let character = character
+                                            let camera = appModel.gameCamera,
+                                            let character = character
                                         {
                                             itemAction(item, camera)
-                                            AudioManager.playGetItemSound(root: character)
+                                            AudioManager.playGetItemSound(
+                                                root: character
+                                            )
                                         }
 
                                     } label: {
@@ -195,10 +238,18 @@ struct GameView: View {
 
                                 // Jump button.
                                 ActionButton(name: "JumpIcon")
-                                    .onLongPressGesture(minimumDuration: 0.0, pressing: { isPressed in
-                                        character?.components[CharacterMovementComponent.self]?.jumpPressed = isPressed
-                                        AudioManager.playJumpSound(root: character!)
-                                    }, perform: {})
+                                    .onLongPressGesture(
+                                        minimumDuration: 0.0,
+                                        pressing: { isPressed in
+                                            character?.components[
+                                                CharacterMovementComponent.self
+                                            ]?.jumpPressed = isPressed
+                                            AudioManager.playJumpSound(
+                                                root: character!
+                                            )
+                                        },
+                                        perform: {}
+                                    )
                             }
                             .padding()
                         }
