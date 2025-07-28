@@ -36,7 +36,7 @@ class GameManager {
         character.components[CharacterStateComponent.self]?.isOnRunning = boolean
         character.components[CharacterMovementComponent.self]?.isOnRunning = boolean
     }
-    
+
     var showOnboarding: Bool = true
     var showInterface: Bool = false
     var showEndCredits: Bool = false
@@ -67,6 +67,7 @@ class GameManager {
         gameRoot = nil
 
         visibleItems = []
+        runButtonEnabled = false
         nearItem = nil
         isFocusedOnItem = false
         savedCameraState = nil

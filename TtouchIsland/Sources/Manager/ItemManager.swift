@@ -18,6 +18,10 @@ struct ItemManager {
     func closeupNewspaper(newspaper: Entity, camera: Entity) throws {
         manager.isFocusedOnItem.toggle()
 
+        if let character = manager.character {
+            character.isEnabled = false // 캐릭터 비활성화
+        }
+
         // 카메라 상태 수동 저장
         if let worldCameraComponent = camera.components[WorldCameraComponent.self] {
             manager.savedCameraState = worldCameraComponent
@@ -63,6 +67,10 @@ struct ItemManager {
 
         camera.stopAllAnimations()
 
+        if let character = manager.character {
+            character.isEnabled = true // 캐릭터 활성화
+        }
+
         // 카메라의 FollowComponent를 캐릭터로 다시 설정
         if let character = manager.character {
             if let followComponent = camera.components[FollowComponent.self] {
@@ -88,6 +96,8 @@ struct ItemManager {
         }
 
         manager.setBackpackAvailable()
+
+        manager.savedCameraState = nil // 카메라 상태 초기화
     }
 
     // MARK: - 신문 아이템 상호작용 함수
@@ -141,6 +151,57 @@ struct ItemManager {
 
     // MARK: - 플래시라이트 아이템 상호작용 메소드
 
+    func setCameraAngleToMapCompass(mapCompass: Entity) throws {
+        guard let camera = manager.gameCamera else {
+            print("⚠️ Warning: Camera is not available.")
+            return
+        }
+
+        guard let currentCameraSetting = camera.components[WorldCameraComponent.self] else { return }
+
+        let orientAction = CameraOrientAction(
+            transitionIn: 2.0, transitionOut: 2.0,
+            azimuth: .pi / 2, elevation: currentCameraSetting.elevation,
+            radius: 10.0, targetOffset: .zero, target: mapCompass.id
+        )
+
+        let orientAnim = try AnimationResource.makeActionAnimation(
+            for: orientAction, duration: 6.0
+        )
+        CameraOrientActionHandler.register { _ in CameraOrientActionHandler() }
+        camera.playAnimation(orientAnim)
+
+        mapCompass.isEnabled = true
+        mapCompass.components.set(
+            OpacityComponent(opacity: 0.0)
+        )
+
+        // Pause the hero.
+        if let character = manager.character,
+           var movementComponent = character.components[CharacterMovementComponent.self]
+        {
+            movementComponent.paused = true
+            character.components.set(movementComponent)
+        }
+
+        CameraOrientAction.subscribe(to: .ended) { _ in
+
+            // 캐릭터 움직임 재개
+            if let character = manager.character,
+               var movementComponent = character.components[CharacterMovementComponent.self]
+            {
+                movementComponent.paused = false
+                character.components.set(movementComponent)
+            }
+        }
+
+        let fadeInAction = FromToByAction(to: Float(1.0))
+        let fadeInAnim = try AnimationResource.makeActionAnimation(
+            for: fadeInAction, duration: 3, bindTarget: .opacity, delay: 1
+        )
+        mapCompass.playAnimation(fadeInAnim)
+    }
+
     func setMapCompassItemAvailable(mapCompass: Entity) {
         if manager.visibleItems.count == 5,
            manager.visibleItems[4].outlinedImageName == "Mystery_Outline"
@@ -155,6 +216,6 @@ struct ItemManager {
             print("⚠️ Warning: MapCompass is not available yet.")
         }
 
-        mapCompass.isEnabled = true
+        try? setCameraAngleToMapCompass(mapCompass: mapCompass)
     }
 }

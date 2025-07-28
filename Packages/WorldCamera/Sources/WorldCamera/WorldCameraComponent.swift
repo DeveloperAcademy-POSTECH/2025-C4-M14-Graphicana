@@ -92,4 +92,31 @@ public struct WorldCameraComponent: Component {
             }
         }
     }
+
+//    @MainActor
+//    public mutating func updateWith(to target: Entity, camera: Entity) {
+//        // 카메라와 타겟의 위치 계산
+//        let cameraPosition = camera.transform.translation
+//        let targetPosition = target.transform.translation
+//        let direction = targetPosition - cameraPosition
+//
+//        // azimuth 계산 (y축 기준 회전)
+//        azimuth = atan2(direction.x, direction.z)
+//
+//        // elevation 계산 (x축 기준 회전)
+//        let horizontalDistance = sqrt(direction.x * direction.x + direction.z * direction.z)
+//        elevation = atan2(direction.y, horizontalDistance)
+//
+//        radius = 0.75 // 카메라와 타겟 사이의 거리
+//
+//        // bounds가 있으면 각도를 제한
+//        if let bounds {
+//            if let azimuthBounds = bounds.azimuth {
+//                azimuth = min(max(azimuthBounds.lowerBound, azimuth), azimuthBounds.upperBound)
+//            }
+//            if let elevationBounds = bounds.elevation {
+//                elevation = min(max(elevationBounds.lowerBound, elevation), elevationBounds.upperBound)
+//            }
+//        }
+//    }
 }
