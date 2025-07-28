@@ -10,5 +10,17 @@
         "isLocked" : false
       }
     ]
+  },
+  "CF57283A-64B4-4D99-94FF-F9C265F12A52" : {
+    "objectMetadataList" : [
+      [
+        "CF57283A-64B4-4D99-94FF-F9C265F12A52",
+        "Root"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      }
+    ]
   }
 }
