@@ -1,11 +1,10 @@
 # 🏝️ Ttouch Island
-
-나중에 이미지 넣기
-
 > 🐭 땃쥐(Ttouch)의 시선에서 수몰 위기의 섬을 탐험하고, 탈출에 필요한 숨겨진 아이템들을 모아 섬을 탈출하는 3D 게임
 
+<img width="500" alt="Image (2)" src="https://github.com/user-attachments/assets/18a8eb8e-a8ef-4658-9d79-47947f1a89c7" />
+
 [![Swift](https://img.shields.io/badge/Swift-5.9-orange.svg)]()
-[![Xcode](https://img.shields.io/badge/Xcode-15.0-blue.svg)]()
+[![Xcode](https://img.shields.io/badge/Xcode-26.0-blue.svg)]()
 [![License](https://img.shields.io/badge/license-MIT-green.svg)]()
 
 ---
