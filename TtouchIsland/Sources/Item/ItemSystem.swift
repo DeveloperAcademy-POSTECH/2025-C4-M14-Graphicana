@@ -172,12 +172,16 @@ struct ItemSystem: System {
 
         // 무한 재생되는 카메라 애니메이션 리소스 생성
         if let orientAnim = try? AnimationResource.makeActionAnimation(
+            // CameraOrientAction 같은 Action 타입을 RealityKit에서 이해할 수 있는 애니메이션 리소스(AnimationResource)로 바꿔줍니다
             for: orientAction,
             duration: Double.infinity
         ) {
+            // CameraOrientAction이 어떻게 실행될지 정의하는 핸들러를 등록
+            // 내부적으로 CameraOrientAction의 매개변수를 실제 카메라의 transform으로 변환하는 작업을 수행
             CameraOrientActionHandler.register({ _ in
                 CameraOrientActionHandler()
             })
+            // 변환된 orientAnim 애니메이션 리소스를 카메라엔티티에 적용해서 실제로 움직이게함
             camera.playAnimation(orientAnim)
         }
 
