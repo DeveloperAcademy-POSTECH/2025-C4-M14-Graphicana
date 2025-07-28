@@ -38,49 +38,45 @@ struct JoystickButtonView: View {
                 Spacer()
             }
 
-//            Spacer()
-
             if !manager.isFocusedOnItem {
-                VStack {
-//                    Spacer()
+                HStack(alignment: .bottom) {
+                    ThumbStickView(updatingValue: $characterJoystick)
+                        .onChange(of: characterJoystick) { _, newValue in
+                            let movementVector: SIMD3<Float> =
+                                [Float(newValue.x), 0, Float(newValue.y)]
+                                    / 10
+                            manager.character?
+                                .components[
+                                    CharacterMovementComponent.self
+                                ]?
+                                .controllerDirection = movementVector
+                        }
 
-                    HStack(alignment: .bottom) {
-                        ThumbStickView(updatingValue: $characterJoystick)
-                            .onChange(of: characterJoystick) { _, newValue in
-                                let movementVector: SIMD3<Float> =
-                                    [Float(newValue.x), 0, Float(newValue.y)]
-                                        / 10
-                                manager.character?
-                                    .components[
-                                        CharacterMovementComponent.self
-                                    ]?
-                                    .controllerDirection = movementVector
-                            }
+                    Spacer()
 
-                        Spacer()
+                    ZStack(alignment: .bottomTrailing) {
+                        CameraThumbStickView(
+                            updatingValue: $cameraAngleThumbstick
+                        )
+                        .onChange(of: cameraAngleThumbstick) {
+                            _,
+                                newValue in
+                            let movementVector: SIMD2<Float> =
+                                [Float(newValue.x), Float(-newValue.y)] / 30
 
-                        ZStack(alignment: .bottomTrailing) {
-                            CameraThumbStickView(
-                                updatingValue: $cameraAngleThumbstick
-                            )
-                            .onChange(of: cameraAngleThumbstick) {
-                                _,
-                                    newValue in
-                                let movementVector: SIMD2<Float> =
-                                    [Float(newValue.x), Float(-newValue.y)] / 30
+                            manager.gameRoot?.findEntity(named: "camera")?
+                                .components[WorldCameraComponent.self]?
+                                .updateWith(
+                                    continuousMotion: movementVector
+                                )
+                        }
+                        .background(Color.clear)
 
-                                manager.gameRoot?.findEntity(named: "camera")?
-                                    .components[WorldCameraComponent.self]?
-                                    .updateWith(
-                                        continuousMotion: movementVector
-                                    )
-                            }
-                            .background(Color.clear)
-
-                            HStack {
-                                if manager.nearItem != nil {
-                                    // Get Item Button
-                                    Button {
+                        HStack {
+                            if manager.nearItem != nil {
+                                // Get Item Button
+                                ActionButton(name: "GetIcon")
+                                    .onTapGesture {
                                         if let item = manager.nearItem,
                                            let camera = manager.gameCamera,
                                            let character = manager.character
@@ -90,14 +86,12 @@ struct JoystickButtonView: View {
                                                 root: character
                                             )
                                         }
-
-                                    } label: {
-                                        ActionButton(name: "GetIcon")
-                                    } // Button
+                                    }
                                     .padding(.trailing, 8)
-                                }
+                            }
 
-                                // Run Button
+                            // Run Button
+                            if manager.runButtonEnabled {
                                 ActionButton(name: "RunIcon")
                                     .onLongPressGesture(
                                         minimumDuration: 0.0, // 즉시 반응
@@ -114,28 +108,31 @@ struct JoystickButtonView: View {
                                         perform: {}
                                     )
                                     .padding(.trailing, 8)
+                            } else {
+                                DisabledActionButton(name: "RunIcon")
+                                    .disabled(true)
+                                    .padding(.trailing, 8)
+                            }
 
-                                // Jump button.
-                                ActionButton(name: "JumpIcon")
-                                    .onLongPressGesture(
-                                        minimumDuration: 0.0,
-                                        pressing: { isPressed in
-                                            manager.character?.components[
-                                                CharacterMovementComponent.self
-                                            ]?.jumpPressed = isPressed
-                                            AudioManager.playJumpSound(
-                                                root: manager.character!
-                                            )
-                                            manager.updateStatus(to: .jump)
-                                        },
-                                        perform: {}
-                                    )
-                            } // HStack
-                        } // ZStack
-//                        .padding(.vertical)
-                    } // HStack
-                    .padding(.horizontal, 56)
-                } // VStack
+                            // Jump button.
+                            ActionButton(name: "JumpIcon")
+                                .onLongPressGesture(
+                                    minimumDuration: 0.0,
+                                    pressing: { isPressed in
+                                        manager.character?.components[
+                                            CharacterMovementComponent.self
+                                        ]?.jumpPressed = isPressed
+                                        AudioManager.playJumpSound(
+                                            root: manager.character!
+                                        )
+                                        manager.updateStatus(to: .jump)
+                                    },
+                                    perform: {}
+                                )
+                        } // HStack
+                    } // ZStack
+                } // HStack
+                .padding(.horizontal, 56)
                 .padding(.bottom, 40)
             }
         } // ZStack

@@ -41,6 +41,8 @@ class GameManager {
 
     var visibleItems: [StatusItem] = []
 
+    var runButtonEnabled = false
+
     var nearItem: Entity?
 
     var isFocusedOnItem = false
