@@ -1015,5 +1015,32 @@ def Xform "Root"
         float3 xformOp:translate = (-43.387157, 0.4817358, -32.14938)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
     }
+
+    def "StageBoundary" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707963, 0, 0)
+        }
+        prepend references = @MapBoundary/StageBoundary.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "_materials"
+        {
+            over "Transparent"
+            {
+                token outputs:mtlx:surface
+                token outputs:realitykit:vertex
+
+                over "Principled_BSDF"
+                {
+                    float inputs:opacityThreshold = 1
+                }
+            }
+        }
+    }
 }
 

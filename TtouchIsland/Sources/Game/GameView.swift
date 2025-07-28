@@ -21,6 +21,12 @@ struct GameView: View {
             Color.black.ignoresSafeArea()
 
             RealityView { content in
+                
+//                if BloomEffect.deviceSupportsEffect() {
+//                    content.renderingEffects.customPostProcessing = .effect(BloomEffect())
+//                    print("BloomEffect supported")
+//                }
+                
                 guard
                     let game: Entity = try? await Entity(
                         named: "Scene",
