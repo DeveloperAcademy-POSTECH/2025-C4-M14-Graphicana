@@ -176,17 +176,15 @@ struct GameView: View {
                 }
             }
         }
-        .alert("게임 리셋", isPresented: $showResetAlert) {
+        .alert("게임을 다시 시작하시겠습니까?", isPresented: $showResetAlert) {
             Button("취소", role: .cancel) {}
-            Button("네", role: .confirm) {
+            Button("다시 시작할래요", role: .confirm) {
                 manager.isGameReady = false
                 manager.resetGame()
                 manager.showInterface = false
                 // 새로운 게임 아이디를 설정해줘서 realityview를 다시 그리게 한다
                 gameId = UUID()
             }
-        } message: {
-            Text("게임을 다시 시작하시겠습니까?")
         }
         .gesture(
             // 핀치 인아웃(두 손가락 벌리기, 오므리기) 제스처를 감지
