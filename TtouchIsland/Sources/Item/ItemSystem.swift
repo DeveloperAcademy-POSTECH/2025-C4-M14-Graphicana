@@ -6,9 +6,11 @@
 //  Copyright © 2025 Graphicana. All rights reserved.
 //
 
+import CharacterMovement
 import RealityKit
-import simd
 import SwiftUI
+import WorldCamera
+import simd
 
 struct ItemSystem: System {
     @State var appModel = GameManager.shared
@@ -24,8 +26,10 @@ struct ItemSystem: System {
     func update(context: SceneUpdateContext) {
         // 현재 nearItem이 설정되어 있다면 해당 엔티티와의 거리만 확인
         if let currentNearItem = appModel.nearItem,
-           let currentItemComponent = currentNearItem.components[ItemComponent.self],
-           let target = currentItemComponent.targetEntity
+            let currentItemComponent = currentNearItem.components[
+                ItemComponent.self
+            ],
+            let target = currentItemComponent.targetEntity
         {
             let itemPosition = currentNearItem.transform.translation
             let characterPosition = target.transform.translation
@@ -46,7 +50,7 @@ struct ItemSystem: System {
             updatingSystemWhen: .rendering
         ) {
             guard var itemComponent = entity.components[ItemComponent.self],
-                  let target = itemComponent.targetEntity // 상호작용하려는 캐릭터 엔티티
+                let target = itemComponent.targetEntity  // 상호작용하려는 캐릭터 엔티티
             else { continue }
 
             // 1. 캐릭터와 아이템 사이 거리 계산
@@ -58,7 +62,7 @@ struct ItemSystem: System {
                 appModel.nearItem = entity
                 itemComponent.isCollected = true
                 entity.components.set(itemComponent)
-                break // 가까운 엔티티를 찾으면 루프 종료
+                break  // 가까운 엔티티를 찾으면 루프 종료
             }
         }
         // 루프 밖에서 다 모았는지 확인
@@ -68,7 +72,7 @@ struct ItemSystem: System {
     // endPint에서 모든 아이템을 수집했는지 확인
     func checkItemAtEndPoint(context: SceneUpdateContext) {
         guard let character = appModel.gameRoot?.findEntity(named: "Ttouch"),
-              let endPoint = appModel.gameRoot?.findEntity(named: "Item")
+            let endPoint = appModel.gameRoot?.findEntity(named: "Item")
         else { return }
 
         // 1. 캐릭터와 아이템 사이 거리 계산
@@ -119,8 +123,17 @@ struct ItemSystem: System {
 
     func playMapEndingAnimation() {
         guard let ocean = appModel.gameRoot?.findEntity(named: "OceanPlane"),
-              let character = appModel.gameRoot?.findEntity(named: "Ttouch")
+            let character = appModel.gameRoot?.findEntity(named: "Ttouch")
         else { return }
+
+        // 땃쥐 멈춰
+        if var movementComponent = character.components[
+            CharacterMovementComponent.self
+        ] {
+            movementComponent.paused = true
+            character.components.set(movementComponent)
+        }
+        appModel.showInterface = false
 
         // 땃쥐 y좌표 가져오기
         let characterPosition = character.transform.translation.y
@@ -135,6 +148,37 @@ struct ItemSystem: System {
             relativeTo: nil,
             duration: 5.0
         )
-        // TO DO: 카메라 페이드 아웃되고 땃쥐가 떠나는 애니메이션 구현
+        // 카메라 페이드 아웃되고 섬 전체 보여주는 애니메이션
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            playZoomOutOceanAnimation()
+        }
+    }
+
+    func playZoomOutOceanAnimation() {
+        guard let character = appModel.gameRoot?.findEntity(named: "Ttouch"),
+            let camera = appModel.gameRoot?.findEntity(named: "camera")
+        else { return }
+
+        // 카메라 줌아웃하는 액션 생성
+        let orientAction = CameraOrientAction(
+            transitionIn: 0.5,
+            transitionOut: 0.5,
+            azimuth: .pi / 12,  // 약 15도(오른쪽으로 살짝 회전)으로 땃쥐 바라보게 됨
+            elevation: .pi / 6,  // 약 30도로 위에서 내려다보는 시점으로 설정
+            radius: 12,  // 카메라 멀리 보내기
+            targetOffset: .zero,
+            target: character.id
+        )
+
+        // 무한 재생되는 카메라 애니메이션 리소스 생성
+        if let orientAnim = try? AnimationResource.makeActionAnimation(
+            for: orientAction,
+            duration: Double.infinity
+        ) {
+            CameraOrientActionHandler.register({ _ in
+                CameraOrientActionHandler()
+            })
+            camera.playAnimation(orientAnim)
+        }
     }
 }
