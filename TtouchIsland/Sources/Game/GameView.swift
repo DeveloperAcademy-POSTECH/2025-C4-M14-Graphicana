@@ -216,13 +216,13 @@ struct GameView: View {
         // TODO: - 환경 충돌 설정
         await setupEnvironmentCollisions(on: game, content: content)
 
-        if let character,
-            let newspaper = game.findEntity(named: "NewsPaper"),
-            let backpack = game.findEntity(named: "Backpack_Anim"),
-            let cheese = game.findEntity(named: "Cheese_Anim"),
-            let bottle = game.findEntity(named: "Bottle_Anim"),
-            let flashlight = game.findEntity(named: "Flashlight_Anim"),
-            let mapCompass = game.findEntity(named: "MapCompass_Anim")
+        if let character = manager.character,
+           let newspaper = game.findEntity(named: "NewsPaper"),
+           let backpack = game.findEntity(named: "Backpack_Anim"),
+           let cheese = game.findEntity(named: "Cheese_Anim"),
+           let bottle = game.findEntity(named: "Bottle_Anim"),
+           let flashlight = game.findEntity(named: "Flashlight_Anim"),
+           let mapCompass = game.findEntity(named: "MapCompass_Anim")
         {
             setupItems(
                 character: character,
