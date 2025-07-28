@@ -111,7 +111,10 @@ extension GameView {
             CharacterControllerComponent(
                 radius: collisionRadius,
                 height: bounds.extents.y,
-                collisionFilter: characterCollisionFilter
+                collisionFilter: CollisionFilter(
+                    group: GameCollisionGroup.player,
+                    mask: .all
+                )
             ),
         ]
     }

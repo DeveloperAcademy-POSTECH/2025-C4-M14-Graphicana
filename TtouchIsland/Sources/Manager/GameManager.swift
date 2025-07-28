@@ -1,3 +1,4 @@
+import CharacterMovement
 import RealityKit
 import SwiftUI
 import WorldCamera
@@ -19,12 +20,23 @@ class GameManager {
         gameRoot?.findEntity(named: "camera")
     }
 
+    var character: Entity? {
+        gameRoot?.findEntity(named: "Ttouch")
+    }
+
     var currentStatus: CharacterStatus = .common
 
     func updateStatus(to updatedStatus: CharacterStatus) {
         currentStatus = updatedStatus
     }
 
+    func setCharacterRunning(to boolean: Bool) {
+        guard let character = character else { return }
+
+        character.components[CharacterStateComponent.self]?.isOnRunning = boolean
+        character.components[CharacterMovementComponent.self]?.isOnRunning = boolean
+    }
+    
     var showOnboarding: Bool = true
     var showInterface: Bool = false
     var showEndCredits: Bool = false
@@ -33,6 +45,8 @@ class GameManager {
     // MARK: - 아이템 상태 변수
 
     var visibleItems: [StatusItem] = []
+
+    var runButtonEnabled = false
 
     var nearItem: Entity?
 
@@ -73,7 +87,7 @@ extension GameManager {
                     solidImageName: "Backpack",
                     outlinedImageName: "Backpack_Outline",
                     isSolid: false
-                )
+                ),
             ]
         } else {
             print("⚠️ Warning: Backpack is already available.")
@@ -117,7 +131,7 @@ extension GameManager {
 
     func setMapCompassAvailable() {
         if visibleItems.count == 5,
-            visibleItems[4].outlinedImageName == "Mystery_Outline"
+           visibleItems[4].outlinedImageName == "Mystery_Outline"
         {
             visibleItems[3].isSolid = true
             visibleItems[4] = StatusItem(

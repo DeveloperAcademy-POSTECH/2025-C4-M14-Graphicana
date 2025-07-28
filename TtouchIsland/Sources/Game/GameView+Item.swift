@@ -24,161 +24,26 @@ extension GameView {
         content _: some RealityViewContentProtocol
     ) {
         newspaper.components.set([
-            ItemComponent(type: .newspaper, targetEntity: character)
+            ItemComponent(type: .newspaper, targetEntity: character),
         ])
         backpack.components.set([
-            ItemComponent(type: .backpack, targetEntity: character)
+            ItemComponent(type: .backpack, targetEntity: character),
         ])
         cheese.components.set([
-            ItemComponent(type: .cheese, targetEntity: character)
+            ItemComponent(type: .cheese, targetEntity: character),
         ])
         bottle.components.set([
-            ItemComponent(type: .bottle, targetEntity: character)
+            ItemComponent(type: .bottle, targetEntity: character),
         ])
         flashlight.components.set([
-            ItemComponent(type: .flashlight, targetEntity: character)
+            ItemComponent(type: .flashlight, targetEntity: character),
         ])
         mapCompass.components.set([
-            ItemComponent(type: .mapCompass, targetEntity: character)
+            ItemComponent(type: .mapCompass, targetEntity: character),
         ])
     }
 
-    /// 신문을 클로즈업하는 함수
-    func closeupNewspaper(newspaper: Entity, camera: Entity) throws {
-        manager.isFocusedOnItem.toggle()
-        manager.showResetButton = false
-
-        // 카메라 상태 수동 저장
-        if let worldCameraComponent = camera.components[
-            WorldCameraComponent.self
-        ] {
-            manager.savedCameraState = worldCameraComponent
-            print("✅ Camera state saved: \(worldCameraComponent)")
-        }
-
-        // 캐릭터 움직임 정지
-        if let character = character,
-            var movementComponent = character.components[
-                CharacterMovementComponent.self
-            ]
-        {
-            movementComponent.paused = true
-            character.components.set(movementComponent)
-        }
-
-        // 카메라를 신문으로 이동시키는 액션 생성
-        let orientAction = CameraOrientAction(
-            transitionIn: 0.5,
-            transitionOut: 0,
-            azimuth: .pi - 0.8,  // 카메라의 수평 회전 각도
-            elevation: 0.3,  // 카메라의 수직 회전 각도
-            radius: 0.75,  // 카메라와 신문 사이의 거리
-            targetOffset: .zero,  // 카메라가 바라볼 때 신문의 오프셋
-            target: newspaper.id
-        )
-
-        let orientAnim = try AnimationResource.makeActionAnimation(
-            for: orientAction,
-            duration: .greatestFiniteMagnitude
-        )
-        CameraOrientActionHandler.register { _ in CameraOrientActionHandler() }
-        camera.playAnimation(orientAnim)
-
-        // 신문이 서서히 나타나는 애니메이션
-        let fadeInAction = FromToByAction(to: Float(1.0))
-        let fadeInAnim = try AnimationResource.makeActionAnimation(
-            for: fadeInAction,
-            duration: 1,
-            bindTarget: .opacity,
-            delay: 1
-        )
-        newspaper.playAnimation(fadeInAnim)
-    }
-
-    /// 플레이어 시점으로 카메라를 되돌리는 함수
-    func returnToPlayerView(camera: Entity) throws {
-        manager.isFocusedOnItem.toggle()
-        manager.showResetButton = true
-
-        camera.stopAllAnimations()
-
-        // 카메라의 FollowComponent를 캐릭터로 다시 설정
-        if let character = character {
-            if let followComponent = camera.components[FollowComponent.self] {
-                followComponent.targetOverride = character.id
-                followComponent.cameraComponent = manager.savedCameraState
-                camera.components.set(followComponent)
-            } else {
-                // FollowComponent가 없으면 새로 추가
-                let followComponent = FollowComponent(
-                    targetId: character.id,
-                    cameraComponent: manager.savedCameraState
-                )
-                camera.components.set(followComponent)
-            }
-        }
-
-        CameraOrientAction.subscribe(to: .ended) { _ in
-            // 캐릭터 움직임 재개
-            if let character = character,
-                var movementComponent = character.components[
-                    CharacterMovementComponent.self
-                ]
-            {
-                movementComponent.paused = false
-                character.components.set(movementComponent)
-            }
-        }
-
-        manager.setBackpackAvailable()
-    }
-
-    // MARK: - 신문 아이템 상호작용 함수
-
-    func handleNewspaperItem(item: Entity, camera: Entity) {
-        do {
-            if manager.isFocusedOnItem {
-                manager.updateStatus(to: .common)
-                try returnToPlayerView(camera: camera)
-            } else {
-                manager.updateStatus(to: .read)
-                try closeupNewspaper(newspaper: item, camera: camera)
-            }
-        } catch {
-            print("Error during newspaper interaction: \(error)")
-        }
-    }
-
-    // MARK: - 치즈 아이템 상호작용 메소드
-
-    func setCharacterScaleUp() async {
-        guard let character = character else { return }
-
-        print(
-            "⚙️ Previous Collision Height: \(character.visualBounds(relativeTo: character.parent).extents.y)"
-        )
-        let bounds = character.visualBounds(relativeTo: character.parent)
-        print("🛠 충돌 영역 크기: \(bounds.extents)")
-        print("🛠 충돌 영역 위치: \(bounds.center)")
-
-        character.setScale([2.0, 2.0, 2.0], relativeTo: character.parent)
-
-        // 충돌 형상 생성
-        let collisionRadius = bounds.extents.x / 2 - 0.2
-        let collisionHeight = bounds.extents.y
-
-        character.components.set(
-            [
-                CharacterControllerComponent(
-                    radius: collisionRadius,
-                    height: collisionHeight,
-                    collisionFilter: characterCollisionFilter
-                )
-            ]
-        )
-    }
-
-    //TODO: 멍청코드 수정하기
+    // TODO: 멍청코드 수정하기
     func playItemAnimations(game: Entity) {
         let items: [(entityName: String, animKey: String)] = [
             ("Backpack_Anim", "default subtree animation"),
@@ -190,10 +55,10 @@ extension GameView {
 
         for (entityName, animKey) in items {
             guard let entity = game.findEntity(named: entityName),
-                let animLibrary = entity.components[
-                    AnimationLibraryComponent.self
-                ],
-                let animation = animLibrary.animations[animKey]
+                  let animLibrary = entity.components[
+                      AnimationLibraryComponent.self
+                  ],
+                  let animation = animLibrary.animations[animKey]
             else { continue }
             let loopingAnimation = animation.repeat()
             entity.playAnimation(loopingAnimation, transitionDuration: 0.0)

@@ -41,8 +41,10 @@ public struct CharacterStateComponent: Component {
     /// 애니메이션 재생 컨트롤러
     var animController: AnimationPlaybackController?
 
-    /// 캐릭터가 불타고 있는지 여부 (특수 상태 플래그)
-    public var isOnFire: Bool = false
+    /// 캐릭터가 달리고 있는 여부
+    public var isOnRunning: Bool = false
+
+// Removed commented-out code for clarity and maintainability.
 
     /// - 상태에 따른 애니메이션 속도 계산
     /// - 걷기: 입력된 속도 그대로, 점프: 2, 나머지: 1
@@ -51,6 +53,7 @@ public struct CharacterStateComponent: Component {
     ) -> Float {
         switch state {
         case .walking: movementSpeed
+        case .run: movementSpeed
         case .jump: 2
         default: 1
         }
@@ -89,6 +92,9 @@ public struct CharacterStateComponent: Component {
             else { return false }
             transitionDuration = 0.1
 
+        case .run:
+            transitionDuration = 0.1
+
         case .none, .idle, .walking: break
 
         default:
@@ -118,7 +124,7 @@ public struct CharacterStateComponent: Component {
             return nil
         }
         if stateComponent.currentState != newState {
-            let allowedStates = [CharacterState.idle, .walking, .jump]
+            let allowedStates = [CharacterState.idle, .walking, .jump, .run]
             if !allowedStates.contains(newState) {
                 fatalError("Cannot handle \(newState) from nil.")
             }
@@ -138,8 +144,9 @@ public struct CharacterStateComponent: Component {
             stateComponent.currentState = newState
         }
         // Update the speed of the animations.
+        // TODO: SPEED
         stateComponent.animController?.speed = calculateControllerSpeed(
-            for: newState, speed: movementSpeed * (stateComponent.isOnFire ? 2 : 1)
+            for: newState, speed: movementSpeed
         )
         entity.components.set(stateComponent)
         return stateComponent.animController

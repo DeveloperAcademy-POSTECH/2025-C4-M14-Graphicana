@@ -5,13 +5,6 @@ import SwiftUI
 import WorldCamera
 
 extension GameView {
-    var characterCollisionFilter: CollisionFilter {
-        CollisionFilter(
-            group: GameCollisionGroup.player,
-            mask: .all
-        )
-    }
-
     // 캐릭터 이동 후 호출되는 함수
     func characterMoveUpdated(
         entity: Entity,
