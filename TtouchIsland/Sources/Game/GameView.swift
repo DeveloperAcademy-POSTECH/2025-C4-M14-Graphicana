@@ -28,7 +28,7 @@ struct GameView: View {
             RealityView { content in
                 guard
                     let game: Entity = try? await Entity(
-                        named: "Scene2",
+                        named: "Scene",
                         in: dummyAssetsBundle
                     )
                 else { return }
@@ -48,6 +48,11 @@ struct GameView: View {
             .zIndex(0)
             // id가 변경되면 뷰를 새로 그림
             .id(gameId)
+
+            if manager.showOnboarding {
+                OnboardingView()
+                    .zIndex(3)
+            }
 
             if manager.showInterface {
                 if !manager.isFocusedOnItem {
@@ -143,17 +148,21 @@ struct GameView: View {
                 .zIndex(1)
             }
             // 초기화 버튼
-            // TO DO: UI 변경
-            VStack {
-                HStack {
+            if manager.showResetButton {
+                VStack {
+                    HStack {
+                        Spacer()
+
+                        Button {
+                            showResetAlert = true
+                        } label: {
+                            ActionButton(name: "ResetIcon")
+                        }
+                    }.padding(.top, 50)
                     Spacer()
-                    Button("Reset") {
-                        showResetAlert = true
-                    }
-                }.padding(.top, 50)
-                Spacer()
-                // 우선순위 위로!
-            }.zIndex(2)
+                    // 우선순위 위로!
+                }.zIndex(2)
+            }
 
             if manager.showEndCredits {
                 VStack {
@@ -167,17 +176,15 @@ struct GameView: View {
                 }
             }
         }
-        .alert("게임 리셋", isPresented: $showResetAlert) {
+        .alert("게임을 다시 시작하시겠습니까?", isPresented: $showResetAlert) {
             Button("취소", role: .cancel) {}
-            Button("네", role: .confirm) {
+            Button("다시 시작할래요", role: .confirm) {
                 manager.isGameReady = false
                 manager.resetGame()
                 manager.showInterface = false
                 // 새로운 게임 아이디를 설정해줘서 realityview를 다시 그리게 한다
                 gameId = UUID()
             }
-        } message: {
-            Text("게임을 다시 시작하시겠습니까?")
         }
         .gesture(
             // 핀치 인아웃(두 손가락 벌리기, 오므리기) 제스처를 감지
@@ -354,4 +361,3 @@ struct GameView: View {
 //#Preview {
 //    GameView()
 //}
-

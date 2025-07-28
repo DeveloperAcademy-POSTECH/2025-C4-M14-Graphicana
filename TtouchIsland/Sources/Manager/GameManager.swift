@@ -25,8 +25,10 @@ class GameManager {
         currentStatus = updatedStatus
     }
 
+    var showOnboarding: Bool = true
     var showInterface: Bool = false
     var showEndCredits: Bool = false
+    var showResetButton: Bool = true
 
     // MARK: - 아이템 상태 변수
 
@@ -57,6 +59,7 @@ class GameManager {
         isGameFinished = false
         levelFinished = false
         showEndCredits = false
+        showResetButton = true
     }
 }
 

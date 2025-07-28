@@ -43,8 +43,6 @@ struct ItemSystem: System {
                 appModel.nearItem = nil
             }
         }
-        
-        
 
         // nearItem이 nil인 경우, 모든 엔티티를 순회하며 아이템을 찾는다.
         for entity in context.entities(
@@ -74,7 +72,7 @@ struct ItemSystem: System {
     // endPint에서 모든 아이템을 수집했는지 확인
     func checkItemAtEndPoint(context: SceneUpdateContext) {
         guard let character = appModel.gameRoot?.findEntity(named: "Ttouch"),
-            let endPoint = appModel.gameRoot?.findEntity(named: "Item")
+            let endPoint = appModel.gameRoot?.findEntity(named: "Leaf")
         else { return }
 
         // 1. 캐릭터와 아이템 사이 거리 계산
@@ -113,10 +111,12 @@ struct ItemSystem: System {
         }
 
         // 모든 조건 충족하면 애니메이션 재생
-        if isCollectedAllItem && endPointDistance < 1.5
+        if isCollectedAllItem && endPointDistance < 0.5
             && !appModel.isGameFinished
         {
             appModel.isGameFinished = true
+            appModel.showResetButton = false
+
             print("complete")
             // 엔딩 애니메이션: 물 차오르는 애니메이션 재생
             playMapEndingAnimation()
