@@ -3,7 +3,7 @@ import SwiftUI
 import WorldCamera
 
 @Observable
-class GameManager: ObservableObject {
+class GameManager {
     static let shared = GameManager()
 
     var isGameReady = false

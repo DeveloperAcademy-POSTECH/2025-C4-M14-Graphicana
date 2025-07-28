@@ -2,7 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
 
-    @StateObject var manager = GameManager.shared
+    @State var manager = GameManager.shared
 
     var body: some View {
 
