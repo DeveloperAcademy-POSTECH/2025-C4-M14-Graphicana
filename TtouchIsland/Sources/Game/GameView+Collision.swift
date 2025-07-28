@@ -16,6 +16,15 @@ extension GameView {
                 filter: GameCollisionFilters.terrainFilter
             )  // 맵은 플레이어나 적과만 충돌하도록 설정한 필터 적용
         }
+        
+        //가방 먹기 전 길막용 바운더리
+        if let stageBoundary = world.findEntity(named: "StageBoundary") {
+            try? await stageBoundary.generateStaticShapeResources(
+                recursive: true,
+                filter: GameCollisionFilters.terrainFilter
+            )
+        }
+        
         // 맵에 대하여 설정
         if let map = world.findEntity(named: "EnvironmentMap") {
             try? await map.generateStaticShapeResources(
