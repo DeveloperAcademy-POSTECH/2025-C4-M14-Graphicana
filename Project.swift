@@ -38,7 +38,7 @@ let project = Project(
         .package(path: "Packages/ThumbStickView"),
         .package(path: "Packages/WorldCamera"),
         .package(path: "Packages/ControllerInput"),
-        .package(url: "https://github.com/airbnb/lottie-spm.git", .upToNextMajor(from: "4.5.1")),
+        .package(url: "https://github.com/airbnb/lottie-ios.git", .upToNextMajor(from: "4.5.2")),
     ],
     targets: [
         .target(
