@@ -44,8 +44,7 @@ public struct CharacterStateComponent: Component {
     /// 캐릭터가 달리고 있는 여부
     public var isOnRunning: Bool = false
 
-//    /// 캐릭터가 불타고 있는지 여부 (특수 상태 플래그)
-//    public var isOnFire: Bool = false
+// Removed commented-out code for clarity and maintainability.
 
     /// - 상태에 따른 애니메이션 속도 계산
     /// - 걷기: 입력된 속도 그대로, 점프: 2, 나머지: 1
