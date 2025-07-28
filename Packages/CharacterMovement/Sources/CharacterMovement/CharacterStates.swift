@@ -21,6 +21,7 @@ public struct CharacterStateComponent: Component {
         case walking = "Ttouch_walk"
         case running
         case jump
+        case run = "Ttouch_run"
 
         @MainActor public static var prefix: String = ""
         var filename: String { rawValue }
