@@ -128,19 +128,4 @@ extension GameManager {
             print("⚠️ Warning: You need to activate the Backpack first.")
         }
     }
-
-    func setMapCompassAvailable() {
-        if visibleItems.count == 5,
-           visibleItems[4].outlinedImageName == "Mystery_Outline"
-        {
-            visibleItems[3].isSolid = true
-            visibleItems[4] = StatusItem(
-                solidImageName: "Map",
-                outlinedImageName: "Map_Outline",
-                isSolid: false
-            )
-        } else {
-            print("⚠️ Warning: MapCompass is not available yet.")
-        }
-    }
 }

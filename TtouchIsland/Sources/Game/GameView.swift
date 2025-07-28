@@ -112,7 +112,12 @@ struct GameView: View {
                                 manager.updateStatus(to: .getItem)
 
                                 manager.visibleItems[3].isSolid = true
-                                manager.setMapCompassAvailable()
+
+                                if let game = manager.gameRoot {
+                                    guard let mapCompass = game.findEntity(named: "MapCompass_Anim") else { return }
+                                    ItemManager().setMapCompassItemAvailable(mapCompass: mapCompass)
+                                }
+
                                 item.removeFromParent()
                                 manager.nearItem = nil
                             }

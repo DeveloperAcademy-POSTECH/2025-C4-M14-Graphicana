@@ -138,4 +138,23 @@ struct ItemManager {
     func setCharacterRunButtonAvailable() {
         manager.runButtonEnabled = true
     }
+
+    // MARK: - 플래시라이트 아이템 상호작용 메소드
+
+    func setMapCompassItemAvailable(mapCompass: Entity) {
+        if manager.visibleItems.count == 5,
+           manager.visibleItems[4].outlinedImageName == "Mystery_Outline"
+        {
+            manager.visibleItems[3].isSolid = true
+            manager.visibleItems[4] = StatusItem(
+                solidImageName: "Map",
+                outlinedImageName: "Map_Outline",
+                isSolid: false
+            )
+        } else {
+            print("⚠️ Warning: MapCompass is not available yet.")
+        }
+
+        mapCompass.isEnabled = true
+    }
 }
