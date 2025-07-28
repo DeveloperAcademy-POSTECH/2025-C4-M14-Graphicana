@@ -22,7 +22,6 @@ public struct CharacterMovementSystem: System {
 
     /// The maximum speed for the character.
     /// 캐릭터의 최대 속도
-//    let maxFlatSpeed: Float = 2.5
     /// 가속 비율
     var accelerationRate: Float = 0.1
     /// 감속 비율
