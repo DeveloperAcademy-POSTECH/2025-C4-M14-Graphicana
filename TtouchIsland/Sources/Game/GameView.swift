@@ -43,6 +43,8 @@ struct GameView: View {
                 DispatchQueue.main.async { manager.isGameReady = true }
 
                 showInterface = true
+               
+                playItemAnimations(game: game)
             }
             .ignoresSafeArea()
             .zIndex(0)
@@ -208,11 +210,11 @@ struct GameView: View {
 
         if let character,
             let newspaper = game.findEntity(named: "NewsPaper"),
-            let backpack = game.findEntity(named: "Backpack"),
-            let cheese = game.findEntity(named: "Cheese"),
-            let bottle = game.findEntity(named: "Bottle"),
-            let flashlight = game.findEntity(named: "Flashlight"),
-            let mapCompass = game.findEntity(named: "MapCompass")
+            let backpack = game.findEntity(named: "Backpack_Anim"),
+            let cheese = game.findEntity(named: "Cheese_Anim"),
+            let bottle = game.findEntity(named: "Bottle_Anim"),
+            let flashlight = game.findEntity(named: "Flashlight_Anim"),
+            let mapCompass = game.findEntity(named: "MapCompass_Anim")
         {
             setupItems(
                 character: character,
@@ -342,3 +344,4 @@ struct GameView: View {
 //#Preview {
 //    GameView()
 //}
+
