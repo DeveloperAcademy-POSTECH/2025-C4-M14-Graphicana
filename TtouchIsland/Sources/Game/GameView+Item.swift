@@ -151,4 +151,23 @@ extension GameView {
             ]
         )
     }
+    
+    //TODO: 멍청코드 수정하기
+    func playItemAnimations(game: Entity) {
+        let items: [(entityName: String, animKey: String)] = [
+            ("Backpack_Anim", "default subtree animation"),
+            ("Bottle_Anim", "default subtree animation"),
+            ("Flashlight_Anim", "default subtree animation"),
+            ("Cheese_Anim", "default subtree animation"),
+            ("MapCompass_Anim", "default subtree animation")
+        ]
+        
+        for (entityName, animKey) in items {
+            guard let entity = game.findEntity(named: entityName),
+                  let animLibrary = entity.components[AnimationLibraryComponent.self],
+                  let animation = animLibrary.animations[animKey] else { continue }
+            let loopingAnimation = animation.repeat()
+            entity.playAnimation(loopingAnimation, transitionDuration: 0.0)
+        }
+    }
 }

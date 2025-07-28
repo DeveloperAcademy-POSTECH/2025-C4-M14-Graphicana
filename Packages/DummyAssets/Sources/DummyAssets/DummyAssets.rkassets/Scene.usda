@@ -166,205 +166,6 @@ def Xform "Root"
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
     }
 
-    def "TtouchV3" (
-        active = false
-        references = @TtouchV3/Ttouch.usd@
-    )
-    {
-        float3 xformOp:scale = (1, 1, 1)
-        float3 xformOp:translate = (-68.69713, 0.6899841, -28.70021)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-
-        over "Ttouch_root"
-        {
-            def RealityKitComponent "AnimationLibrary"
-            {
-                uniform token info:id = "RealityKit.AnimationLibrary"
-
-                def RealityKitAnimationFile "Ttouch_walk"
-                {
-                    uniform asset file = @TtouchV3/Ttouch_walk.usd@
-                    uniform string name = "Ttouch_walk"
-                }
-
-                def RealityKitAnimationFile "Ttouch_idle"
-                {
-                    uniform asset file = @TtouchV3/Ttouch_idle.usd@
-                    uniform string name = "Ttouch_idle"
-                }
-            }
-
-            def RealityKitComponent "AudioLibrary"
-            {
-                uniform token info:id = "RealityKit.AudioLibrary"
-            }
-        }
-    }
-
-    def "EnvironmentMap" (
-        active = true
-        customData = {
-            float3 rotationEulerHint = (-1.5707963, 0, 0)
-        }
-        references = @EnvironmentMapV3/EnvironmentMap.usd@
-    )
-    {
-        quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
-        float3 xformOp:scale = (1, 1, 1)
-        float3 xformOp:translate = (0, -0.3, 0)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-    }
-
-    def "Backpack" (
-        active = false
-        customData = {
-            float3 rotationEulerHint = (-1.570796, 2.1936502, 2.3841858e-7)
-        }
-        references = @Items/Backpack.usd@
-    )
-    {
-        quatf xformOp:orient = (0.32273993, -0.3227399, 0.62915736, 0.62915736)
-        float3 xformOp:scale = (0.50000006, 0.50000006, 0.50000006)
-        float3 xformOp:translate = (-67.95084, 0.6, -25.019018)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-
-        over "Backpack"
-        {
-            over "Cube" (
-                prepend apiSchemas = ["MaterialBindingAPI"]
-            )
-            {
-                rel material:binding = </Root/EmissiveMaterial> (
-                    bindMaterialAs = "strongerThanDescendants"
-                )
-            }
-        }
-    }
-
-    def "Bottle" (
-        active = true
-        customData = {
-            float3 rotationEulerHint = (-1.0471975, 0, 0)
-        }
-        references = @Items/Bottle.usd@
-    )
-    {
-        quatf xformOp:orient = (0.8660254, -0.49999997, 0, 0)
-        float3 xformOp:scale = (1, 1, 1)
-        float3 xformOp:translate = (-59.716408, 0.6003629, -27.349688)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-
-        over "Bottle"
-        {
-            over "Cylinder" (
-                prepend apiSchemas = ["MaterialBindingAPI"]
-            )
-            {
-                rel material:binding = </Root/EmissiveMaterial> (
-                    bindMaterialAs = "weakerThanDescendants"
-                )
-            }
-        }
-    }
-
-    def "Cheese" (
-        active = true
-        customData = {
-            float3 rotationEulerHint = (-1.5707963, 0, 0)
-        }
-        references = @Items/Cheese.usd@
-    )
-    {
-        quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
-        float3 xformOp:scale = (0.5, 0.5, 0.5)
-        float3 xformOp:translate = (-63.207767, 0.50055337, -26.076021)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-
-        over "Circle"
-        {
-            over "Circle" (
-                prepend apiSchemas = ["MaterialBindingAPI"]
-            )
-            {
-                rel material:binding = </Root/EmissiveMaterial> (
-                    bindMaterialAs = "weakerThanDescendants"
-                )
-                float3 xformOp:translate = (0, -0.00009536744, 0.07404251)
-                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-            }
-        }
-    }
-
-    def "Flashlight" (
-        active = true
-        customData = {
-            float3 rotationEulerHint = (-1.5707963, 0, 0)
-        }
-        references = @Items/Flashlight.usd@
-    )
-    {
-        quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
-        float3 xformOp:scale = (0.7, 0.7, 0.7)
-        float3 xformOp:translate = (-70.312775, 0.49999985, -26.90945)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-
-        over "FlashLight"
-        {
-            over "Cylinder_001" (
-                prepend apiSchemas = ["MaterialBindingAPI"]
-            )
-            {
-                rel material:binding = </Root/EmissiveMaterial> (
-                    bindMaterialAs = "weakerThanDescendants"
-                )
-            }
-        }
-    }
-
-    def "MapCompass" (
-        active = true
-        customData = {
-            float3 rotationEulerHint = (1.570796, -0.6930334, -3.1415923)
-        }
-        references = @Items/MapCompass.usd@
-    )
-    {
-        quatf xformOp:orient = (-0.24015021, 0.24015011, 0.66507727, 0.6650774)
-        float3 xformOp:scale = (0.19999996, 0.19999994, 0.19999993)
-        float3 xformOp:translate = (-60.078693, 0.54014134, -25.4429)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-
-        over "MapandCompass"
-        {
-            over "Mesh_004" (
-                prepend apiSchemas = ["MaterialBindingAPI"]
-            )
-            {
-                rel material:binding = </Root/MapCompass/_materials/Map> (
-                    bindMaterialAs = "weakerThanDescendants"
-                )
-
-                over "Map" (
-                    prepend apiSchemas = ["MaterialBindingAPI"]
-                )
-                {
-                    rel material:binding = </Root/EmissiveMap> (
-                        bindMaterialAs = "weakerThanDescendants"
-                    )
-                }
-
-                over "Compass" (
-                    prepend apiSchemas = ["MaterialBindingAPI"]
-                )
-                {
-                    rel material:binding = </Root/EmissiveMaterial> (
-                        bindMaterialAs = "weakerThanDescendants"
-                    )
-                }
-            }
-        }
-    }
-
     def Material "EmissiveMaterial"
     {
         token outputs:mtlx:surface.connect = </Root/EmissiveMaterial/PreviewSurface.outputs:out>
@@ -915,23 +716,12 @@ def Xform "Root"
         }
     }
 
-    def Xform "SpatialAudio"
-    {
-        float3 xformOp:translate = (-28.901989, 2.9329166, 34.007584)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-
-        def RealityKitComponent "SpatialAudio"
-        {
-            uniform token info:id = "RealityKit.SpatialAudio"
-            float rolloffFactor = 0
-        }
-    }
-
     def "Ttouch" (
         active = true
         references = @TtouchV3-1/Ttouch.usd@
     )
     {
+        reorder nameChildren = ["BOOM_Library___Animals___Mouse_Squeaking_wav", "Ttouch_root", "_materials", "env_light"]
         float3 xformOp:scale = (1, 1, 1)
         float3 xformOp:translate = (-69, 0.6, -29)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
@@ -959,6 +749,137 @@ def Xform "Root"
                 {
                     uniform asset file = @TtouchV3-1/Ttouch_walk3.usd@
                     uniform string name = "Ttouch_walk"
+                }
+            }
+        }
+    }
+
+    def "Bottle_Anim" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707963, 0, 0)
+        }
+        prepend references = @Items/Bottle_Anim.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (-59.71641, 0.60036, -27.34969)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "Bottle"
+        {
+            over "Cylinder" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </Root/EmissiveMaterial> (
+                    bindMaterialAs = "weakerThanDescendants"
+                )
+            }
+        }
+    }
+
+    def "Cheese_Anim" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707963, 0, 0)
+        }
+        prepend references = @Items/Cheese_Anim.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
+        float3 xformOp:scale = (0.5, 0.5, 0.5)
+        float3 xformOp:translate = (-63.20777, 0.55, -26.07602)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "Circle"
+        {
+            over "Circle" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </Root/EmissiveMaterial> (
+                    bindMaterialAs = "weakerThanDescendants"
+                )
+            }
+        }
+    }
+
+    def "Flashlight_Anim" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707963, 0, 0)
+        }
+        prepend references = @Items/Flashlight_Anim.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
+        float3 xformOp:scale = (0.7, 0.7, 0.7)
+        float3 xformOp:translate = (-70.31277, 0.5, -26.90945)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "FlashLight"
+        {
+            over "Cylinder_001" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </Root/EmissiveMaterial> (
+                    bindMaterialAs = "weakerThanDescendants"
+                )
+            }
+        }
+    }
+
+    def "MapCompass_Anim" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (1.570796, 1.0753179, -3.1415925)
+        }
+        prepend references = @Items/MapCompass_Anim.usd@
+    )
+    {
+        quatf xformOp:orient = (0.36212817, -0.36212817, 0.607341, 0.6073411)
+        float3 xformOp:scale = (0.2, 0.2, 0.19999999)
+        float3 xformOp:translate = (-60.0787, 0.65167695, -25.442896)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "_materials"
+        {
+            over "Map"
+            {
+                token outputs:mtlx:surface
+                token outputs:realitykit:vertex
+            }
+        }
+
+        over "MapandCompass"
+        {
+            over "Mesh_004" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </Root/EmissiveMap> (
+                    bindMaterialAs = "weakerThanDescendants"
+                )
+
+                over "Map" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </Root/EmissiveMap> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+                }
+
+                over "Compass" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </Root/EmissiveMaterial> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
                 }
             }
         }
