@@ -89,6 +89,8 @@ public struct CharacterMovementSystem: System {
                 // 점프 준비 상태면 점프 상태로 설정
                 if characterMovement.jumpReady {
                     .jump
+                } else if characterMovement.isOnRunning {
+                    .run
                 } else {
                     // 이동 중이면 걷기 상태로, 멈춰있다면 대기 상태로
                     directionLength > 1e-10 ? .walking : .idle

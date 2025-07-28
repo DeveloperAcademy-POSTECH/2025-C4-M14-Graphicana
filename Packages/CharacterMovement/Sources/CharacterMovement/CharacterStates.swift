@@ -19,7 +19,6 @@ public struct CharacterStateComponent: Component {
     public enum CharacterState: String, CaseIterable {
         case idle = "Ttouch_idle"
         case walking = "Ttouch_walk"
-        case running
         case jump
         case run = "Ttouch_run"
 
@@ -55,6 +54,7 @@ public struct CharacterStateComponent: Component {
     ) -> Float {
         switch state {
         case .walking: movementSpeed
+        case .run: movementSpeed
         case .jump: 2
         default: 1
         }
@@ -93,6 +93,9 @@ public struct CharacterStateComponent: Component {
             else { return false }
             transitionDuration = 0.1
 
+        case .run:
+            transitionDuration = 0.1
+
         case .none, .idle, .walking: break
 
         default:
@@ -122,7 +125,7 @@ public struct CharacterStateComponent: Component {
             return nil
         }
         if stateComponent.currentState != newState {
-            let allowedStates = [CharacterState.idle, .walking, .jump, .running]
+            let allowedStates = [CharacterState.idle, .walking, .jump, .run]
             if !allowedStates.contains(newState) {
                 fatalError("Cannot handle \(newState) from nil.")
             }
