@@ -43,6 +43,8 @@ struct ItemSystem: System {
                 appModel.nearItem = nil
             }
         }
+        
+        
 
         // nearItem이 nil인 경우, 모든 엔티티를 순회하며 아이템을 찾는다.
         for entity in context.entities(

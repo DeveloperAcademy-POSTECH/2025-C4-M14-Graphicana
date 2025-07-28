@@ -10,7 +10,7 @@
 
 def Xform "Root"
 {
-    reorder nameChildren = ["DirectionalLight", "EnvironmentMap", "Backpack", "Bottle", "Cheese", "Flashlight", "MapCompass", "EmissiveMaterial", "EmissiveNewspaper", "EmissiveMap", "Item", "OceanPlane", "SkySphere", "SkyBoxMaterial", "TtouchParent", "Ttouch_walk", "Ttouch", "NewsPaper", "DummyMaterial"]
+    reorder nameChildren = ["DirectionalLight", "EnvironmentMap", "Backpack", "Bottle", "Cheese", "Flashlight", "MapCompass", "EmissiveMaterial", "EmissiveNewspaper", "EmissiveMap", "MapBoundary", "OceanPlane", "SkySphere", "SkyBoxMaterial", "TtouchParent", "Ttouch_walk", "TtouchV3", "NewsPaperV1", "DummyMaterial", "NewsPaper"]
     def Xform "DirectionalLight" (
         customData = {
             float3 rotationEulerHint = (-0.71140635, 1.556634e-7, -5.782976e-8)
@@ -166,26 +166,13 @@ def Xform "Root"
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
     }
 
-    def "Ttouch_walk" (
+    def "TtouchV3" (
         active = false
-        customData = {
-            float3 rotationEulerHint = (0, 0, 0)
-        }
-        references = @TtouchV3/Ttouch_walk.usd@
-    )
-    {
-        quatf xformOp:orient = (1, 0, 0, 0)
-        float3 xformOp:scale = (1, 1, 1)
-        float3 xformOp:translate = (-70, 0.3, -29)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-    }
-
-    def "Ttouch" (
         references = @TtouchV3/Ttouch.usd@
     )
     {
         float3 xformOp:scale = (1, 1, 1)
-        float3 xformOp:translate = (-69.30744, 0.37, -28.799633)
+        float3 xformOp:translate = (-68.69713, 0.6899841, -28.70021)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
         over "Ttouch_root"
@@ -206,6 +193,11 @@ def Xform "Root"
                     uniform string name = "Ttouch_idle"
                 }
             }
+
+            def RealityKitComponent "AudioLibrary"
+            {
+                uniform token info:id = "RealityKit.AudioLibrary"
+            }
         }
     }
 
@@ -224,7 +216,7 @@ def Xform "Root"
     }
 
     def "Backpack" (
-        active = true
+        active = false
         customData = {
             float3 rotationEulerHint = (-1.570796, 2.1936502, 2.3841858e-7)
         }
@@ -285,7 +277,7 @@ def Xform "Root"
     {
         quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
         float3 xformOp:scale = (0.5, 0.5, 0.5)
-        float3 xformOp:translate = (-63.207767, 0.3000002, -26.076021)
+        float3 xformOp:translate = (-63.207767, 0.50055337, -26.076021)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
         over "Circle"
@@ -515,13 +507,51 @@ def Xform "Root"
 
         def Shader "WorleyNoise3D"
         {
-            uniform token info:id = "ND_worleynoise3d_float"
-            float inputs:jitter
-            float3 inputs:position.connect = </Root/EmissiveNewspaper/Add.outputs:out>
-            float outputs:out
-            float2 ui:nodegraph:node:pos = (-395.79898, -37.23713)
-            int ui:nodegraph:node:stackingOrder = 501
-        }
+            color3f inputs:Mix_bg (
+                customData = {
+                    dictionary realitykit = {
+                        float2 positionInSubgraph = (1268.75, 391.82568)
+                    }
+                }
+            )
+            color3f inputs:Mix_bg.connect = </Root/EmissiveNewspaper/Image.outputs:out>
+            color3f outputs:Mix_out.connect = </Root/EmissiveNewspaper/nodegraph/Mix.outputs:out>
+            float2 ui:nodegraph:node:pos = (-237.90915, 43.274002)
+            int ui:nodegraph:node:stackingOrder = 591
+            string[] ui:nodegraph:realitykit:node:attributesShowingChildren = ["inputs:Mix_bg", "inputs:Mix_bg", "outputs:Mix_out"]
+            float2 ui:nodegraph:realitykit:subgraphOutputs:pos = (1666, 324.07977)
+
+            def Shader "Mix"
+            {
+                uniform token info:id = "ND_mix_color3"
+                color3f inputs:bg.connect = </Root/EmissiveNewspaper/nodegraph.inputs:Mix_bg>
+                color3f inputs:fg.connect = </Root/EmissiveNewspaper/nodegraph/Convert.outputs:out>
+                float inputs:mix = 0.5
+                color3f outputs:out
+                float2 ui:nodegraph:node:pos = (1461, 324.07977)
+                int ui:nodegraph:node:stackingOrder = 935
+            }
+
+            def Shader "Convert"
+            {
+                uniform token info:id = "ND_convert_float_color3"
+                float inputs:in.connect = </Root/EmissiveNewspaper/nodegraph/Noise3D.outputs:out>
+                color3f outputs:out
+                float2 ui:nodegraph:node:pos = (1268.75, 256.33386)
+                int ui:nodegraph:node:stackingOrder = 934
+            }
+
+            def Shader "Separate3"
+            {
+                uniform token info:id = "ND_separate3_vector3"
+                float3 inputs:in.connect = </Root/EmissiveNewspaper/nodegraph/Position.outputs:out>
+                float outputs:outx
+                float outputs:outy
+                float outputs:outz
+                float2 ui:nodegraph:node:pos = (272.25, 27.5)
+                int ui:nodegraph:node:stackingOrder = 934
+                string[] ui:nodegraph:realitykit:node:attributesShowingChildren = ["outputs:outy"]
+            }
 
         def Shader "Position"
         {
@@ -702,6 +732,13 @@ def Xform "Root"
             float2 ui:nodegraph:node:pos = (-180.9125, 149.24414)
             int ui:nodegraph:node:stackingOrder = 499
         }
+        references = @EnvironmentMapV4/EnvironmentMap.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
     }
 
     def Capsule "Item" (
@@ -726,10 +763,203 @@ def Xform "Root"
 
             def Shader "DefaultSurfaceShader"
             {
-                uniform token info:id = "UsdPreviewSurface"
-                color3f inputs:diffuseColor = (1, 1, 1)
-                float inputs:roughness = 0.75
-                token outputs:surface
+                token birthDirection = "Constant"
+                token birthLocation = "Volume"
+                float3 emissionDirection = (0, 0, 0)
+                double emissionDuration = 1
+                double emissionDurationVariation = 0
+                token emitterShape = "Cylinder"
+                double idleDuration = 0
+                double idleDurationVariation = 0
+                bool isLocal = 0
+                bool isSpawningEnabled = 1
+                bool loops = 1
+                float particleSpeed = 0.06
+                float particleSpeedVariation = 0.04
+                float3 shapeSize = (0.7, 0.3, 0.05)
+                bool spawnInheritParentColor = 1
+                token spawnOccasion = "OnUpdate"
+                float spawnSpreadFactor = 0
+                float spawnSpreadFactorVariation = 0
+                float spawnVelocityFactor = 1
+                double warmupDuration = 1.5
+
+                def RealityKitStruct "mainEmitter"
+                {
+                    float3 acceleration = (0, 0, 0)
+                    token animationRepeatMode = "Looping"
+                    token billboardMode = "Billboard"
+                    float birthRate = 40
+                    float birthRateVariation = 0
+                    token blendMode = "Additive"
+                    float colorEvolutionPower = 1
+                    int64 columnCount = 4
+                    float dampingFactor = 0.25
+                    float4 endColorA = (1, 0.051991113, 1, 1)
+                    float4 endColorB = (0, 0.98059916, 1, 1)
+                    float frameRate = 30
+                    float frameRateVariation = 0
+                    int64 initialFrame = 0
+                    int64 initialFrameVariation = 2
+                    bool isAnimated = 1
+                    bool isLightingEnabled = 0
+                    float noiseAnimationSpeed = 1
+                    float noiseScale = 1
+                    float noiseStrength = 0.1
+                    token opacityOverLife = "GradualFadeInOut"
+                    float particleAngle = 0
+                    float particleAngleVariation = 0.5
+                    float particleAngularVelocity = 0.25
+                    float particleAngularVelocityVariation = 0.5
+                    asset particleImage = @ParticleEmitterPresetTextures/twinkle.exr@
+                    double particleLifeSpan = 2
+                    double particleLifeSpanVariation = 0.2
+                    float particleMass = 1
+                    float particleMassVariation = 0.2
+                    float particleSize = 0.2
+                    float particleSizeVariation = 0.004
+                    float3 radialGravityCenter = (1, 1, 0)
+                    float radialGravityStrength = 0
+                    int64 rowCount = 4
+                    float sizeMultiplierAtEndOfLifespan = 0.5
+                    float sizeMultiplierAtEndOfLifespanPower = 3
+                    token sortOrder = "IncreasingDepth"
+                    float spreadingAngle = 0
+                    float4 startColorA = (1, 0.051991113, 1, 1)
+                    float4 startColorB = (0.9986965, 0.9674097, 0, 1)
+                    float stretchFactor = 0
+                    bool useEndColor = 1
+                    bool useEndColorRange = 1
+                    bool useStartColorRange = 1
+                    float3 vortexDirection = (0, 1, 0)
+                    float vortexStrength = 0
+                }
+
+                def RealityKitStruct "spawnedEmitter"
+                {
+                    float3 acceleration = (0, -0.04, 0)
+                    token animationRepeatMode = "AutoReverse"
+                    token billboardMode = "Billboard"
+                    float birthRate = 25
+                    float birthRateVariation = 0
+                    token blendMode = "Additive"
+                    float colorEvolutionPower = 0
+                    int64 columnCount = 4
+                    float dampingFactor = 3
+                    float4 endColorA = (0, 0.98059916, 1, 1)
+                    float4 endColorB = (1, 0.051991113, 1, 1)
+                    float frameRate = 24
+                    float frameRateVariation = 0
+                    int64 initialFrame = 2
+                    int64 initialFrameVariation = 4
+                    bool isAnimated = 1
+                    bool isLightingEnabled = 0
+                    float noiseAnimationSpeed = 0.25
+                    float noiseScale = 1
+                    float noiseStrength = 0.1
+                    token opacityOverLife = "GradualFadeInOut"
+                    float particleAngle = 0.745
+                    float particleAngleVariation = 0.25
+                    float particleAngularVelocity = 0.25
+                    float particleAngularVelocityVariation = 0
+                    asset particleImage = @ParticleEmitterPresetTextures/twinkle.exr@
+                    double particleLifeSpan = 0.75
+                    double particleLifeSpanVariation = 0.25
+                    float particleMass = 1
+                    float particleMassVariation = 2
+                    float particleSize = 0.02
+                    float particleSizeVariation = 0.004
+                    float3 radialGravityCenter = (0, 0, 0)
+                    float radialGravityStrength = 0
+                    int64 rowCount = 4
+                    float sizeMultiplierAtEndOfLifespan = 0
+                    float sizeMultiplierAtEndOfLifespanPower = 1
+                    token sortOrder = "IncreasingID"
+                    float spreadingAngle = 0
+                    float4 startColorA = (1, 0.051991113, 1, 0.04)
+                    float4 startColorB = (0, 0.98059916, 1, 0.04)
+                    float stretchFactor = 0
+                    bool useEndColor = 0
+                    bool useEndColorRange = 1
+                    bool useStartColorRange = 1
+                    float3 vortexDirection = (0, 1, 0)
+                    float vortexStrength = 0
+                }
+            }
+        }
+    }
+
+    def "Backpack_Anim" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707963, 0, 0)
+        }
+        references = @Items/Backpack_Anim.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
+        float3 xformOp:scale = (0.5, 0.5, 0.5)
+        float3 xformOp:translate = (-67.95084, 0.6, -25.01902)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "Backpack"
+        {
+            over "Cube" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </Root/EmissiveMaterial> (
+                    bindMaterialAs = "strongerThanDescendants"
+                )
+            }
+        }
+    }
+
+    def Xform "SpatialAudio"
+    {
+        float3 xformOp:translate = (-28.901989, 2.9329166, 34.007584)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def RealityKitComponent "SpatialAudio"
+        {
+            uniform token info:id = "RealityKit.SpatialAudio"
+            float rolloffFactor = 0
+        }
+    }
+
+    def "Ttouch" (
+        active = true
+        references = @TtouchV3-1/Ttouch.usd@
+    )
+    {
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (-69, 0.6, -29)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "Ttouch_root"
+        {
+            def RealityKitComponent "AnimationLibrary"
+            {
+                reorder nameChildren = ["Ttouch_idle", "Ttouch_run", "Ttouch_walk"]
+                uniform token info:id = "RealityKit.AnimationLibrary"
+
+                def RealityKitAnimationFile "Ttouch_idle"
+                {
+                    uniform asset file = @TtouchV3-1/Ttouch_idle.usd@
+                    uniform string name = "Ttouch_idle"
+                }
+
+                def RealityKitAnimationFile "Ttouch_run"
+                {
+                    uniform asset file = @TtouchV3-1/Ttouch_walk2.usd@
+                    uniform string name = "Ttouch_run"
+                }
+
+                def RealityKitAnimationFile "Ttouch_walk"
+                {
+                    uniform asset file = @TtouchV3-1/Ttouch_walk3.usd@
+                    uniform string name = "Ttouch_walk"
+                }
             }
         }
     }

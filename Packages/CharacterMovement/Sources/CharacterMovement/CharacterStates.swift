@@ -20,6 +20,7 @@ public struct CharacterStateComponent: Component {
         case idle = "Ttouch_idle"
         case walking = "Ttouch_walk"
         case jump
+        case run = "Ttouch_run"
 
         @MainActor public static var prefix: String = ""
         var filename: String { rawValue }
