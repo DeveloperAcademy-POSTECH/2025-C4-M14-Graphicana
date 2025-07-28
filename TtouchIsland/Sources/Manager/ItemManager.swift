@@ -135,5 +135,7 @@ struct ItemManager {
 
     // MARK: - 보틀 아이템 상호작용 메소드
 
-    func setCharacterRunButtonAvailable() {}
+    func setCharacterRunButtonAvailable() {
+        manager.runButtonEnabled = true
+    }
 }
