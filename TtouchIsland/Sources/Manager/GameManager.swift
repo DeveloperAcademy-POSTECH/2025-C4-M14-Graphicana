@@ -27,6 +27,7 @@ class GameManager {
 
     var showInterface: Bool = false
     var showEndCredits: Bool = false
+    var showResetButton: Bool = true
 
     // MARK: - 아이템 상태 변수
 

@@ -23,27 +23,44 @@ extension GameView {
         mapCompass: Entity,
         content _: some RealityViewContentProtocol
     ) {
-        newspaper.components.set([ItemComponent(type: .newspaper, targetEntity: character)])
-        backpack.components.set([ItemComponent(type: .backpack, targetEntity: character)])
-        cheese.components.set([ItemComponent(type: .cheese, targetEntity: character)])
-        bottle.components.set([ItemComponent(type: .bottle, targetEntity: character)])
-        flashlight.components.set([ItemComponent(type: .flashlight, targetEntity: character)])
-        mapCompass.components.set([ItemComponent(type: .mapCompass, targetEntity: character)])
+        newspaper.components.set([
+            ItemComponent(type: .newspaper, targetEntity: character)
+        ])
+        backpack.components.set([
+            ItemComponent(type: .backpack, targetEntity: character)
+        ])
+        cheese.components.set([
+            ItemComponent(type: .cheese, targetEntity: character)
+        ])
+        bottle.components.set([
+            ItemComponent(type: .bottle, targetEntity: character)
+        ])
+        flashlight.components.set([
+            ItemComponent(type: .flashlight, targetEntity: character)
+        ])
+        mapCompass.components.set([
+            ItemComponent(type: .mapCompass, targetEntity: character)
+        ])
     }
 
     /// 신문을 클로즈업하는 함수
     func closeupNewspaper(newspaper: Entity, camera: Entity) throws {
         manager.isFocusedOnItem.toggle()
+        manager.showResetButton = false
 
         // 카메라 상태 수동 저장
-        if let worldCameraComponent = camera.components[WorldCameraComponent.self] {
+        if let worldCameraComponent = camera.components[
+            WorldCameraComponent.self
+        ] {
             manager.savedCameraState = worldCameraComponent
             print("✅ Camera state saved: \(worldCameraComponent)")
         }
 
         // 캐릭터 움직임 정지
         if let character = character,
-           var movementComponent = character.components[CharacterMovementComponent.self]
+            var movementComponent = character.components[
+                CharacterMovementComponent.self
+            ]
         {
             movementComponent.paused = true
             character.components.set(movementComponent)
@@ -53,15 +70,16 @@ extension GameView {
         let orientAction = CameraOrientAction(
             transitionIn: 0.5,
             transitionOut: 0,
-            azimuth: .pi - 0.8, // 카메라의 수평 회전 각도
-            elevation: 0.3, // 카메라의 수직 회전 각도
-            radius: 0.75, // 카메라와 신문 사이의 거리
-            targetOffset: .zero, // 카메라가 바라볼 때 신문의 오프셋
+            azimuth: .pi - 0.8,  // 카메라의 수평 회전 각도
+            elevation: 0.3,  // 카메라의 수직 회전 각도
+            radius: 0.75,  // 카메라와 신문 사이의 거리
+            targetOffset: .zero,  // 카메라가 바라볼 때 신문의 오프셋
             target: newspaper.id
         )
 
         let orientAnim = try AnimationResource.makeActionAnimation(
-            for: orientAction, duration: .greatestFiniteMagnitude
+            for: orientAction,
+            duration: .greatestFiniteMagnitude
         )
         CameraOrientActionHandler.register { _ in CameraOrientActionHandler() }
         camera.playAnimation(orientAnim)
@@ -69,7 +87,10 @@ extension GameView {
         // 신문이 서서히 나타나는 애니메이션
         let fadeInAction = FromToByAction(to: Float(1.0))
         let fadeInAnim = try AnimationResource.makeActionAnimation(
-            for: fadeInAction, duration: 1, bindTarget: .opacity, delay: 1
+            for: fadeInAction,
+            duration: 1,
+            bindTarget: .opacity,
+            delay: 1
         )
         newspaper.playAnimation(fadeInAnim)
     }
@@ -77,6 +98,7 @@ extension GameView {
     /// 플레이어 시점으로 카메라를 되돌리는 함수
     func returnToPlayerView(camera: Entity) throws {
         manager.isFocusedOnItem.toggle()
+        manager.showResetButton = true
 
         camera.stopAllAnimations()
 
@@ -99,7 +121,9 @@ extension GameView {
         CameraOrientAction.subscribe(to: .ended) { _ in
             // 캐릭터 움직임 재개
             if let character = character,
-               var movementComponent = character.components[CharacterMovementComponent.self]
+                var movementComponent = character.components[
+                    CharacterMovementComponent.self
+                ]
             {
                 movementComponent.paused = false
                 character.components.set(movementComponent)
@@ -130,7 +154,9 @@ extension GameView {
     func setCharacterScaleUp() async {
         guard let character = character else { return }
 
-        print("⚙️ Previous Collision Height: \(character.visualBounds(relativeTo: character.parent).extents.y)")
+        print(
+            "⚙️ Previous Collision Height: \(character.visualBounds(relativeTo: character.parent).extents.y)"
+        )
         let bounds = character.visualBounds(relativeTo: character.parent)
         print("🛠 충돌 영역 크기: \(bounds.extents)")
         print("🛠 충돌 영역 위치: \(bounds.center)")
@@ -147,11 +173,11 @@ extension GameView {
                     radius: collisionRadius,
                     height: collisionHeight,
                     collisionFilter: characterCollisionFilter
-                ),
+                )
             ]
         )
     }
-    
+
     //TODO: 멍청코드 수정하기
     func playItemAnimations(game: Entity) {
         let items: [(entityName: String, animKey: String)] = [
@@ -159,13 +185,16 @@ extension GameView {
             ("Bottle_Anim", "default subtree animation"),
             ("Flashlight_Anim", "default subtree animation"),
             ("Cheese_Anim", "default subtree animation"),
-            ("MapCompass_Anim", "default subtree animation")
+            ("MapCompass_Anim", "default subtree animation"),
         ]
-        
+
         for (entityName, animKey) in items {
             guard let entity = game.findEntity(named: entityName),
-                  let animLibrary = entity.components[AnimationLibraryComponent.self],
-                  let animation = animLibrary.animations[animKey] else { continue }
+                let animLibrary = entity.components[
+                    AnimationLibraryComponent.self
+                ],
+                let animation = animLibrary.animations[animKey]
+            else { continue }
             let loopingAnimation = animation.repeat()
             entity.playAnimation(loopingAnimation, transitionDuration: 0.0)
         }

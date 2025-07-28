@@ -28,7 +28,7 @@ struct GameView: View {
             RealityView { content in
                 guard
                     let game: Entity = try? await Entity(
-                        named: "Scene2",
+                        named: "Scene",
                         in: dummyAssetsBundle
                     )
                 else { return }
@@ -143,17 +143,21 @@ struct GameView: View {
                 .zIndex(1)
             }
             // 초기화 버튼
-            // TO DO: UI 변경
-            VStack {
-                HStack {
+            if manager.showResetButton {
+                VStack {
+                    HStack {
+                        Spacer()
+
+                        Button {
+                            showResetAlert = true
+                        } label: {
+                            ActionButton(name: "ResetIcon")
+                        }
+                    }.padding(.top, 50)
                     Spacer()
-                    Button("Reset") {
-                        showResetAlert = true
-                    }
-                }.padding(.top, 50)
-                Spacer()
-                // 우선순위 위로!
-            }.zIndex(2)
+                    // 우선순위 위로!
+                }.zIndex(2)
+            }
 
             if manager.showEndCredits {
                 VStack {
@@ -354,4 +358,3 @@ struct GameView: View {
 //#Preview {
 //    GameView()
 //}
-
