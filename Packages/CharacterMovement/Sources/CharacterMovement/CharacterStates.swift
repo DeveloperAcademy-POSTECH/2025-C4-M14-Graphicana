@@ -19,6 +19,7 @@ public struct CharacterStateComponent: Component {
     public enum CharacterState: String, CaseIterable {
         case idle = "Ttouch_idle"
         case walking = "Ttouch_walk"
+        case running
         case jump
 
         @MainActor public static var prefix: String = ""
@@ -40,8 +41,11 @@ public struct CharacterStateComponent: Component {
     /// 애니메이션 재생 컨트롤러
     var animController: AnimationPlaybackController?
 
-    /// 캐릭터가 불타고 있는지 여부 (특수 상태 플래그)
-    public var isOnFire: Bool = false
+    /// 캐릭터가 달리고 있는 여부
+    public var isOnRunning: Bool = false
+
+//    /// 캐릭터가 불타고 있는지 여부 (특수 상태 플래그)
+//    public var isOnFire: Bool = false
 
     /// - 상태에 따른 애니메이션 속도 계산
     /// - 걷기: 입력된 속도 그대로, 점프: 2, 나머지: 1
@@ -117,7 +121,7 @@ public struct CharacterStateComponent: Component {
             return nil
         }
         if stateComponent.currentState != newState {
-            let allowedStates = [CharacterState.idle, .walking, .jump]
+            let allowedStates = [CharacterState.idle, .walking, .jump, .running]
             if !allowedStates.contains(newState) {
                 fatalError("Cannot handle \(newState) from nil.")
             }
@@ -137,8 +141,9 @@ public struct CharacterStateComponent: Component {
             stateComponent.currentState = newState
         }
         // Update the speed of the animations.
+        // TODO: SPEED
         stateComponent.animController?.speed = calculateControllerSpeed(
-            for: newState, speed: movementSpeed * (stateComponent.isOnFire ? 2 : 1)
+            for: newState, speed: movementSpeed
         )
         entity.components.set(stateComponent)
         return stateComponent.animController

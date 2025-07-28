@@ -22,7 +22,7 @@ public struct CharacterMovementSystem: System {
 
     /// The maximum speed for the character.
     /// 캐릭터의 최대 속도
-    let maxFlatSpeed: Float = 2.5
+//    let maxFlatSpeed: Float = 2.5
     /// 가속 비율
     var accelerationRate: Float = 0.1
     /// 감속 비율
@@ -143,6 +143,14 @@ public struct CharacterMovementSystem: System {
         lastLinear: inout SIMD3<Float>,
         jump: Bool
     ) {
+        var speedMultiplier: Float = 1.0
+
+        if let isOnRunning = character.components[CharacterStateComponent.self]?.isOnRunning,
+           isOnRunning
+        {
+            speedMultiplier = 3.0
+        }
+
         /// 수평면(XZ)에서의 속도 크기 비교
         /// 속도 감소 시 0.6으로 감속 (빠르게) , 가속 시 0.1로 가속 (부드럽게)
         let accelerationRate: Float = {
@@ -153,8 +161,8 @@ public struct CharacterMovementSystem: System {
 
         /// 선형 보간(LERP) 방식을 통한 부드러운 속도 전환
         /// 이전 속도에서 목표 속도로 점진적인 변화
-        lastLinear.x = lastLinear.x * (1 - accelerationRate) + fixedDirection.x * deltaTime * accelerationRate
-        lastLinear.z = lastLinear.z * (1 - accelerationRate) + fixedDirection.z * deltaTime * accelerationRate
+        lastLinear.x = lastLinear.x * (1 - accelerationRate) + (fixedDirection.x * speedMultiplier) * deltaTime * accelerationRate
+        lastLinear.z = lastLinear.z * (1 - accelerationRate) + (fixedDirection.z * speedMultiplier) * deltaTime * accelerationRate
 
         // 점프 처리 코드
         if let controllerState = character.components[CharacterControllerStateComponent.self] {

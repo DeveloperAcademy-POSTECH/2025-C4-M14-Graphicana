@@ -42,7 +42,7 @@ extension GameView {
         }
 
         // 캐릭터 움직임 정지
-        if let character = character,
+        if let character = manager.character,
            var movementComponent = character.components[CharacterMovementComponent.self]
         {
             movementComponent.paused = true
@@ -81,7 +81,7 @@ extension GameView {
         camera.stopAllAnimations()
 
         // 카메라의 FollowComponent를 캐릭터로 다시 설정
-        if let character = character {
+        if let character = manager.character {
             if let followComponent = camera.components[FollowComponent.self] {
                 followComponent.targetOverride = character.id
                 followComponent.cameraComponent = manager.savedCameraState
@@ -98,7 +98,7 @@ extension GameView {
 
         CameraOrientAction.subscribe(to: .ended) { _ in
             // 캐릭터 움직임 재개
-            if let character = character,
+            if let character = manager.character,
                var movementComponent = character.components[CharacterMovementComponent.self]
             {
                 movementComponent.paused = false
@@ -128,7 +128,7 @@ extension GameView {
     // MARK: - 치즈 아이템 상호작용 메소드
 
     func setCharacterScaleUp() async {
-        guard let character = character else { return }
+        guard let character = manager.character else { return }
 
         print("⚙️ Previous Collision Height: \(character.visualBounds(relativeTo: character.parent).extents.y)")
         let bounds = character.visualBounds(relativeTo: character.parent)
@@ -151,4 +151,8 @@ extension GameView {
             ]
         )
     }
+
+    // MARK: - 보틀 아이템 상호작용 메소드
+
+    
 }

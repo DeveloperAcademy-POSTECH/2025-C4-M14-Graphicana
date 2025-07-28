@@ -30,6 +30,9 @@ public struct CharacterMovementComponent: Component {
     /// 캐릭터 이동 일시정지 상태
     public var paused = false
 
+    /// 캐릭터가 달리고 있는지 여부
+    public var isOnRunning = false
+
     /// 점프 버튼 누름 상태 (누르면 jumpReady를 true로 설정)
     public var jumpPressed = false {
         didSet {

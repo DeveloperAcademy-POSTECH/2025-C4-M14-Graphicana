@@ -14,10 +14,6 @@ struct GameView: View {
     @State private var currentScale: CGFloat = 1.0
     @State private var lastScale: CGFloat = 1.0
 
-    var character: Entity? {
-        manager.gameRoot?.findEntity(named: "Ttouch")
-    }
-
     @State var showInterface: Bool = false
     @State private var showResetAlert = false
 
@@ -57,7 +53,6 @@ struct GameView: View {
 
                 PlatformerThumbControl(
                     manager: manager,
-                    character: character,
                     itemAction: { item, camera in
                         if item.components[ItemComponent.self]?.type
                             == .newspaper
@@ -124,7 +119,7 @@ struct GameView: View {
                                 manager.nearItem = nil
                             }
                         }
-                    }
+                    },
                 )
                 .zIndex(1)
             }
@@ -180,7 +175,7 @@ struct GameView: View {
         _ game: Entity,
         _ content: some RealityViewContentProtocol
     ) async {
-        if let character {
+        if let character = manager.character {
             setupWorldCamera(target: character)
             await characterSetup(character)
         }
@@ -191,7 +186,7 @@ struct GameView: View {
         // TODO: - 환경 충돌 설정
         await setupEnvironmentCollisions(on: game, content: content)
 
-        if let character,
+        if let character = manager.character,
            let newspaper = game.findEntity(named: "NewsPaper"),
            let backpack = game.findEntity(named: "Backpack"),
            let cheese = game.findEntity(named: "Cheese"),
@@ -214,7 +209,6 @@ struct GameView: View {
 
     fileprivate struct PlatformerThumbControl: View {
         let manager: GameManager
-        let character: Entity?
         let itemAction: (_ item: Entity, _ camera: Entity) -> Void
 
         @State var characterJoystick: CGPoint = .zero
@@ -253,7 +247,7 @@ struct GameView: View {
                                 let movementVector: SIMD3<Float> =
                                     [Float(newValue.x), 0, Float(newValue.y)]
                                         / 10
-                                character?
+                                manager.character?
                                     .components[
                                         CharacterMovementComponent.self
                                     ]?
@@ -279,40 +273,59 @@ struct GameView: View {
                             }
                             .background(Color.clear)
 
-                            HStack {
-                                if manager.nearItem != nil {
-                                    Button {
-                                        if let item = manager.nearItem,
-                                           let camera = manager.gameCamera,
-                                           let character = character
-                                        {
-                                            itemAction(item, camera)
-                                            AudioManager.playGetItemSound(
-                                                root: character
-                                            )
-                                        }
-
-                                    } label: {
-                                        ActionButton(name: "GetIcon")
-                                    }
-                                    .padding(.trailing, 16)
-                                }
-
-                                // Jump button.
-                                ActionButton(name: "JumpIcon")
+                            VStack(alignment: .trailing) {
+                                ActionButton(name: "RunIcon")
                                     .onLongPressGesture(
-                                        minimumDuration: 0.0,
+                                        minimumDuration: 0.0, // 즉시 반응
                                         pressing: { isPressed in
-                                            character?.components[
-                                                CharacterMovementComponent.self
-                                            ]?.jumpPressed = isPressed
-                                            AudioManager.playJumpSound(
-                                                root: character!
-                                            )
-                                            manager.updateStatus(to: .jump)
+                                            if isPressed {
+                                                manager.updateStatus(to: .run)
+                                                manager.setCharacterRunning(to: true)
+
+                                            } else {
+                                                manager.updateStatus(to: .common)
+                                                manager.setCharacterRunning(to: false)
+                                            }
                                         },
                                         perform: {}
                                     )
+                                    .padding(.bottom, 4)
+
+                                HStack {
+                                    if manager.nearItem != nil {
+                                        Button {
+                                            if let item = manager.nearItem,
+                                               let camera = manager.gameCamera,
+                                               let character = manager.character
+                                            {
+                                                itemAction(item, camera)
+                                                AudioManager.playGetItemSound(
+                                                    root: character
+                                                )
+                                            }
+
+                                        } label: {
+                                            ActionButton(name: "GetIcon")
+                                        }
+                                        .padding(.trailing, 16)
+                                    }
+
+                                    // Jump button.
+                                    ActionButton(name: "JumpIcon")
+                                        .onLongPressGesture(
+                                            minimumDuration: 0.0,
+                                            pressing: { isPressed in
+                                                manager.character?.components[
+                                                    CharacterMovementComponent.self
+                                                ]?.jumpPressed = isPressed
+                                                AudioManager.playJumpSound(
+                                                    root: manager.character!
+                                                )
+                                                manager.updateStatus(to: .jump)
+                                            },
+                                            perform: {}
+                                        )
+                                }
                             }
                             .padding()
                         }
