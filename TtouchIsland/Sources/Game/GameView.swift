@@ -21,12 +21,12 @@ struct GameView: View {
             Color.black.ignoresSafeArea()
 
             RealityView { content in
-                
-//                if BloomEffect.deviceSupportsEffect() {
-//                    content.renderingEffects.customPostProcessing = .effect(BloomEffect())
-//                    print("BloomEffect supported")
-//                }
-                
+
+                //                if BloomEffect.deviceSupportsEffect() {
+                //                    content.renderingEffects.customPostProcessing = .effect(BloomEffect())
+                //                    print("BloomEffect supported")
+                //                }
+
                 guard
                     let game: Entity = try? await Entity(
                         named: "Scene",
@@ -47,6 +47,8 @@ struct GameView: View {
                 DispatchQueue.main.async { manager.isGameReady = true }
 
                 playItemAnimations(game: game)
+                manager.showInterface = true
+
             }
             .id(gameId)
 
@@ -55,7 +57,7 @@ struct GameView: View {
                     .zIndex(3)
             }
 
-            if manager.isGameReady {
+            if manager.showInterface {
                 JoystickButtonView(
                     manager: manager,
                     itemAction: { item, camera in
@@ -63,7 +65,10 @@ struct GameView: View {
                             == .newspaper
                         {
                             print("📰")
-                            ItemManager().handleNewspaperItem(item: item, camera: camera)
+                            ItemManager().handleNewspaperItem(
+                                item: item,
+                                camera: camera
+                            )
                         }
                         if manager.visibleItems.count == 1 {
                             if item.components[ItemComponent.self]?.type
@@ -89,7 +94,9 @@ struct GameView: View {
                                 // 땃쥐 행복해하는 로티 애니메이션 플레이
                                 manager.updateStatus(to: .getItem)
 
-                                Task { await ItemManager().setCharacterScaleUp() }
+                                Task {
+                                    await ItemManager().setCharacterScaleUp()
+                                }
 
                                 manager.visibleItems[1].isSolid = true
                                 item.removeFromParent()
@@ -153,9 +160,10 @@ struct GameView: View {
                             showResetAlert = true
                         } label: {
                             ActionButton(name: "ResetIcon")
+                                .scaleEffect(0.7)
                         }
                     }
-                    .padding(.top, 50)
+                    .padding(.all, 30)
                     Spacer()
                     // 우선순위 위로!
                 }
@@ -223,12 +231,12 @@ struct GameView: View {
         await setupEnvironmentCollisions(on: game, content: content)
 
         if let character = manager.character,
-           let newspaper = game.findEntity(named: "NewsPaper"),
-           let backpack = game.findEntity(named: "Backpack_Anim"),
-           let cheese = game.findEntity(named: "Cheese_Anim"),
-           let bottle = game.findEntity(named: "Bottle_Anim"),
-           let flashlight = game.findEntity(named: "Flashlight_Anim"),
-           let mapCompass = game.findEntity(named: "MapCompass_Anim")
+            let newspaper = game.findEntity(named: "NewsPaper"),
+            let backpack = game.findEntity(named: "Backpack_Anim"),
+            let cheese = game.findEntity(named: "Cheese_Anim"),
+            let bottle = game.findEntity(named: "Bottle_Anim"),
+            let flashlight = game.findEntity(named: "Flashlight_Anim"),
+            let mapCompass = game.findEntity(named: "MapCompass_Anim")
         {
             setupItems(
                 character: character,

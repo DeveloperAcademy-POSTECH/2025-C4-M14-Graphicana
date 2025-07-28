@@ -17,16 +17,21 @@ struct ItemManager {
     /// 신문을 클로즈업하는 함수
     func closeupNewspaper(newspaper: Entity, camera: Entity) throws {
         manager.isFocusedOnItem.toggle()
+        manager.showResetButton = false
 
         // 카메라 상태 수동 저장
-        if let worldCameraComponent = camera.components[WorldCameraComponent.self] {
+        if let worldCameraComponent = camera.components[
+            WorldCameraComponent.self
+        ] {
             manager.savedCameraState = worldCameraComponent
             print("✅ Camera state saved: \(worldCameraComponent)")
         }
 
         // 캐릭터 움직임 정지
         if let character = manager.character,
-           var movementComponent = character.components[CharacterMovementComponent.self]
+            var movementComponent = character.components[
+                CharacterMovementComponent.self
+            ]
         {
             movementComponent.paused = true
             character.components.set(movementComponent)
@@ -36,15 +41,16 @@ struct ItemManager {
         let orientAction = CameraOrientAction(
             transitionIn: 0.5,
             transitionOut: 0,
-            azimuth: .pi - 0.8, // 카메라의 수평 회전 각도
-            elevation: 0.3, // 카메라의 수직 회전 각도
-            radius: 0.75, // 카메라와 신문 사이의 거리
-            targetOffset: .zero, // 카메라가 바라볼 때 신문의 오프셋
+            azimuth: .pi - 0.8,  // 카메라의 수평 회전 각도
+            elevation: 0.3,  // 카메라의 수직 회전 각도
+            radius: 0.75,  // 카메라와 신문 사이의 거리
+            targetOffset: .zero,  // 카메라가 바라볼 때 신문의 오프셋
             target: newspaper.id
         )
 
         let orientAnim = try AnimationResource.makeActionAnimation(
-            for: orientAction, duration: .greatestFiniteMagnitude
+            for: orientAction,
+            duration: .greatestFiniteMagnitude
         )
         CameraOrientActionHandler.register { _ in CameraOrientActionHandler() }
         camera.playAnimation(orientAnim)
@@ -52,7 +58,10 @@ struct ItemManager {
         // 신문이 서서히 나타나는 애니메이션
         let fadeInAction = FromToByAction(to: Float(1.0))
         let fadeInAnim = try AnimationResource.makeActionAnimation(
-            for: fadeInAction, duration: 1, bindTarget: .opacity, delay: 1
+            for: fadeInAction,
+            duration: 1,
+            bindTarget: .opacity,
+            delay: 1
         )
         newspaper.playAnimation(fadeInAnim)
     }
@@ -60,6 +69,7 @@ struct ItemManager {
     /// 플레이어 시점으로 카메라를 되돌리는 함수
     func returnToPlayerView(camera: Entity) throws {
         manager.isFocusedOnItem.toggle()
+        manager.showResetButton = true
 
         camera.stopAllAnimations()
 
@@ -81,7 +91,9 @@ struct ItemManager {
 
         // 캐릭터 움직임 재개
         if let character = manager.character,
-           var movementComponent = character.components[CharacterMovementComponent.self]
+            var movementComponent = character.components[
+                CharacterMovementComponent.self
+            ]
         {
             movementComponent.paused = false
             character.components.set(movementComponent)
@@ -128,7 +140,7 @@ struct ItemManager {
                         group: GameCollisionGroup.player,
                         mask: .all
                     )
-                ),
+                )
             ]
         )
     }
