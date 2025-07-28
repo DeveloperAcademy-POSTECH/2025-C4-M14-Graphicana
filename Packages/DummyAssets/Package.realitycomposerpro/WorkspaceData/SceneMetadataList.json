@@ -3,7 +3,77 @@
     "objectMetadataList" : [
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "StageBoundary",
+        "StageBoundary"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "MapBoundary",
+        "SeaWall"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "MapBoundary"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "StageBoundary",
+        "_materials"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "StageBoundary"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "SpatialAudio"
+      ],
+      {
+        "isExpanded" : false,
+        "isLocked" : false,
+        "selectedAudioFilePrim" : {
+          "string" : "\/Root\/Sound_Spark___Sea____Wave_Crashing_into_the_Shore_Splashing_wav"
+        }
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "MapBoundary",
+        "_materials"
       ],
       {
         "isExpanded" : true,
