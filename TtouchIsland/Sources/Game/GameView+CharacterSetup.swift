@@ -47,6 +47,7 @@ extension GameView {
         ////        anims[.spin] = animationLibrary.animations["spin"]?.combineWithAudio(named: "attack")
         anims[.idle] = animationLibrary.animations["Ttouch_idle"]?.repeat()
         anims[.walking] = animationLibrary.animations["Ttouch_walk"]?.repeat()
+        anims[.run] = animationLibrary.animations["Ttouch_run"]?.repeat()
 
         //        // 각 캐릭터 상태들(idle, walking, jump, spin)에 대해서 해당 애니메이션 상태들을 연결한다.
         let characterStates = CharacterStateComponent(animations: anims)

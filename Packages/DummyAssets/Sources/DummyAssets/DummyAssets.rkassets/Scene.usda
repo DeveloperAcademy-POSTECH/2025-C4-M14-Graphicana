@@ -10,7 +10,7 @@
 
 def Xform "Root"
 {
-    reorder nameChildren = ["DirectionalLight", "EnvironmentMap", "Backpack", "Bottle", "Cheese", "Flashlight", "MapCompass", "EmissiveMaterial", "EmissiveNewspaper", "EmissiveMap", "MapBoundary", "OceanPlane", "SkySphere", "SkyBoxMaterial", "TtouchParent", "Ttouch_walk", "Ttouch", "NewsPaperV1", "DummyMaterial", "NewsPaper"]
+    reorder nameChildren = ["DirectionalLight", "EnvironmentMap", "Backpack", "Bottle", "Cheese", "Flashlight", "MapCompass", "EmissiveMaterial", "EmissiveNewspaper", "EmissiveMap", "MapBoundary", "OceanPlane", "SkySphere", "SkyBoxMaterial", "TtouchParent", "Ttouch_walk", "TtouchV3", "NewsPaperV1", "DummyMaterial", "NewsPaper"]
     def Xform "DirectionalLight" (
         customData = {
             float3 rotationEulerHint = (-0.71140635, 1.556634e-7, -5.782976e-8)
@@ -97,12 +97,13 @@ def Xform "Root"
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
     }
 
-    def "Ttouch" (
+    def "TtouchV3" (
+        active = false
         references = @TtouchV3/Ttouch.usd@
     )
     {
         float3 xformOp:scale = (1, 1, 1)
-        float3 xformOp:translate = (-69.30744, 0.37, -28.799633)
+        float3 xformOp:translate = (-68.69713, 0.6899841, -28.70021)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
         over "Ttouch_root"
@@ -123,11 +124,16 @@ def Xform "Root"
                     uniform string name = "Ttouch_idle"
                 }
             }
+
+            def RealityKitComponent "AudioLibrary"
+            {
+                uniform token info:id = "RealityKit.AudioLibrary"
+            }
         }
     }
 
     def "Backpack" (
-        active = true
+        active = false
         customData = {
             float3 rotationEulerHint = (-1.570796, 2.1936502, 2.3841858e-7)
         }
@@ -188,7 +194,7 @@ def Xform "Root"
     {
         quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
         float3 xformOp:scale = (0.5, 0.5, 0.5)
-        float3 xformOp:translate = (-63.207767, 0.3000002, -26.076021)
+        float3 xformOp:translate = (-63.207767, 0.50055337, -26.076021)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
         over "Circle"
@@ -481,8 +487,8 @@ def Xform "Root"
             color3f inputs:Mix_bg.connect = </Root/EmissiveNewspaper/Image.outputs:out>
             color3f outputs:Mix_out.connect = </Root/EmissiveNewspaper/nodegraph/Mix.outputs:out>
             float2 ui:nodegraph:node:pos = (-237.90915, 43.274002)
-            int ui:nodegraph:node:stackingOrder = 588
-            string[] ui:nodegraph:realitykit:node:attributesShowingChildren = ["inputs:Mix_bg", "inputs:Mix_bg"]
+            int ui:nodegraph:node:stackingOrder = 591
+            string[] ui:nodegraph:realitykit:node:attributesShowingChildren = ["inputs:Mix_bg", "inputs:Mix_bg", "outputs:Mix_out"]
             float2 ui:nodegraph:realitykit:subgraphOutputs:pos = (1666, 324.07977)
 
             def Shader "Mix"
@@ -784,6 +790,7 @@ def Xform "Root"
     {
         quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
         float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (0, 0, 0)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
     }
 
@@ -882,7 +889,7 @@ def Xform "Root"
                     double particleLifeSpanVariation = 0.2
                     float particleMass = 1
                     float particleMassVariation = 0.2
-                    float particleSize = 0.25
+                    float particleSize = 0.2
                     float particleSizeVariation = 0.004
                     float3 radialGravityCenter = (1, 1, 0)
                     float radialGravityStrength = 0
@@ -950,6 +957,81 @@ def Xform "Root"
                     bool useStartColorRange = 1
                     float3 vortexDirection = (0, 1, 0)
                     float vortexStrength = 0
+                }
+            }
+        }
+    }
+
+    def "Backpack_Anim" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707963, 0, 0)
+        }
+        references = @Items/Backpack_Anim.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
+        float3 xformOp:scale = (0.5, 0.5, 0.5)
+        float3 xformOp:translate = (-67.95084, 0.6, -25.01902)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "Backpack"
+        {
+            over "Cube" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </Root/EmissiveMaterial> (
+                    bindMaterialAs = "strongerThanDescendants"
+                )
+            }
+        }
+    }
+
+    def Xform "SpatialAudio"
+    {
+        float3 xformOp:translate = (-28.901989, 2.9329166, 34.007584)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def RealityKitComponent "SpatialAudio"
+        {
+            uniform token info:id = "RealityKit.SpatialAudio"
+            float rolloffFactor = 0
+        }
+    }
+
+    def "Ttouch" (
+        active = true
+        references = @TtouchV3-1/Ttouch.usd@
+    )
+    {
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (-69, 0.6, -29)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "Ttouch_root"
+        {
+            def RealityKitComponent "AnimationLibrary"
+            {
+                reorder nameChildren = ["Ttouch_idle", "Ttouch_run", "Ttouch_walk"]
+                uniform token info:id = "RealityKit.AnimationLibrary"
+
+                def RealityKitAnimationFile "Ttouch_idle"
+                {
+                    uniform asset file = @TtouchV3-1/Ttouch_idle.usd@
+                    uniform string name = "Ttouch_idle"
+                }
+
+                def RealityKitAnimationFile "Ttouch_run"
+                {
+                    uniform asset file = @TtouchV3-1/Ttouch_walk2.usd@
+                    uniform string name = "Ttouch_run"
+                }
+
+                def RealityKitAnimationFile "Ttouch_walk"
+                {
+                    uniform asset file = @TtouchV3-1/Ttouch_walk3.usd@
+                    uniform string name = "Ttouch_walk"
                 }
             }
         }
