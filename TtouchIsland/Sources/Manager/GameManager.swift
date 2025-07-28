@@ -25,6 +25,7 @@ class GameManager {
         currentStatus = updatedStatus
     }
 
+    var showOnboarding: Bool = true
     var showInterface: Bool = false
     var showEndCredits: Bool = false
     var showResetButton: Bool = true
@@ -58,6 +59,7 @@ class GameManager {
         isGameFinished = false
         levelFinished = false
         showEndCredits = false
+        showResetButton = true
     }
 }
 

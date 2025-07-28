@@ -115,6 +115,8 @@ struct ItemSystem: System {
             && !appModel.isGameFinished
         {
             appModel.isGameFinished = true
+            appModel.showResetButton = false
+
             print("complete")
             // 엔딩 애니메이션: 물 차오르는 애니메이션 재생
             playMapEndingAnimation()

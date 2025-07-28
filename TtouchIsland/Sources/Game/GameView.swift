@@ -49,6 +49,11 @@ struct GameView: View {
             // id가 변경되면 뷰를 새로 그림
             .id(gameId)
 
+            if manager.showOnboarding {
+                OnboardingView()
+                    .zIndex(3)
+            }
+
             if manager.showInterface {
                 if !manager.isFocusedOnItem {
                     GameStatusView()
