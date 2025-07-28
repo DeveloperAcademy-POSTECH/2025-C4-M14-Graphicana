@@ -36,6 +36,11 @@ class GameManager {
         character.components[CharacterStateComponent.self]?.isOnRunning = boolean
         character.components[CharacterMovementComponent.self]?.isOnRunning = boolean
     }
+    
+    var showOnboarding: Bool = true
+    var showInterface: Bool = false
+    var showEndCredits: Bool = false
+    var showResetButton: Bool = true
 
     // MARK: - 아이템 상태 변수
 
@@ -67,6 +72,8 @@ class GameManager {
         savedCameraState = nil
         isGameFinished = false
         levelFinished = false
+        showEndCredits = false
+        showResetButton = true
     }
 }
 

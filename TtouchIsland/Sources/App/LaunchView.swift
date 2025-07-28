@@ -13,7 +13,7 @@ struct LaunchView: View {
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
-            LottieLaunchView(animationName: "LoadingScreen", loopMode: .loop)
+            LottieLaunchView(animationName: "LoadingLottie", loopMode: .loop)
         }
     }
 }

@@ -39,10 +39,15 @@ struct GameView: View {
                 print("게임 세팅 완료")
 
                 DispatchQueue.main.async { manager.isGameReady = true }
+
+                playItemAnimations(game: game)
             }
             .id(gameId)
 
-            // MARK: - Interface View
+            if manager.showOnboarding {
+                OnboardingView()
+                    .zIndex(3)
+            }
 
             if manager.isGameReady {
                 JoystickButtonView(
@@ -133,28 +138,44 @@ struct GameView: View {
             }
 
             // 초기화 버튼
-            // TODO: UI 변경
-            VStack {
-                HStack {
-                    Spacer()
-                    Button("Reset") {
-                        showResetAlert = true
+            if manager.showResetButton {
+                VStack {
+                    HStack {
+                        Spacer()
+
+                        Button {
+                            showResetAlert = true
+                        } label: {
+                            ActionButton(name: "ResetIcon")
+                        }
                     }
-                }.padding(.top, 50)
-                Spacer()
-                // 우선순위 위로!
-            }.zIndex(2)
+                    .padding(.top, 50)
+                    Spacer()
+                    // 우선순위 위로!
+                }
+                .zIndex(2)
+            }
+
+            if manager.showEndCredits {
+                VStack {
+                    Text("end credits")
+                    Button("처음부터 시작") {
+                        manager.isGameReady = false
+                        manager.resetGame()
+                        manager.showInterface = false
+                        gameId = UUID()
+                    }
+                }
+            }
         }
-        .alert("게임 리셋", isPresented: $showResetAlert) {
+        .alert("게임을 다시 시작하시겠습니까?", isPresented: $showResetAlert) {
             Button("취소", role: .cancel) {}
-            Button("네", role: .confirm) {
+            Button("다시 시작할래요", role: .confirm) {
                 manager.isGameReady = false
                 manager.resetGame()
                 // 새로운 게임 아이디를 설정해줘서 realityview를 다시 그리게 한다
                 gameId = UUID()
             }
-        } message: {
-            Text("게임을 다시 시작하시겠습니까?")
         }
         .gesture(
             // 핀치 인아웃(두 손가락 벌리기, 오므리기) 제스처를 감지
@@ -195,13 +216,13 @@ struct GameView: View {
         // TODO: - 환경 충돌 설정
         await setupEnvironmentCollisions(on: game, content: content)
 
-        if let character = manager.character,
-           let newspaper = game.findEntity(named: "NewsPaper"),
-           let backpack = game.findEntity(named: "Backpack"),
-           let cheese = game.findEntity(named: "Cheese"),
-           let bottle = game.findEntity(named: "Bottle"),
-           let flashlight = game.findEntity(named: "Flashlight"),
-           let mapCompass = game.findEntity(named: "MapCompass")
+        if let character,
+            let newspaper = game.findEntity(named: "NewsPaper"),
+            let backpack = game.findEntity(named: "Backpack_Anim"),
+            let cheese = game.findEntity(named: "Cheese_Anim"),
+            let bottle = game.findEntity(named: "Bottle_Anim"),
+            let flashlight = game.findEntity(named: "Flashlight_Anim"),
+            let mapCompass = game.findEntity(named: "MapCompass_Anim")
         {
             setupItems(
                 character: character,
