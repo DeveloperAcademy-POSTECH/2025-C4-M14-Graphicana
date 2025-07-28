@@ -33,12 +33,53 @@ def Xform "Root"
         }
     }
 
+    def "NewsPaper" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-2.9042923, 0.7079655, -0.035237744)
+        }
+        references = @Newspaper/NewsPapaer.usd@
+    )
+    {
+        quatf xformOp:orient = (-0.11707966, 0.93053734, -0.057435095, -0.34218967)
+        float3 xformOp:scale = (1.5, 1.5, 1.5)
+        float3 xformOp:translate = (-67.219635, 0.6, -27.579752)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "NewsPaper"
+        {
+            def RealityKitComponent "VFXEmitter"
+            {
+                uniform token info:id = "RealityKit.VFXEmitter"
+
+                def RealityKitStruct "currentState"
+                {
+                    def RealityKitStruct "mainEmitter"
+                    {
+                    }
+
+                    def RealityKitStruct "spawnedEmitter"
+                    {
+                    }
+                }
+            }
+
+            over "Plane" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </Root/EmissiveNewspaper> (
+                    bindMaterialAs = "weakerThanDescendants"
+                )
+            }
+        }
+    }
+
     def Material "DummyMaterial"
     {
         token outputs:mtlx:surface
         token outputs:realitykit:vertex
         token outputs:surface.connect = </Root/DummyMaterial/UsdPreviewSurface.outputs:surface>
-        float2 ui:nodegraph:realitykit:subgraphOutputs:pos = (0, 110.5)
 
         def Shader "UsdPreviewSurface"
         {
@@ -85,6 +126,34 @@ def Xform "Root"
         }
     }
 
+    def "TtouchParent" (
+        active = false
+        customData = {
+            float3 rotationEulerHint = (-1.5707964, 0, 0)
+        }
+        references = @Character/TtouchParent.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (-70.364426, 0.3, -29.27386)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "Ttouch"
+        {
+            quatf xformOp:orient = (0.7058013, 0.70580125, 0.04294868, 0.04294868)
+            float3 xformOp:scale = (0.1, 0.1, 0.1)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+            over "Cube_027"
+            {
+                float3 xformOp:translate = (0, 0, 0)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+        }
+    }
+
     def "OceanPlane" (
         customData = {
             float3 rotationEulerHint = (-1.5707964, 0, 0)
@@ -107,7 +176,7 @@ def Xform "Root"
         def Shader "PreviewSurface"
         {
             uniform token info:id = "ND_UsdPreviewSurface_surfaceshader"
-            color3f inputs:diffuseColor.connect = </Root/EmissiveMaterial/nodegraph.outputs:Mix_out>
+            color3f inputs:diffuseColor.connect = </Root/EmissiveMaterial/Mix.outputs:out>
             float inputs:metallic
             float3 inputs:normal
             float inputs:opacity
@@ -116,6 +185,70 @@ def Xform "Root"
             float2 ui:nodegraph:node:pos = (69.368706, 42.220215)
             int ui:nodegraph:node:stackingOrder = 445
             string[] ui:nodegraph:realitykit:node:attributesShowingChildren = []
+        }
+
+        def Shader "Time"
+        {
+            uniform token info:id = "ND_time_float"
+            float outputs:out
+            float2 ui:nodegraph:node:pos = (-663.06934, 16.68396)
+            int ui:nodegraph:node:stackingOrder = 588
+        }
+
+        def Shader "WorleyNoise3D"
+        {
+            uniform token info:id = "ND_worleynoise3d_float"
+            float inputs:jitter
+            float3 inputs:position.connect = </Root/EmissiveMaterial/Add.outputs:out>
+            float outputs:out
+            float2 ui:nodegraph:node:pos = (-395.79898, -37.23713)
+            int ui:nodegraph:node:stackingOrder = 586
+        }
+
+        def Shader "Position"
+        {
+            uniform token info:id = "ND_position_vector3"
+            float3 outputs:out
+            float2 ui:nodegraph:node:pos = (-838.69684, -81.98379)
+            int ui:nodegraph:node:stackingOrder = 590
+        }
+
+        def Shader "ConstantFloat"
+        {
+            uniform token info:id = "ND_constant_float"
+            float inputs:value = 0
+            float outputs:out
+            float2 ui:nodegraph:node:pos = (-863.0906, -26.864492)
+            int ui:nodegraph:node:stackingOrder = 591
+        }
+
+        def Shader "Multiply_2"
+        {
+            uniform token info:id = "ND_multiply_vector3FA"
+            float3 inputs:in1.connect = </Root/EmissiveMaterial/Position.outputs:out>
+            float inputs:in2.connect = </Root/EmissiveMaterial/ConstantFloat.outputs:out>
+            float3 outputs:out
+            float2 ui:nodegraph:node:pos = (-690.38367, -40.90969)
+            int ui:nodegraph:node:stackingOrder = 589
+        }
+
+        def Shader "Add"
+        {
+            uniform token info:id = "ND_add_vector3FA"
+            float3 inputs:in1.connect = </Root/EmissiveMaterial/Multiply_2.outputs:out>
+            float inputs:in2.connect = </Root/EmissiveMaterial/Time.outputs:out>
+            float3 outputs:out
+            float2 ui:nodegraph:node:pos = (-531.8637, -31.653145)
+            int ui:nodegraph:node:stackingOrder = 587
+        }
+
+        def Shader "Convert"
+        {
+            uniform token info:id = "ND_convert_float_color3"
+            float inputs:in.connect = </Root/EmissiveMaterial/WorleyNoise3D.outputs:out>
+            color3f outputs:out
+            float2 ui:nodegraph:node:pos = (-211.0086, -0.31381586)
+            int ui:nodegraph:node:stackingOrder = 585
         }
 
         def Shader "Image"
@@ -130,128 +263,15 @@ def Xform "Root"
             string[] ui:nodegraph:realitykit:node:attributesShowingChildren = []
         }
 
-        def Scope "Group" (
-            kind = "group"
-        )
+        def Shader "Mix"
         {
-            string ui:group:annotation = "Group"
-            string ui:group:annotationDescription = ""
-            string[] ui:group:members = ["p:nodegraph"]
-        }
-
-        def NodeGraph "nodegraph"
-        {
-            color3f inputs:Mix_bg (
-                customData = {
-                    dictionary realitykit = {
-                        float2 positionInSubgraph = (1268.75, 391.82568)
-                    }
-                }
-            )
-            prepend color3f inputs:Mix_bg.connect = </Root/EmissiveMaterial/Image.outputs:out>
-            prepend color3f outputs:Mix_out.connect = </Root/EmissiveMaterial/nodegraph/Mix.outputs:out>
-            float2 ui:nodegraph:node:pos = (-237.15913, 25.024858)
-            int ui:nodegraph:node:stackingOrder = 500
-            float2 ui:nodegraph:realitykit:subgraphOutputs:pos = (1666, 324.07977)
-
-            def Shader "Mix"
-            {
-                uniform token info:id = "ND_mix_color3"
-                color3f inputs:bg.connect = </Root/EmissiveMaterial/nodegraph.inputs:Mix_bg>
-                color3f inputs:fg.connect = </Root/EmissiveMaterial/nodegraph/Convert.outputs:out>
-                float inputs:mix = 0.5
-                color3f outputs:out
-                float2 ui:nodegraph:node:pos = (1461, 324.07977)
-                int ui:nodegraph:node:stackingOrder = 935
-            }
-
-            def Shader "Convert"
-            {
-                uniform token info:id = "ND_convert_float_color3"
-                float inputs:in.connect = </Root/EmissiveMaterial/nodegraph/Noise3D.outputs:out>
-                color3f outputs:out
-                float2 ui:nodegraph:node:pos = (1268.75, 256.33386)
-                int ui:nodegraph:node:stackingOrder = 934
-            }
-
-            def Shader "Separate3"
-            {
-                uniform token info:id = "ND_separate3_vector3"
-                float3 inputs:in.connect = </Root/EmissiveMaterial/nodegraph/Position.outputs:out>
-                float outputs:outx
-                float outputs:outy
-                float outputs:outz
-                float2 ui:nodegraph:node:pos = (272.25, 27.5)
-                int ui:nodegraph:node:stackingOrder = 934
-                string[] ui:nodegraph:realitykit:node:attributesShowingChildren = ["outputs:outy"]
-            }
-
-            def Shader "Multiply_2"
-            {
-                uniform token info:id = "ND_multiply_vector3FA"
-                float3 inputs:in1.connect = </Root/EmissiveMaterial/nodegraph/Combine3.outputs:out>
-                float inputs:in2.connect = </Root/EmissiveMaterial/nodegraph/ConstantFloat.outputs:out>
-                float3 outputs:out
-                float2 ui:nodegraph:node:pos = (709.75, 145.87036)
-                int ui:nodegraph:node:stackingOrder = 934
-            }
-
-            def Shader "Position"
-            {
-                uniform token info:id = "ND_position_vector3"
-                float3 outputs:out
-                float2 ui:nodegraph:node:pos = (68.75, 27.5)
-                int ui:nodegraph:node:stackingOrder = 934
-            }
-
-            def Shader "ConstantFloat"
-            {
-                uniform token info:id = "ND_constant_float"
-                float inputs:value = 0.5
-                float outputs:out
-                float2 ui:nodegraph:node:pos = (497.25, 264.24072)
-                int ui:nodegraph:node:stackingOrder = 934
-            }
-
-            def Shader "Combine3"
-            {
-                uniform token info:id = "ND_combine3_vector3"
-                float inputs:in1.connect = </Root/EmissiveMaterial/nodegraph/Separate3.outputs:outx>
-                float inputs:in2.connect = </Root/EmissiveMaterial/nodegraph/Separate3.outputs:outy>
-                float inputs:in3
-                float3 outputs:out
-                float2 ui:nodegraph:node:pos = (497.25, 27.5)
-                int ui:nodegraph:node:stackingOrder = 934
-            }
-
-            def Shader "Time"
-            {
-                uniform token info:id = "ND_time_float"
-                float outputs:out
-                float2 ui:nodegraph:node:pos = (709.75, 366.79736)
-                int ui:nodegraph:node:stackingOrder = 934
-            }
-
-            def Shader "Noise3D"
-            {
-                uniform token info:id = "ND_noise3d_float"
-                float inputs:amplitude
-                float inputs:pivot = 0.5
-                float3 inputs:position.connect = </Root/EmissiveMaterial/nodegraph/Add.outputs:out>
-                float outputs:out
-                float2 ui:nodegraph:node:pos = (1045, 256.33386)
-                int ui:nodegraph:node:stackingOrder = 934
-            }
-
-            def Shader "Add"
-            {
-                uniform token info:id = "ND_add_vector3FA"
-                float3 inputs:in1.connect = </Root/EmissiveMaterial/nodegraph/Multiply_2.outputs:out>
-                float inputs:in2.connect = </Root/EmissiveMaterial/nodegraph/Time.outputs:out>
-                float3 outputs:out
-                float2 ui:nodegraph:node:pos = (860.75, 256.33386)
-                int ui:nodegraph:node:stackingOrder = 934
-            }
+            uniform token info:id = "ND_mix_color3"
+            color3f inputs:bg.connect = </Root/EmissiveMaterial/Image.outputs:out>
+            color3f inputs:fg.connect = </Root/EmissiveMaterial/Convert.outputs:out>
+            float inputs:mix = 0.5
+            color3f outputs:out
+            float2 ui:nodegraph:node:pos = (-180.9125, 149.24414)
+            int ui:nodegraph:node:stackingOrder = 584
         }
     }
 
@@ -267,7 +287,7 @@ def Xform "Root"
         def Shader "PreviewSurface"
         {
             uniform token info:id = "ND_UsdPreviewSurface_surfaceshader"
-            color3f inputs:diffuseColor.connect = </Root/EmissiveNewspaper/nodegraph.outputs:Mix_out>
+            color3f inputs:diffuseColor.connect = </Root/EmissiveNewspaper/Mix.outputs:out>
             float inputs:metallic
             float3 inputs:normal
             float inputs:opacity
@@ -278,19 +298,15 @@ def Xform "Root"
             string[] ui:nodegraph:realitykit:node:attributesShowingChildren = []
         }
 
-        def Shader "Image"
+        def Shader "Time"
         {
-            uniform token info:id = "ND_image_color3"
-            asset inputs:file = @NewsPaperV2/textures/NewsPaper.png@
-            string inputs:filtertype
-            string inputs:vaddressmode
-            color3f outputs:out
-            float2 ui:nodegraph:node:pos = (-600.5329, 135.63483)
-            int ui:nodegraph:node:stackingOrder = 590
-            string[] ui:nodegraph:realitykit:node:attributesShowingChildren = []
+            uniform token info:id = "ND_time_float"
+            float outputs:out
+            float2 ui:nodegraph:node:pos = (-663.06934, 16.68396)
+            int ui:nodegraph:node:stackingOrder = 240
         }
 
-        def NodeGraph "nodegraph"
+        def Shader "WorleyNoise3D"
         {
             color3f inputs:Mix_bg (
                 customData = {
@@ -338,72 +354,73 @@ def Xform "Root"
                 string[] ui:nodegraph:realitykit:node:attributesShowingChildren = ["outputs:outy"]
             }
 
-            def Shader "Multiply_2"
-            {
-                uniform token info:id = "ND_multiply_vector3FA"
-                float3 inputs:in1.connect = </Root/EmissiveNewspaper/nodegraph/Combine3.outputs:out>
-                float inputs:in2.connect = </Root/EmissiveNewspaper/nodegraph/ConstantFloat.outputs:out>
-                float3 outputs:out
-                float2 ui:nodegraph:node:pos = (709.75, 145.87036)
-                int ui:nodegraph:node:stackingOrder = 934
-            }
+        def Shader "Position"
+        {
+            uniform token info:id = "ND_position_vector3"
+            float3 outputs:out
+            float2 ui:nodegraph:node:pos = (-838.69684, -81.98379)
+            int ui:nodegraph:node:stackingOrder = 248
+        }
 
-            def Shader "Position"
-            {
-                uniform token info:id = "ND_position_vector3"
-                float3 outputs:out
-                float2 ui:nodegraph:node:pos = (68.75, 27.5)
-                int ui:nodegraph:node:stackingOrder = 934
-            }
+        def Shader "ConstantFloat"
+        {
+            uniform token info:id = "ND_constant_float"
+            float inputs:value = 0
+            float outputs:out
+            float2 ui:nodegraph:node:pos = (-863.0906, -26.864492)
+            int ui:nodegraph:node:stackingOrder = 246
+        }
 
-            def Shader "ConstantFloat"
-            {
-                uniform token info:id = "ND_constant_float"
-                float inputs:value = 0.5
-                float outputs:out
-                float2 ui:nodegraph:node:pos = (497.25, 264.24072)
-                int ui:nodegraph:node:stackingOrder = 934
-            }
+        def Shader "Multiply_2"
+        {
+            uniform token info:id = "ND_multiply_vector3FA"
+            float3 inputs:in1.connect = </Root/EmissiveNewspaper/Position.outputs:out>
+            float inputs:in2.connect = </Root/EmissiveNewspaper/ConstantFloat.outputs:out>
+            float3 outputs:out
+            float2 ui:nodegraph:node:pos = (-690.38367, -40.90969)
+            int ui:nodegraph:node:stackingOrder = 244
+        }
 
-            def Shader "Combine3"
-            {
-                uniform token info:id = "ND_combine3_vector3"
-                float inputs:in1.connect = </Root/EmissiveNewspaper/nodegraph/Separate3.outputs:outx>
-                float inputs:in2.connect = </Root/EmissiveNewspaper/nodegraph/Separate3.outputs:outy>
-                float inputs:in3
-                float3 outputs:out
-                float2 ui:nodegraph:node:pos = (497.25, 27.5)
-                int ui:nodegraph:node:stackingOrder = 934
-            }
+        def Shader "Add"
+        {
+            uniform token info:id = "ND_add_vector3FA"
+            float3 inputs:in1.connect = </Root/EmissiveNewspaper/Multiply_2.outputs:out>
+            float inputs:in2.connect = </Root/EmissiveNewspaper/Time.outputs:out>
+            float3 outputs:out
+            float2 ui:nodegraph:node:pos = (-531.8637, -31.653145)
+            int ui:nodegraph:node:stackingOrder = 238
+        }
 
-            def Shader "Time"
-            {
-                uniform token info:id = "ND_time_float"
-                float outputs:out
-                float2 ui:nodegraph:node:pos = (709.75, 366.79736)
-                int ui:nodegraph:node:stackingOrder = 934
-            }
+        def Shader "Convert"
+        {
+            uniform token info:id = "ND_convert_float_color3"
+            float inputs:in.connect = </Root/EmissiveNewspaper/WorleyNoise3D.outputs:out>
+            color3f outputs:out
+            float2 ui:nodegraph:node:pos = (-211.0086, -0.31381586)
+            int ui:nodegraph:node:stackingOrder = 498
+        }
 
-            def Shader "Noise3D"
-            {
-                uniform token info:id = "ND_noise3d_float"
-                float inputs:amplitude
-                float inputs:pivot = 0.5
-                float3 inputs:position.connect = </Root/EmissiveNewspaper/nodegraph/Add.outputs:out>
-                float outputs:out
-                float2 ui:nodegraph:node:pos = (1045, 256.33386)
-                int ui:nodegraph:node:stackingOrder = 934
-            }
+        def Shader "Image"
+        {
+            uniform token info:id = "ND_image_color3"
+            asset inputs:file = @Newspaper/textures/Newspaper.png@
+            string inputs:filtertype
+            string inputs:vaddressmode
+            color3f outputs:out
+            float2 ui:nodegraph:node:pos = (-547.98157, 324.4609)
+            int ui:nodegraph:node:stackingOrder = 503
+            string[] ui:nodegraph:realitykit:node:attributesShowingChildren = []
+        }
 
-            def Shader "Add"
-            {
-                uniform token info:id = "ND_add_vector3FA"
-                float3 inputs:in1.connect = </Root/EmissiveNewspaper/nodegraph/Multiply_2.outputs:out>
-                float inputs:in2.connect = </Root/EmissiveNewspaper/nodegraph/Time.outputs:out>
-                float3 outputs:out
-                float2 ui:nodegraph:node:pos = (860.75, 256.33386)
-                int ui:nodegraph:node:stackingOrder = 934
-            }
+        def Shader "Mix"
+        {
+            uniform token info:id = "ND_mix_color3"
+            color3f inputs:bg.connect = </Root/EmissiveNewspaper/Image.outputs:out>
+            color3f inputs:fg.connect = </Root/EmissiveNewspaper/Convert.outputs:out>
+            float inputs:mix = 0.5
+            color3f outputs:out
+            float2 ui:nodegraph:node:pos = (-180.9125, 149.24414)
+            int ui:nodegraph:node:stackingOrder = 499
         }
     }
 
@@ -419,7 +436,7 @@ def Xform "Root"
         def Shader "PreviewSurface"
         {
             uniform token info:id = "ND_UsdPreviewSurface_surfaceshader"
-            color3f inputs:diffuseColor.connect = </Root/EmissiveMap/nodegraph.outputs:Mix_out>
+            color3f inputs:diffuseColor.connect = </Root/EmissiveMap/Mix.outputs:out>
             float inputs:metallic
             float3 inputs:normal
             float inputs:opacity
@@ -430,175 +447,91 @@ def Xform "Root"
             string[] ui:nodegraph:realitykit:node:attributesShowingChildren = []
         }
 
+        def Shader "Time"
+        {
+            uniform token info:id = "ND_time_float"
+            float outputs:out
+            float2 ui:nodegraph:node:pos = (-663.06934, 16.68396)
+            int ui:nodegraph:node:stackingOrder = 562
+        }
+
+        def Shader "WorleyNoise3D"
+        {
+            uniform token info:id = "ND_worleynoise3d_float"
+            float inputs:jitter
+            float3 inputs:position.connect = </Root/EmissiveMap/Add.outputs:out>
+            float outputs:out
+            float2 ui:nodegraph:node:pos = (-395.79898, -37.23713)
+            int ui:nodegraph:node:stackingOrder = 501
+        }
+
+        def Shader "Position"
+        {
+            uniform token info:id = "ND_position_vector3"
+            float3 outputs:out
+            float2 ui:nodegraph:node:pos = (-838.69684, -81.98379)
+            int ui:nodegraph:node:stackingOrder = 562
+        }
+
+        def Shader "ConstantFloat"
+        {
+            uniform token info:id = "ND_constant_float"
+            float inputs:value = 0
+            float outputs:out
+            float2 ui:nodegraph:node:pos = (-863.0906, -26.864492)
+            int ui:nodegraph:node:stackingOrder = 562
+        }
+
+        def Shader "Multiply_2"
+        {
+            uniform token info:id = "ND_multiply_vector3FA"
+            float3 inputs:in1.connect = </Root/EmissiveMap/Position.outputs:out>
+            float inputs:in2.connect = </Root/EmissiveMap/ConstantFloat.outputs:out>
+            float3 outputs:out
+            float2 ui:nodegraph:node:pos = (-690.38367, -40.90969)
+            int ui:nodegraph:node:stackingOrder = 562
+        }
+
+        def Shader "Add"
+        {
+            uniform token info:id = "ND_add_vector3FA"
+            float3 inputs:in1.connect = </Root/EmissiveMap/Multiply_2.outputs:out>
+            float inputs:in2.connect = </Root/EmissiveMap/Time.outputs:out>
+            float3 outputs:out
+            float2 ui:nodegraph:node:pos = (-531.8637, -31.653145)
+            int ui:nodegraph:node:stackingOrder = 238
+        }
+
+        def Shader "Convert"
+        {
+            uniform token info:id = "ND_convert_float_color3"
+            float inputs:in.connect = </Root/EmissiveMap/WorleyNoise3D.outputs:out>
+            color3f outputs:out
+            float2 ui:nodegraph:node:pos = (-211.0086, -0.31381586)
+            int ui:nodegraph:node:stackingOrder = 498
+        }
+
         def Shader "Image"
         {
             uniform token info:id = "ND_image_color3"
             asset inputs:file = @Items/textures/Map.png@
             string inputs:filtertype
-            string inputs:uaddressmode
             string inputs:vaddressmode
             color3f outputs:out
-            float2 ui:nodegraph:node:pos = (-543.665, 126.19008)
-            int ui:nodegraph:node:stackingOrder = 595
+            float2 ui:nodegraph:node:pos = (-547.98157, 324.4609)
+            int ui:nodegraph:node:stackingOrder = 564
             string[] ui:nodegraph:realitykit:node:attributesShowingChildren = []
         }
 
-        def NodeGraph "nodegraph"
+        def Shader "Mix"
         {
-            color3f inputs:Mix_bg (
-                customData = {
-                    dictionary realitykit = {
-                        float2 positionInSubgraph = (1268.75, 391.82568)
-                    }
-                }
-            )
-            color3f inputs:Mix_bg.connect = </Root/EmissiveMap/Image.outputs:out>
-            color3f outputs:Mix_out.connect = </Root/EmissiveMap/nodegraph/Mix.outputs:out>
-            float2 ui:nodegraph:node:pos = (-273.70248, 86.03568)
-            int ui:nodegraph:node:stackingOrder = 593
-            string[] ui:nodegraph:realitykit:node:attributesShowingChildren = ["inputs:Mix_bg", "inputs:Mix_bg"]
-            float2 ui:nodegraph:realitykit:subgraphOutputs:pos = (1666, 324.07977)
-
-            def Shader "Mix"
-            {
-                uniform token info:id = "ND_mix_color3"
-                color3f inputs:bg.connect = </Root/EmissiveMap/nodegraph.inputs:Mix_bg>
-                color3f inputs:fg.connect = </Root/EmissiveMap/nodegraph/Convert.outputs:out>
-                float inputs:mix = 0.5
-                color3f outputs:out
-                float2 ui:nodegraph:node:pos = (1461, 324.07977)
-                int ui:nodegraph:node:stackingOrder = 935
-            }
-
-            def Shader "Convert"
-            {
-                uniform token info:id = "ND_convert_float_color3"
-                float inputs:in.connect = </Root/EmissiveMap/nodegraph/Noise3D.outputs:out>
-                color3f outputs:out
-                float2 ui:nodegraph:node:pos = (1268.75, 256.33386)
-                int ui:nodegraph:node:stackingOrder = 934
-            }
-
-            def Shader "Separate3"
-            {
-                uniform token info:id = "ND_separate3_vector3"
-                float3 inputs:in.connect = </Root/EmissiveMap/nodegraph/Position.outputs:out>
-                float outputs:outx
-                float outputs:outy
-                float outputs:outz
-                float2 ui:nodegraph:node:pos = (272.25, 27.5)
-                int ui:nodegraph:node:stackingOrder = 934
-                string[] ui:nodegraph:realitykit:node:attributesShowingChildren = ["outputs:outy"]
-            }
-
-            def Shader "Multiply_2"
-            {
-                uniform token info:id = "ND_multiply_vector3FA"
-                float3 inputs:in1.connect = </Root/EmissiveMap/nodegraph/Combine3.outputs:out>
-                float inputs:in2.connect = </Root/EmissiveMap/nodegraph/ConstantFloat.outputs:out>
-                float3 outputs:out
-                float2 ui:nodegraph:node:pos = (709.75, 145.87036)
-                int ui:nodegraph:node:stackingOrder = 934
-            }
-
-            def Shader "Position"
-            {
-                uniform token info:id = "ND_position_vector3"
-                float3 outputs:out
-                float2 ui:nodegraph:node:pos = (68.75, 27.5)
-                int ui:nodegraph:node:stackingOrder = 934
-            }
-
-            def Shader "ConstantFloat"
-            {
-                uniform token info:id = "ND_constant_float"
-                float inputs:value = 0.5
-                float outputs:out
-                float2 ui:nodegraph:node:pos = (497.25, 264.24072)
-                int ui:nodegraph:node:stackingOrder = 934
-            }
-
-            def Shader "Combine3"
-            {
-                uniform token info:id = "ND_combine3_vector3"
-                float inputs:in1.connect = </Root/EmissiveMap/nodegraph/Separate3.outputs:outx>
-                float inputs:in2.connect = </Root/EmissiveMap/nodegraph/Separate3.outputs:outy>
-                float inputs:in3
-                float3 outputs:out
-                float2 ui:nodegraph:node:pos = (497.25, 27.5)
-                int ui:nodegraph:node:stackingOrder = 934
-            }
-
-            def Shader "Time"
-            {
-                uniform token info:id = "ND_time_float"
-                float outputs:out
-                float2 ui:nodegraph:node:pos = (709.75, 366.79736)
-                int ui:nodegraph:node:stackingOrder = 934
-            }
-
-            def Shader "Noise3D"
-            {
-                uniform token info:id = "ND_noise3d_float"
-                float inputs:amplitude
-                float inputs:pivot = 0.5
-                float3 inputs:position.connect = </Root/EmissiveMap/nodegraph/Add.outputs:out>
-                float outputs:out
-                float2 ui:nodegraph:node:pos = (1045, 256.33386)
-                int ui:nodegraph:node:stackingOrder = 934
-            }
-
-            def Shader "Add"
-            {
-                uniform token info:id = "ND_add_vector3FA"
-                float3 inputs:in1.connect = </Root/EmissiveMap/nodegraph/Multiply_2.outputs:out>
-                float inputs:in2.connect = </Root/EmissiveMap/nodegraph/Time.outputs:out>
-                float3 outputs:out
-                float2 ui:nodegraph:node:pos = (860.75, 256.33386)
-                int ui:nodegraph:node:stackingOrder = 934
-            }
-        }
-    }
-
-    def "MapBoundary" (
-        active = true
-        customData = {
-            float3 rotationEulerHint = (-1.5707964, 0, 0)
-        }
-        references = @MapBoundary/MapBoundary.usd@
-    )
-    {
-        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
-        float3 xformOp:scale = (1, 1, 1)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-
-        over "_materials"
-        {
-            over "Transparent"
-            {
-                token outputs:mtlx:surface
-                token outputs:realitykit:vertex
-
-                over "Principled_BSDF"
-                {
-                    float inputs:opacityThreshold = 1
-                }
-            }
-        }
-
-        over "SeaWall"
-        {
-            quatf xformOp:orient = (0.9999955, -0.0004442352, -0.0020393047, 0.00214269)
-            float3 xformOp:scale = (150, 150.00003, 1)
-            double3 xformOp:translate = (0.04505950212478638, -0.005868434906005859, 0)
-            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-        }
-    }
-
-    def "EnvironmentMap" (
-        active = true
-        customData = {
-            float3 rotationEulerHint = (-1.5707964, 0, 0)
+            uniform token info:id = "ND_mix_color3"
+            color3f inputs:bg.connect = </Root/EmissiveMap/Image.outputs:out>
+            color3f inputs:fg.connect = </Root/EmissiveMap/Convert.outputs:out>
+            float inputs:mix = 0.5
+            color3f outputs:out
+            float2 ui:nodegraph:node:pos = (-180.9125, 149.24414)
+            int ui:nodegraph:node:stackingOrder = 499
         }
         references = @EnvironmentMapV4/EnvironmentMap.usd@
     )
@@ -609,47 +542,27 @@ def Xform "Root"
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
     }
 
-    def "NewsPaper" (
+    def Capsule "Item" (
         active = true
+        prepend apiSchemas = ["MaterialBindingAPI"]
         customData = {
-            float3 rotationEulerHint = (-2.9670596, 0.6981319, 4.863021e-9)
+            float3 rotationEulerHint = (0, 0, 0)
         }
-        references = @NewsPaperV2/NewsPapaer.usd@
     )
     {
-        quatf xformOp:orient = (-0.081899665, 0.9361168, -0.029809045, -0.34071872)
-        float3 xformOp:scale = (1, 1, 1)
-        float3 xformOp:translate = (-66.87272, 0.7716406, -27.292587)
+        uniform token axis = "Y"
+        double height = 0.2
+        rel material:binding = </Root/Item/DefaultMaterial>
+        double radius = 0.1
+        quatf xformOp:orient = (1, 0, 0, 0)
+        float3 xformOp:translate = (-48.194664, 0.6000004, -22.37871)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
-        over "_materials"
+        def Material "DefaultMaterial"
         {
-            over "NewsPaper"
-            {
-                token outputs:mtlx:surface
-                token outputs:realitykit:vertex
-            }
-        }
+            token outputs:surface.connect = </Root/Item/DefaultMaterial/DefaultSurfaceShader.outputs:surface>
 
-        over "NewsPaper"
-        {
-            over "Plane" (
-                prepend apiSchemas = ["MaterialBindingAPI"]
-            )
-            {
-                rel material:binding = </Root/NewsPaper/_materials/NewsPaper> (
-                    bindMaterialAs = "weakerThanDescendants"
-                )
-                float3 xformOp:scale = (0.8, 0.8, 0.8)
-                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-            }
-        }
-
-        def RealityKitComponent "VFXEmitter"
-        {
-            uniform token info:id = "RealityKit.VFXEmitter"
-
-            def RealityKitStruct "currentState"
+            def Shader "DefaultSurfaceShader"
             {
                 token birthDirection = "Constant"
                 token birthLocation = "Volume"

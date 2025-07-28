@@ -25,6 +25,9 @@ class GameManager {
         currentStatus = updatedStatus
     }
 
+    var showInterface: Bool = false
+    var showEndCredits: Bool = false
+
     // MARK: - 아이템 상태 변수
 
     var visibleItems: [StatusItem] = []
@@ -53,6 +56,7 @@ class GameManager {
         savedCameraState = nil
         isGameFinished = false
         levelFinished = false
+        showEndCredits = false
     }
 }
 

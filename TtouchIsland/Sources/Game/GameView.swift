@@ -18,7 +18,6 @@ struct GameView: View {
         manager.gameRoot?.findEntity(named: "Ttouch")
     }
 
-    @State var showInterface: Bool = false
     @State private var showResetAlert = false
 
     var body: some View {
@@ -42,16 +41,15 @@ struct GameView: View {
 
                 DispatchQueue.main.async { manager.isGameReady = true }
 
-                showInterface = true
-               
                 playItemAnimations(game: game)
+                manager.showInterface = true
             }
             .ignoresSafeArea()
             .zIndex(0)
             // id가 변경되면 뷰를 새로 그림
             .id(gameId)
 
-            if showInterface {
+            if manager.showInterface {
                 if !manager.isFocusedOnItem {
                     GameStatusView()
                         .padding(.top, 26)
@@ -156,13 +154,25 @@ struct GameView: View {
                 Spacer()
                 // 우선순위 위로!
             }.zIndex(2)
+
+            if manager.showEndCredits {
+                VStack {
+                    Text("end credits")
+                    Button("처음부터 시작") {
+                        manager.isGameReady = false
+                        manager.resetGame()
+                        manager.showInterface = false
+                        gameId = UUID()
+                    }
+                }
+            }
         }
         .alert("게임 리셋", isPresented: $showResetAlert) {
             Button("취소", role: .cancel) {}
             Button("네", role: .confirm) {
                 manager.isGameReady = false
                 manager.resetGame()
-                showInterface = false
+                manager.showInterface = false
                 // 새로운 게임 아이디를 설정해줘서 realityview를 다시 그리게 한다
                 gameId = UUID()
             }
