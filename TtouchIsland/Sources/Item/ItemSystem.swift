@@ -180,5 +180,9 @@ struct ItemSystem: System {
             })
             camera.playAnimation(orientAnim)
         }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+            appModel.showEndCredits = true
+        }
     }
 }

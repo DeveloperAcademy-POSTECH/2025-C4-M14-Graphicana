@@ -153,6 +153,18 @@ struct GameView: View {
                 Spacer()
                 // 우선순위 위로!
             }.zIndex(2)
+
+            if manager.showEndCredits {
+                VStack {
+                    Text("end credits")
+                    Button("처음부터 시작") {
+                        manager.isGameReady = false
+                        manager.resetGame()
+                        manager.showInterface = false
+                        gameId = UUID()
+                    }
+                }
+            }
         }
         .alert("게임 리셋", isPresented: $showResetAlert) {
             Button("취소", role: .cancel) {}
