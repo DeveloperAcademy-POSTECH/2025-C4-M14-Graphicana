@@ -122,9 +122,11 @@ struct JoystickButtonView: View {
                                         manager.character?.components[
                                             CharacterMovementComponent.self
                                         ]?.jumpPressed = isPressed
-                                        AudioManager.playJumpSound(
-                                            root: manager.character!
-                                        )
+                                        if let character = manager.character {
+                                            AudioManager.playJumpSound(
+                                                root: character
+                                            )
+                                        }
                                         manager.updateStatus(to: .jump)
                                     },
                                     perform: {}
