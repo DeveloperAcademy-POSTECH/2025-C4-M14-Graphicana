@@ -6,6 +6,8 @@ import WorldCamera
 class GameManager {
     static let shared = GameManager()
 
+    var isGameReady = false
+
     // MARK: - 초기 게임 세팅
 
     var gameRoot: Entity?

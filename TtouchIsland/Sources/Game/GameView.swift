@@ -27,7 +27,6 @@ struct GameView: View {
                 .ignoresSafeArea()
 
             RealityView { content in
-
                 guard
                     let game: Entity = try? await Entity(
                         named: "Scene",
@@ -39,6 +38,9 @@ struct GameView: View {
 
                 await initializeGameSetting(game, content)
                 content.add(game)
+                print("게임 세팅 완료")
+
+                DispatchQueue.main.async { manager.isGameReady = true }
 
                 showInterface = true
             }
@@ -66,7 +68,9 @@ struct GameView: View {
                             handleNewspaperItem(item: item, camera: camera)
                         }
                         if manager.visibleItems.count == 1 {
-                            if item.components[ItemComponent.self]?.type == .backpack {
+                            if item.components[ItemComponent.self]?.type
+                                == .backpack
+                            {
                                 print("🎒")
 
                                 // 땃쥐 행복해하는 로티 애니메이션 플레이
@@ -79,7 +83,9 @@ struct GameView: View {
                             }
                         }
                         if manager.visibleItems.count > 1 {
-                            if item.components[ItemComponent.self]?.type == .cheese {
+                            if item.components[ItemComponent.self]?.type
+                                == .cheese
+                            {
                                 print("🧀")
 
                                 // 땃쥐 행복해하는 로티 애니메이션 플레이
@@ -90,7 +96,9 @@ struct GameView: View {
                                 item.removeFromParent()
                                 manager.nearItem = nil
                             }
-                            if item.components[ItemComponent.self]?.type == .bottle {
+                            if item.components[ItemComponent.self]?.type
+                                == .bottle
+                            {
                                 print("🍶")
 
                                 // 땃쥐 행복해하는 로티 애니메이션 플레이
@@ -100,7 +108,9 @@ struct GameView: View {
                                 item.removeFromParent()
                                 manager.nearItem = nil
                             }
-                            if item.components[ItemComponent.self]?.type == .flashlight {
+                            if item.components[ItemComponent.self]?.type
+                                == .flashlight
+                            {
                                 print("🔦")
 
                                 // 땃쥐 행복해하는 로티 애니메이션 플레이
@@ -112,8 +122,12 @@ struct GameView: View {
                                 manager.nearItem = nil
                             }
                         }
-                        if manager.visibleItems.last?.outlinedImageName == "Map_Outline" {
-                            if item.components[ItemComponent.self]?.type == .mapCompass {
+                        if manager.visibleItems.last?.outlinedImageName
+                            == "Map_Outline"
+                        {
+                            if item.components[ItemComponent.self]?.type
+                                == .mapCompass
+                            {
                                 print("🗺️")
 
                                 // 땃쥐 행복해하는 로티 애니메이션 플레이
@@ -144,6 +158,7 @@ struct GameView: View {
         .alert("게임 리셋", isPresented: $showResetAlert) {
             Button("취소", role: .cancel) {}
             Button("네", role: .confirm) {
+                manager.isGameReady = false
                 manager.resetGame()
                 showInterface = false
                 // 새로운 게임 아이디를 설정해줘서 realityview를 다시 그리게 한다
@@ -192,12 +207,12 @@ struct GameView: View {
         await setupEnvironmentCollisions(on: game, content: content)
 
         if let character,
-           let newspaper = game.findEntity(named: "NewsPaper"),
-           let backpack = game.findEntity(named: "Backpack"),
-           let cheese = game.findEntity(named: "Cheese"),
-           let bottle = game.findEntity(named: "Bottle"),
-           let flashlight = game.findEntity(named: "Flashlight"),
-           let mapCompass = game.findEntity(named: "MapCompass")
+            let newspaper = game.findEntity(named: "NewsPaper"),
+            let backpack = game.findEntity(named: "Backpack"),
+            let cheese = game.findEntity(named: "Cheese"),
+            let bottle = game.findEntity(named: "Bottle"),
+            let flashlight = game.findEntity(named: "Flashlight"),
+            let mapCompass = game.findEntity(named: "MapCompass")
         {
             setupItems(
                 character: character,
@@ -229,7 +244,7 @@ struct GameView: View {
                         Button(action: {
                             // 뒤로가기 액션 호출
                             if let item = manager.nearItem,
-                               let camera = manager.gameCamera
+                                let camera = manager.gameCamera
                             {
                                 itemAction(item, camera)
                             }
@@ -252,7 +267,7 @@ struct GameView: View {
                             .onChange(of: characterJoystick) { _, newValue in
                                 let movementVector: SIMD3<Float> =
                                     [Float(newValue.x), 0, Float(newValue.y)]
-                                        / 10
+                                    / 10
                                 character?
                                     .components[
                                         CharacterMovementComponent.self
@@ -267,7 +282,7 @@ struct GameView: View {
                             )
                             .onChange(of: cameraAngleThumbstick) {
                                 _,
-                                    newValue in
+                                newValue in
                                 let movementVector: SIMD2<Float> =
                                     [Float(newValue.x), Float(-newValue.y)] / 30
 
@@ -283,8 +298,8 @@ struct GameView: View {
                                 if manager.nearItem != nil {
                                     Button {
                                         if let item = manager.nearItem,
-                                           let camera = manager.gameCamera,
-                                           let character = character
+                                            let camera = manager.gameCamera,
+                                            let character = character
                                         {
                                             itemAction(item, camera)
                                             AudioManager.playGetItemSound(
@@ -323,7 +338,7 @@ struct GameView: View {
         }
     }
 }
-
-#Preview {
-    GameView()
-}
+//
+//#Preview {
+//    GameView()
+//}
