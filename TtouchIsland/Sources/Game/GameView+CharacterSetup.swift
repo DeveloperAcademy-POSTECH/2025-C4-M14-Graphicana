@@ -53,12 +53,6 @@ extension GameView {
         let characterStates = CharacterStateComponent(animations: anims)
         // 생성된 컴포넌트를 히어로 엔티티에 부착한다.
         character.components.set(characterStates)
-
-        //        // Register the attack actions.
-        //        HeroAttackAction.registerAction()
-        //        HeroAttackActionHandler.register { _ in
-        //            HeroAttackActionHandler()
-        //        }
     }
 
     // 캐릭터에 필요한 모든 핵심 컴포넌트를 생성하고 구성하는 함수

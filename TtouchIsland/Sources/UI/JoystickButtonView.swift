@@ -82,7 +82,7 @@ struct JoystickButtonView: View {
                                            let character = manager.character
                                         {
                                             itemAction(item, camera)
-                                            AudioManager.playGetItemSound(
+                                            AudioManager.playJumpAudio(
                                                 root: character
                                             )
                                         }
@@ -98,11 +98,15 @@ struct JoystickButtonView: View {
                                         pressing: { isPressed in
                                             if isPressed {
                                                 manager.currentActStatus = .run
-                                                manager.setCharacterRunning(to: true)
+                                                manager.setCharacterRunning(
+                                                    to: true
+                                                )
 
                                             } else {
                                                 manager.currentActStatus = .common
-                                                manager.setCharacterRunning(to: false)
+                                                manager.setCharacterRunning(
+                                                    to: false
+                                                )
                                             }
                                         },
                                         perform: {}
@@ -123,7 +127,7 @@ struct JoystickButtonView: View {
                                             CharacterMovementComponent.self
                                         ]?.jumpPressed = isPressed
                                         if let character = manager.character {
-                                            AudioManager.playJumpSound(
+                                            AudioManager.playJumpAudio(
                                                 root: character
                                             )
                                         }

@@ -72,7 +72,7 @@ struct ItemSystem: System {
     // endPint에서 모든 아이템을 수집했는지 확인
     func checkItemAtEndPoint(context: SceneUpdateContext) {
         guard let character = manager.gameRoot?.findEntity(named: "Ttouch"),
-              let endPoint = manager.gameRoot?.findEntity(named: "Leaf")
+            let endPoint = manager.gameRoot?.findEntity(named: "Leaf")
         else { return }
 
         // 1. 캐릭터와 아이템 사이 거리 계산
@@ -125,16 +125,22 @@ struct ItemSystem: System {
 
     func playMapEndingAnimation() {
         guard let ocean = manager.gameRoot?.findEntity(named: "OceanPlane"),
-              let character = manager.gameRoot?.findEntity(named: "Ttouch")
+            let character = manager.gameRoot?.findEntity(named: "Ttouch")
         else { return }
 
         // 땃쥐 멈춰
         if var movementComponent = character.components[
             CharacterMovementComponent.self
-        ] {
+        ]  //            var stateComponent = character.components[
+        //                CharacterStateComponent.self
+        //            ]
+        {
             movementComponent.paused = true
             character.components.set(movementComponent)
+            //            stateComponent.currentState = .idle
+            //            character.components.set(stateComponent)
         }
+      
         manager.showInterface = false
 
         // 땃쥐 y좌표 가져오기
@@ -151,14 +157,14 @@ struct ItemSystem: System {
             duration: 5.0
         )
         // 카메라 페이드 아웃되고 섬 전체 보여주는 애니메이션
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             playZoomOutOceanAnimation()
         }
     }
 
     func playZoomOutOceanAnimation() {
         guard let character = manager.gameRoot?.findEntity(named: "Ttouch"),
-              let camera = manager.gameRoot?.findEntity(named: "camera")
+            let camera = manager.gameRoot?.findEntity(named: "camera")
         else { return }
 
         // 카메라 줌아웃하는 액션 생성

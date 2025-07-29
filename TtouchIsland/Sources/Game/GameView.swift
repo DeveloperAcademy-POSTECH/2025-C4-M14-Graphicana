@@ -15,18 +15,13 @@ struct GameView: View {
     @State private var lastScale: CGFloat = 1.0
 
     @State private var showResetAlert = false
+    @State private var showRestartButton = false
 
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
 
             RealityView { content in
-
-                //                if BloomEffect.deviceSupportsEffect() {
-                //                    content.renderingEffects.customPostProcessing = .effect(BloomEffect())
-                //                    print("BloomEffect supported")
-                //                }
-
                 guard
                     let game: Entity = try? await Entity(
                         named: "Scene",
@@ -68,7 +63,8 @@ struct GameView: View {
                                 item: item,
                                 camera: camera
                             )
-                        } else if manager.visibleItems.count == 1 {
+                        }
+                        if manager.visibleItems.count == 1 {
                             if item.components[ItemComponent.self]?.type
                                 == .backpack
                             {
@@ -76,17 +72,16 @@ struct GameView: View {
 
                                 // 땃쥐 행복해하는 로티 애니메이션 플레이
                                 manager.currentActStatus = .getItem
-
+                                AudioManager.playGetItemAudio(
+                                    root: manager.gameRoot!
+                                )
                                 manager.visibleItems[0].isSolid = true
                                 manager.setAllItemsAvailable()
                                 item.removeFromParent()
                                 manager.nearItem = nil
-
-                                manager.currentSpeechStatus = .getBag
-                            } else {
-                                manager.currentSpeechStatus = .needBag
                             }
-                        } else if manager.visibleItems.count > 1 {
+                        }
+                        if manager.visibleItems.count > 1 {
                             if item.components[ItemComponent.self]?.type
                                 == .cheese
                             {
@@ -98,12 +93,12 @@ struct GameView: View {
                                 Task {
                                     await ItemManager().setCharacterScaleUp()
                                 }
-
+                                AudioManager.playGetItemAudio(
+                                    root: manager.gameRoot!
+                                )
                                 manager.visibleItems[1].isSolid = true
                                 item.removeFromParent()
                                 manager.nearItem = nil
-
-                                manager.currentSpeechStatus = .getCheeze
                             }
                             if item.components[ItemComponent.self]?.type
                                 == .bottle
@@ -114,12 +109,12 @@ struct GameView: View {
                                 manager.currentActStatus = .getItem
 
                                 ItemManager().setCharacterRunButtonAvailable()
-
+                                AudioManager.playGetItemAudio(
+                                    root: manager.gameRoot!
+                                )
                                 manager.visibleItems[2].isSolid = true
                                 item.removeFromParent()
                                 manager.nearItem = nil
-
-                                manager.currentSpeechStatus = .getBottle
                             }
                             if item.components[ItemComponent.self]?.type
                                 == .flashlight
@@ -131,17 +126,21 @@ struct GameView: View {
 
                                 manager.visibleItems[3].isSolid = true
                                 if let game = manager.gameRoot {
-                                    guard let mapCompass = game.findEntity(named: "MapCompass_Anim") else { return }
-                                    ItemManager().setMapCompassItemAvailable(mapCompass: mapCompass)
+                                    guard
+                                        let mapCompass = game.findEntity(
+                                            named: "MapCompass_Anim"
+                                        )
+                                    else { return }
+                                    ItemManager().setMapCompassItemAvailable(
+                                        mapCompass: mapCompass
+                                    )
                                 }
-
+                                AudioManager.playGetItemAudio(
+                                    root: manager.gameRoot!
+                                )
                                 item.removeFromParent()
                                 manager.nearItem = nil
-
-                                manager.currentSpeechStatus = .getFlashlight
                             }
-                        } else {
-                            manager.currentSpeechStatus = .needNewspaper
                         }
                         if manager.visibleItems.last?.outlinedImageName
                             == "Map_Outline"
@@ -155,16 +154,20 @@ struct GameView: View {
                                 manager.currentActStatus = .getItem
 
                                 do {
-                                    try ItemManager().setCameraAngleToDestination()
+                                    try ItemManager()
+                                        .setCameraAngleToDestination()
                                 } catch {
-                                    print("⚠️ Camera angle setting failed: \(error)")
+                                    print(
+                                        "⚠️ Camera angle setting failed: \(error)"
+                                    )
                                 }
 
+                                AudioManager.playGetItemAudio(
+                                    root: manager.gameRoot!
+                                )
                                 manager.visibleItems[4].isSolid = true
                                 item.removeFromParent()
                                 manager.nearItem = nil
-
-                                manager.currentSpeechStatus = .getMap
                             }
                         }
                     }
@@ -192,13 +195,31 @@ struct GameView: View {
             }
 
             if manager.showEndCredits {
-                VStack {
-                    Text("end credits")
-                    Button("처음부터 시작") {
-                        manager.isGameReady = false
-                        manager.resetGame()
-                        manager.showInterface = false
-                        gameId = UUID()
+                let width: CGFloat = UIScreen.main.bounds.width * 0.75
+                let height: CGFloat = UIScreen.main.bounds.height * 0.75
+                ZStack {
+                    EndCreditsView()
+                        .frame(width: width, height: height)
+                        .onAppear {
+                            // 로티 재생시간
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 53)
+                            {
+                                showRestartButton = true
+                            }
+                        }
+                    // 로티 재생 후 다시 시작버튼 생김
+                    if showRestartButton {
+                        Button {
+                            manager.isGameReady = false
+                            manager.resetGame()
+                            manager.showInterface = false
+                            showRestartButton = false
+                            gameId = UUID()
+                        } label: {
+                            Text("다시 탐험하기").foregroundStyle(Color.white)
+                                .padding(.horizontal, 32)
+                                .padding(.vertical, 14)
+                        }.glassEffect(.regular.interactive())
                     }
                 }
             }
@@ -246,18 +267,20 @@ struct GameView: View {
         }
 
         // 배경음 삽입
-        AudioManager.setupBackgroundMusic(root: game, content: content)
+        AudioManager.setupBackgroundAudio(root: game, content: content)
+        AudioManager.playOceanAudio(root: game, content: content)
+        AudioManager.playForestAudio(root: game, content: content)
 
         // TODO: - 환경 충돌 설정
         await setupEnvironmentCollisions(on: game, content: content)
 
         if let character = manager.character,
-           let newspaper = game.findEntity(named: "NewsPaper"),
-           let backpack = game.findEntity(named: "Backpack_Anim"),
-           let cheese = game.findEntity(named: "Cheese_Anim"),
-           let bottle = game.findEntity(named: "Bottle_Anim"),
-           let flashlight = game.findEntity(named: "Flashlight_Anim"),
-           let mapCompass = game.findEntity(named: "MapCompass_Anim")
+            let newspaper = game.findEntity(named: "NewsPaper"),
+            let backpack = game.findEntity(named: "Backpack_Anim"),
+            let cheese = game.findEntity(named: "Cheese_Anim"),
+            let bottle = game.findEntity(named: "Bottle_Anim"),
+            let flashlight = game.findEntity(named: "Flashlight_Anim"),
+            let mapCompass = game.findEntity(named: "MapCompass_Anim")
         {
             setupItems(
                 character: character,

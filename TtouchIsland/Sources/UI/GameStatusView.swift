@@ -13,18 +13,11 @@ struct GameStatusView: View {
     let manager: GameManager = .shared
 
     var body: some View {
-        ZStack(alignment: .topLeading) {
-            HStack(alignment: .top, spacing: 0) {
-                StatusAnimationIcon(file: manager.currentActStatus.filename, isLoop: manager.currentActStatus.isLoop)
+        HStack(alignment: .top, spacing: 0) {
+            StatusAnimationIcon(file: manager.currentActStatus.filename, isLoop: manager.currentActStatus.isLoop)
 
-                if !manager.isFocusedOnItem {
-                    StatusAnimationItems()
-                }
-            }
-            if manager.currentSpeechStatus != .none {
-                CharacterSpeechBallon(file: manager.currentSpeechStatus.filename)
-                    .padding(.leading, 60)
-                    .padding(.top, 70)
+            if !manager.isFocusedOnItem {
+                StatusAnimationItems()
             }
         }
     }
