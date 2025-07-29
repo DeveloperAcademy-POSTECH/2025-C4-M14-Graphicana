@@ -24,8 +24,11 @@ class GameManager {
         gameRoot?.findEntity(named: "Ttouch")
     }
 
-    var currentActStatus: CharacterActStatus = .common
-    var currentSpeechStatus: CharacterSpeechStatus = .none
+    var currentStatus: CharacterStatus = .common
+
+    func updateStatus(to updatedStatus: CharacterStatus) {
+        currentStatus = updatedStatus
+    }
 
     func setCharacterRunning(to boolean: Bool) {
         guard let character = character else { return }
