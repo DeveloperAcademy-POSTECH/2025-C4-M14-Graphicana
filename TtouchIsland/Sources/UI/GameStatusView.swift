@@ -23,7 +23,7 @@ struct GameStatusView: View {
             }
 
             if manager.currentSpeechStatus != .none {
-                CharacterSpeechBallon(file: manager.currentSpeechStatus.filename)
+                CharacterSpeechBalloon(file: manager.currentSpeechStatus.filename)
                     .padding(.top, 70)
                     .padding(.leading, 60)
             }

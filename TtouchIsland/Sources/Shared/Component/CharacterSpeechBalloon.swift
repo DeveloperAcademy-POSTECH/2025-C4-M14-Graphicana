@@ -9,7 +9,7 @@
 import Lottie
 import SwiftUI
 
-struct CharacterSpeechBallon: View {
+struct CharacterSpeechBalloon: View {
     let file: String
 
     let manager = GameManager.shared
@@ -30,5 +30,5 @@ struct CharacterSpeechBallon: View {
 }
 
 #Preview {
-    CharacterSpeechBallon(file: "Speech_Bag")
+    CharacterSpeechBalloon(file: "Speech_Bag")
 }
