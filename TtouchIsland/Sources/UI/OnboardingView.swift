@@ -35,7 +35,7 @@ struct OnboardingView: View {
                             Button {
                                 manager.showOnboarding = false
                             } label: {
-                                Text("게임 시작").foregroundStyle(Color.gray)
+                                Text("탐험 시작").foregroundStyle(Color.gray)
                                     .padding(.horizontal, 32)
                                     .padding(.vertical, 14)
                             }.glassEffect(.regular.interactive())
