@@ -20,7 +20,7 @@ struct StatusAnimationIcon: View {
             .playbackMode(.playing(.fromProgress(0, toProgress: 1, loopMode: isLoop ? .loop : .playOnce)))
             .animationDidFinish { completed in
                 if completed {
-                    manager.updateStatus(to: .common)
+                    manager.currentActStatus = .common
                 }
             }
             .frame(width: 100, height: 100)

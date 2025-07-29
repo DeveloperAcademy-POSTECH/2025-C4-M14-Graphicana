@@ -4,53 +4,6 @@
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root",
-        "StageBoundary",
-        "StageBoundary"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
-        "Root",
-        "MapBoundary",
-        "SeaWall"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
-        "Root",
-        "MapBoundary"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
-        "Root"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
-        "Root",
-        "StageBoundary",
-        "_materials"
-      ],
-      {
-        "isExpanded" : true,
-        "isLocked" : false
-      },
-      [
-        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
-        "Root",
         "StageBoundary"
       ],
       {
@@ -72,8 +25,25 @@
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root",
-        "MapBoundary",
-        "_materials"
+        "StageBoundary",
+        "StageBoundary"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "MapBoundary"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root"
       ],
       {
         "isExpanded" : true,

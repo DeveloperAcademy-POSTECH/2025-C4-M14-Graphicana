@@ -7,6 +7,7 @@ enum GameCollisionGroup {
     static let player = CollisionGroup(rawValue: 1 << 0) // == 1
     static let environment = CollisionGroup(rawValue: 1 << 1) // == 2
     static let item = CollisionGroup(rawValue: 1 << 2) // == 4
+    static let stageBoundary = CollisionGroup(rawValue: 1 << 3) // == 8
     static let camera = CollisionGroup(rawValue: 1 << 6) // == 64
     static let cameraAdjusters = CollisionGroup(rawValue: 1 << 7) // == 128
     //    static let areaTrigger = CollisionGroup(rawValue: 1 << 8)
@@ -20,6 +21,11 @@ enum GameCollisionFilters {
         group: GameCollisionGroup.environment, // group: 자신이 속한 그룹, 즉 enviroment에 속해있고
         mask: movingCharacters // mask: 충돌할 수 있는 그룹, player와 enemy와 충돌
     )
-    
+
     static let itemFilter = CollisionFilter(group: GameCollisionGroup.item, mask: movingCharacters)
+
+    static let stageBoundaryFilter = CollisionFilter(
+        group: GameCollisionGroup.stageBoundary,
+        mask: movingCharacters
+    )
 }
