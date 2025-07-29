@@ -88,7 +88,7 @@ struct GameView: View {
                                 print("🧀")
 
                                 // 땃쥐 행복해하는 로티 애니메이션 플레이
-                                manager.updateStatus(to: .getItem)
+                                manager.currentActStatus = .getItem
 
                                 Task {
                                     await ItemManager().setCharacterScaleUp()
@@ -106,7 +106,7 @@ struct GameView: View {
                                 print("🍶")
 
                                 // 땃쥐 행복해하는 로티 애니메이션 플레이
-                                manager.updateStatus(to: .getItem)
+                                manager.currentActStatus = .getItem
 
                                 ItemManager().setCharacterRunButtonAvailable()
                                 AudioManager.playGetItemAudio(
@@ -122,7 +122,7 @@ struct GameView: View {
                                 print("🔦")
 
                                 // 땃쥐 행복해하는 로티 애니메이션 플레이
-                                manager.updateStatus(to: .getItem)
+                                manager.currentActStatus = .getItem
 
                                 manager.visibleItems[3].isSolid = true
                                 if let game = manager.gameRoot {
@@ -151,7 +151,7 @@ struct GameView: View {
                                 print("🗺️")
 
                                 // 땃쥐 행복해하는 로티 애니메이션 플레이
-                                manager.updateStatus(to: .getItem)
+                                manager.currentActStatus = .getItem
 
                                 do {
                                     try ItemManager()

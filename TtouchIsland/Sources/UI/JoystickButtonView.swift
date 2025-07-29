@@ -131,7 +131,7 @@ struct JoystickButtonView: View {
                                                 root: character
                                             )
                                         }
-                                        manager.updateStatus(to: .jump)
+                                        manager.currentActStatus = .jump
                                     },
                                     perform: {}
                                 )
