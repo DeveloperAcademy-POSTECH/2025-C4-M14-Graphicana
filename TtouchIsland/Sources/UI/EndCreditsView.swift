@@ -11,7 +11,10 @@ import SwiftUI
 
 struct EndCreditsView: View {
     var body: some View {
-        LottieEndCreditsView(animationName: "EndCredits", loopMode: .playOnce)
+        LottieEndCreditsView(
+            animationName: "EndcreditsLottie",
+            loopMode: .playOnce
+        )
     }
 }
 
