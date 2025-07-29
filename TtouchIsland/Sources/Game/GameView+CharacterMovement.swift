@@ -20,18 +20,10 @@ extension GameView {
     }
 
     // 컨트롤러 입력 처리 함수
-    // TODO: - 드래그 제스쳐로 카메라 이동 구현
     func controllerInputUpdater(
         _ component: inout ControllerInputReceiver,
         entity: Entity
     ) {
-        // TODO: - 조이스틱 -> 화면 드래그로 카메라 조정
-        //        if let camEntity = entity.scene?.findEntity(named: "camera"),
-        //           var camComponent = camEntity.components[WorldCameraComponent.self]
-        //        {
-        //            camComponent.updateWith(joystickMotion: component.rightJoystick)
-        //            camEntity.components.set(camComponent)
-        //        }
 
         // 캐릭터 움직임 업데이트
         guard
