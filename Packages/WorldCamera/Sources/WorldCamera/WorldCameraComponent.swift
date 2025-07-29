@@ -92,4 +92,6 @@ public struct WorldCameraComponent: Component {
             }
         }
     }
+
+// (Commented-out code removed for clarity and maintainability. Refer to version control history if needed.)
 }

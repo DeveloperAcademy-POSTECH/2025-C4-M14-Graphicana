@@ -36,7 +36,7 @@ class GameManager {
         character.components[CharacterStateComponent.self]?.isOnRunning = boolean
         character.components[CharacterMovementComponent.self]?.isOnRunning = boolean
     }
-    
+
     var showOnboarding: Bool = true
     var showInterface: Bool = false
     var showEndCredits: Bool = false
@@ -67,6 +67,7 @@ class GameManager {
         gameRoot = nil
 
         visibleItems = []
+        runButtonEnabled = false
         nearItem = nil
         isFocusedOnItem = false
         savedCameraState = nil
@@ -126,21 +127,6 @@ extension GameManager {
                 ]
         } else {
             print("⚠️ Warning: You need to activate the Backpack first.")
-        }
-    }
-
-    func setMapCompassAvailable() {
-        if visibleItems.count == 5,
-           visibleItems[4].outlinedImageName == "Mystery_Outline"
-        {
-            visibleItems[3].isSolid = true
-            visibleItems[4] = StatusItem(
-                solidImageName: "Map",
-                outlinedImageName: "Map_Outline",
-                isSolid: false
-            )
-        } else {
-            print("⚠️ Warning: MapCompass is not available yet.")
         }
     }
 }

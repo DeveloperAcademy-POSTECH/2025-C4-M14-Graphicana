@@ -41,6 +41,8 @@ extension GameView {
         mapCompass.components.set([
             ItemComponent(type: .mapCompass, targetEntity: character),
         ])
+
+        mapCompass.isEnabled = false
     }
 
     // TODO: 멍청코드 수정하기

@@ -13,10 +13,10 @@ public struct CameraOrientAction: EntityAction {
     // 애니메이션 가능한 값의 타입 지정
     public var animatedValueType: (any AnimatableData.Type)? { Float.self }
 
-    var azimuth: Float?
-    let elevation: Float?
-    let radius: Float?
-    let targetOffset: SIMD3<Float>?
+    var azimuth: Float? // 카메라의 방위각(azimuth) 설정
+    let elevation: Float? // 카메라의 고도(elevation) 설정
+    let radius: Float? // 카메라와 타겟 사이의 거리(radius) 설정
+    let targetOffset: SIMD3<Float>? // 타겟 오프셋(targetOffset) 설정
     let target: Entity.ID?
 
     var transitionIn: TimeInterval
