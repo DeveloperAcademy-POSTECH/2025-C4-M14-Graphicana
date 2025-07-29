@@ -49,7 +49,6 @@ struct GameView: View {
 
                 playItemAnimations(game: game)
                 manager.showInterface = true
-
             }
             .id(gameId)
 
@@ -126,7 +125,6 @@ struct GameView: View {
                                 manager.updateStatus(to: .getItem)
 
                                 manager.visibleItems[3].isSolid = true
-
                                 if let game = manager.gameRoot {
                                     guard
                                         let mapCompass = game.findEntity(
@@ -152,6 +150,12 @@ struct GameView: View {
 
                                 // 땃쥐 행복해하는 로티 애니메이션 플레이
                                 manager.updateStatus(to: .getItem)
+
+                                do {
+                                    try ItemManager().setCameraAngleToDestination()
+                                } catch {
+                                    print("⚠️ Camera angle setting failed: \(error)")
+                                }
 
                                 manager.visibleItems[4].isSolid = true
                                 item.removeFromParent()
@@ -261,12 +265,12 @@ struct GameView: View {
         await setupEnvironmentCollisions(on: game, content: content)
 
         if let character = manager.character,
-            let newspaper = game.findEntity(named: "NewsPaper"),
-            let backpack = game.findEntity(named: "Backpack_Anim"),
-            let cheese = game.findEntity(named: "Cheese_Anim"),
-            let bottle = game.findEntity(named: "Bottle_Anim"),
-            let flashlight = game.findEntity(named: "Flashlight_Anim"),
-            let mapCompass = game.findEntity(named: "MapCompass_Anim")
+           let newspaper = game.findEntity(named: "NewsPaper"),
+           let backpack = game.findEntity(named: "Backpack_Anim"),
+           let cheese = game.findEntity(named: "Cheese_Anim"),
+           let bottle = game.findEntity(named: "Bottle_Anim"),
+           let flashlight = game.findEntity(named: "Flashlight_Anim"),
+           let mapCompass = game.findEntity(named: "MapCompass_Anim")
         {
             setupItems(
                 character: character,

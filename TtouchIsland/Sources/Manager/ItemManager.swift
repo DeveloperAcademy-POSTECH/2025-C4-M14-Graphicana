@@ -33,9 +33,9 @@ struct ItemManager {
 
         // 캐릭터 움직임 정지
         if let character = manager.character,
-            var movementComponent = character.components[
-                CharacterMovementComponent.self
-            ]
+           var movementComponent = character.components[
+               CharacterMovementComponent.self
+           ]
         {
             movementComponent.paused = true
             character.components.set(movementComponent)
@@ -45,10 +45,10 @@ struct ItemManager {
         let orientAction = CameraOrientAction(
             transitionIn: 0.5,
             transitionOut: 0,
-            azimuth: .pi - 0.8,  // 카메라의 수평 회전 각도
-            elevation: 0.3,  // 카메라의 수직 회전 각도
-            radius: 0.75,  // 카메라와 신문 사이의 거리
-            targetOffset: .zero,  // 카메라가 바라볼 때 신문의 오프셋
+            azimuth: .pi - 0.8, // 카메라의 수평 회전 각도
+            elevation: 0.3, // 카메라의 수직 회전 각도
+            radius: 0.75, // 카메라와 신문 사이의 거리
+            targetOffset: .zero, // 카메라가 바라볼 때 신문의 오프셋
             target: newspaper.id
         )
 
@@ -99,9 +99,9 @@ struct ItemManager {
 
         // 캐릭터 움직임 재개
         if let character = manager.character,
-            var movementComponent = character.components[
-                CharacterMovementComponent.self
-            ]
+           var movementComponent = character.components[
+               CharacterMovementComponent.self
+           ]
         {
             movementComponent.paused = false
             character.components.set(movementComponent)
@@ -150,7 +150,7 @@ struct ItemManager {
                         group: GameCollisionGroup.player,
                         mask: .all
                     )
-                )
+                ),
             ]
         )
     }
@@ -232,6 +232,44 @@ struct ItemManager {
             try setCameraAngleToMapCompass(mapCompass: mapCompass)
         } catch {
             print("❌ Error: Failed to set camera angle to map compass - \(error.localizedDescription)")
+        }
+    }
+
+    // MARK: - 맵 아이템 상호작용 메소드
+
+    func setCameraAngleToDestination() throws {
+        guard let camera = manager.gameCamera,
+              let leaf = manager.gameRoot?.findEntity(named: "Leaf") else { return }
+
+        let orientAction = CameraOrientAction(
+            transitionIn: 3.5, transitionOut: 2.0,
+            azimuth: .pi / 2, elevation: .pi / 6,
+            radius: 5.0, targetOffset: .zero, target: leaf.id
+        )
+
+        let orientAnim = try AnimationResource.makeActionAnimation(
+            for: orientAction, duration: 6.0
+        )
+        CameraOrientActionHandler.register { _ in CameraOrientActionHandler() }
+        camera.playAnimation(orientAnim)
+
+        // Pause the hero.
+        if let character = manager.character,
+           var movementComponent = character.components[CharacterMovementComponent.self]
+        {
+            movementComponent.paused = true
+            character.components.set(movementComponent)
+        }
+
+        CameraOrientAction.subscribe(to: .ended) { _ in
+
+            // 캐릭터 움직임 재개
+            if let character = manager.character,
+               var movementComponent = character.components[CharacterMovementComponent.self]
+            {
+                movementComponent.paused = false
+                character.components.set(movementComponent)
+            }
         }
     }
 }

@@ -8,9 +8,9 @@
 
 import CharacterMovement
 import RealityKit
+import simd
 import SwiftUI
 import WorldCamera
-import simd
 
 struct ItemSystem: System {
     @State var manager = GameManager.shared
@@ -26,10 +26,10 @@ struct ItemSystem: System {
     func update(context: SceneUpdateContext) {
         // 현재 nearItem이 설정되어 있다면 해당 엔티티와의 거리만 확인
         if let currentNearItem = manager.nearItem,
-            let currentItemComponent = currentNearItem.components[
-                ItemComponent.self
-            ],
-            let target = currentItemComponent.targetEntity
+           let currentItemComponent = currentNearItem.components[
+               ItemComponent.self
+           ],
+           let target = currentItemComponent.targetEntity
         {
             let itemPosition = currentNearItem.transform.translation
             let characterPosition = target.transform.translation
@@ -50,7 +50,7 @@ struct ItemSystem: System {
             updatingSystemWhen: .rendering
         ) {
             guard var itemComponent = entity.components[ItemComponent.self],
-                let target = itemComponent.targetEntity  // 상호작용하려는 캐릭터 엔티티
+                  let target = itemComponent.targetEntity // 상호작용하려는 캐릭터 엔티티
             else { continue }
 
             // 1. 캐릭터와 아이템 사이 거리 계산
@@ -62,7 +62,7 @@ struct ItemSystem: System {
                 manager.nearItem = entity
                 itemComponent.isCollected = true
                 entity.components.set(itemComponent)
-                break  // 가까운 엔티티를 찾으면 루프 종료
+                break // 가까운 엔티티를 찾으면 루프 종료
             }
         }
         // 루프 밖에서 다 모았는지 확인
@@ -140,7 +140,7 @@ struct ItemSystem: System {
             //            stateComponent.currentState = .idle
             //            character.components.set(stateComponent)
         }
-
+      
         manager.showInterface = false
 
         // 땃쥐 y좌표 가져오기
@@ -171,9 +171,9 @@ struct ItemSystem: System {
         let orientAction = CameraOrientAction(
             transitionIn: 0.5,
             transitionOut: 0.5,
-            azimuth: .pi / 12,  // 약 15도(오른쪽으로 살짝 회전)으로 땃쥐 바라보게 됨
-            elevation: .pi / 6,  // 약 30도로 위에서 내려다보는 시점으로 설정
-            radius: 12,  // 카메라 멀리 보내기
+            azimuth: .pi / 12, // 약 15도(오른쪽으로 살짝 회전)으로 땃쥐 바라보게 됨
+            elevation: .pi / 6, // 약 30도로 위에서 내려다보는 시점으로 설정
+            radius: 12, // 카메라 멀리 보내기
             targetOffset: .zero,
             target: character.id
         )
@@ -186,9 +186,9 @@ struct ItemSystem: System {
         ) {
             // CameraOrientAction이 어떻게 실행될지 정의하는 핸들러를 등록
             // 내부적으로 CameraOrientAction의 매개변수를 실제 카메라의 transform으로 변환하는 작업을 수행
-            CameraOrientActionHandler.register({ _ in
+            CameraOrientActionHandler.register { _ in
                 CameraOrientActionHandler()
-            })
+            }
             // 변환된 orientAnim 애니메이션 리소스를 카메라엔티티에 적용해서 실제로 움직이게함
             camera.playAnimation(orientAnim)
         }
