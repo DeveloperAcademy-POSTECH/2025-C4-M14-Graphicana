@@ -97,11 +97,11 @@ struct JoystickButtonView: View {
                                         minimumDuration: 0.0, // 즉시 반응
                                         pressing: { isPressed in
                                             if isPressed {
-                                                manager.currentActStatus = .run
+                                                manager.updateStatus(to: .run)
                                                 manager.setCharacterRunning(to: true)
 
                                             } else {
-                                                manager.currentActStatus = .common
+                                                manager.updateStatus(to: .common)
                                                 manager.setCharacterRunning(to: false)
                                             }
                                         },
@@ -127,7 +127,7 @@ struct JoystickButtonView: View {
                                                 root: character
                                             )
                                         }
-                                        manager.currentActStatus = .jump
+                                        manager.updateStatus(to: .jump)
                                     },
                                     perform: {}
                                 )

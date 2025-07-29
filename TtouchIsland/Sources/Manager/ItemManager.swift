@@ -117,10 +117,10 @@ struct ItemManager {
     func handleNewspaperItem(item: Entity, camera: Entity) {
         do {
             if manager.isFocusedOnItem {
-                manager.currentActStatus = .common
+                manager.updateStatus(to: .common)
                 try returnToPlayerView(camera: camera)
             } else {
-                manager.currentActStatus = .read
+                manager.updateStatus(to: .read)
                 try closeupNewspaper(newspaper: item, camera: camera)
             }
         } catch {

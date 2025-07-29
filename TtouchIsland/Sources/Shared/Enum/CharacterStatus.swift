@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum CharacterActStatus: String, CaseIterable {
+public enum CharacterStatus: String, CaseIterable {
     case common = "TtouchMouse_Basic"
     case jump = "TtouchMouse_Jump"
     case run = "TtouchMouse_Run"
