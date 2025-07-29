@@ -214,7 +214,8 @@ struct GameView: View {
                         .frame(width: width, height: height)
                         .onAppear {
                             // 로티 재생시간
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 53) {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 53)
+                            {
                                 showRestartButton = true
                             }
                         }
@@ -286,12 +287,12 @@ struct GameView: View {
         await setupEnvironmentCollisions(on: game, content: content)
 
         if let character = manager.character,
-           let newspaper = game.findEntity(named: "NewsPaper"),
-           let backpack = game.findEntity(named: "Backpack_Anim"),
-           let cheese = game.findEntity(named: "Cheese_Anim"),
-           let bottle = game.findEntity(named: "Bottle_Anim"),
-           let flashlight = game.findEntity(named: "Flashlight_Anim"),
-           let mapCompass = game.findEntity(named: "MapCompass_Anim")
+            let newspaper = game.findEntity(named: "NewsPaper"),
+            let backpack = game.findEntity(named: "Backpack_Anim"),
+            let cheese = game.findEntity(named: "Cheese_Anim"),
+            let bottle = game.findEntity(named: "Bottle_Anim"),
+            let flashlight = game.findEntity(named: "Flashlight_Anim"),
+            let mapCompass = game.findEntity(named: "MapCompass_Anim")
         {
             setupItems(
                 character: character,
