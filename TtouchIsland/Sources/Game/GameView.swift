@@ -22,12 +22,6 @@ struct GameView: View {
             Color.black.ignoresSafeArea()
 
             RealityView { content in
-
-                //                if BloomEffect.deviceSupportsEffect() {
-                //                    content.renderingEffects.customPostProcessing = .effect(BloomEffect())
-                //                    print("BloomEffect supported")
-                //                }
-
                 guard
                     let game: Entity = try? await Entity(
                         named: "Scene",
@@ -78,7 +72,9 @@ struct GameView: View {
 
                                 // 땃쥐 행복해하는 로티 애니메이션 플레이
                                 manager.updateStatus(to: .getItem)
-
+                                AudioManager.playGetItemAudio(
+                                    root: manager.gameRoot!
+                                )
                                 manager.visibleItems[0].isSolid = true
                                 manager.setAllItemsAvailable()
                                 item.removeFromParent()
@@ -97,7 +93,9 @@ struct GameView: View {
                                 Task {
                                     await ItemManager().setCharacterScaleUp()
                                 }
-
+                                AudioManager.playGetItemAudio(
+                                    root: manager.gameRoot!
+                                )
                                 manager.visibleItems[1].isSolid = true
                                 item.removeFromParent()
                                 manager.nearItem = nil
@@ -111,7 +109,9 @@ struct GameView: View {
                                 manager.updateStatus(to: .getItem)
 
                                 ItemManager().setCharacterRunButtonAvailable()
-
+                                AudioManager.playGetItemAudio(
+                                    root: manager.gameRoot!
+                                )
                                 manager.visibleItems[2].isSolid = true
                                 item.removeFromParent()
                                 manager.nearItem = nil
@@ -135,7 +135,9 @@ struct GameView: View {
                                         mapCompass: mapCompass
                                     )
                                 }
-
+                                AudioManager.playGetItemAudio(
+                                    root: manager.gameRoot!
+                                )
                                 item.removeFromParent()
                                 manager.nearItem = nil
                             }
@@ -152,11 +154,17 @@ struct GameView: View {
                                 manager.updateStatus(to: .getItem)
 
                                 do {
-                                    try ItemManager().setCameraAngleToDestination()
+                                    try ItemManager()
+                                        .setCameraAngleToDestination()
                                 } catch {
-                                    print("⚠️ Camera angle setting failed: \(error)")
+                                    print(
+                                        "⚠️ Camera angle setting failed: \(error)"
+                                    )
                                 }
 
+                                AudioManager.playGetItemAudio(
+                                    root: manager.gameRoot!
+                                )
                                 manager.visibleItems[4].isSolid = true
                                 item.removeFromParent()
                                 manager.nearItem = nil
@@ -259,18 +267,20 @@ struct GameView: View {
         }
 
         // 배경음 삽입
-        AudioManager.setupBackgroundMusic(root: game, content: content)
+        AudioManager.setupBackgroundAudio(root: game, content: content)
+        AudioManager.playOceanAudio(root: game, content: content)
+        AudioManager.playForestAudio(root: game, content: content)
 
         // TODO: - 환경 충돌 설정
         await setupEnvironmentCollisions(on: game, content: content)
 
         if let character = manager.character,
-           let newspaper = game.findEntity(named: "NewsPaper"),
-           let backpack = game.findEntity(named: "Backpack_Anim"),
-           let cheese = game.findEntity(named: "Cheese_Anim"),
-           let bottle = game.findEntity(named: "Bottle_Anim"),
-           let flashlight = game.findEntity(named: "Flashlight_Anim"),
-           let mapCompass = game.findEntity(named: "MapCompass_Anim")
+            let newspaper = game.findEntity(named: "NewsPaper"),
+            let backpack = game.findEntity(named: "Backpack_Anim"),
+            let cheese = game.findEntity(named: "Cheese_Anim"),
+            let bottle = game.findEntity(named: "Bottle_Anim"),
+            let flashlight = game.findEntity(named: "Flashlight_Anim"),
+            let mapCompass = game.findEntity(named: "MapCompass_Anim")
         {
             setupItems(
                 character: character,

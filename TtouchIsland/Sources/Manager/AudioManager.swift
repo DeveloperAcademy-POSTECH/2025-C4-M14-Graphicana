@@ -4,49 +4,89 @@ import SwiftUI
 // 단순 기능 모음이고 인스턴스 생성 가능성을 완전히 차단할 수 있어서 enum으로
 enum AudioManager {
     // 왜 static이냐? 인스턴스를 안 만들어도 직접 호출할 수 있어야 해서
-    static func setupBackgroundMusic(
+
+    // ChannelAudio(포지션, 디렉션x)
+    static func setupBackgroundAudio(
         root: Entity,
         content: some RealityViewContentProtocol  // realityKit 씬을 구성하고 연결하는 역할의 프로토콜(?)
     ) {
-        // TtouchParent를 사운드의 재생 위치로 할거다~
-        if let background = root.findEntity(named: "EnvironmentMap") {
-            Task {
-                // background.wav 파일을 가져와서 realitykit에서 사용할 수 있게함(비동기)
-                let backgroundMusic = try! await AudioFileResource(
-                    // AudioFileResource: RealityKit에서 외부에서 가져온 오디오파일을 사용할수있게 해주는 객체(.wav, .mp3 파일을 취급)
-                    named: "backgroundMusic.wav",
-                    configuration: AudioFileResource.Configuration(
-                        // 끝나면 자동으로 반복 재생 true
-                        shouldLoop: true,
-                    )
-                )
-                // background 엔티티에서 backgroundMusic를 재생
-                await background.playAudio(backgroundMusic)
-            }
+        // 오디오를 적용할 엔티티를 찾는다
+        if let background = root.findEntity(named: "EnvironmentMap"),
+            let audioLibrary = background.components[
+                AudioLibraryComponent.self
+            ],
+            // AudioLibraryComponent(리컴포에서 추가할 수 있음)에서 backgroundAudio라는 리소스(.wav,.mp3 파일을 메모리에 올린 객체)를 가져온다
+            let backgroundAudio = audioLibrary.resources["backgroundAudio"]
+        {
+            // 가져온 오디오 리소스를 해당 엔티티에서 재생한다
+            background.playAudio(backgroundAudio)
         }
     }
 
-    static func playJumpSound(
+    // ChannelAudio(포지션, 디렉션x)
+    static func playJumpAudio(
         root: Entity
     ) {
-        // Ttouch를 재생위치로 설정
-        if let ttouchJumpSound = root.findEntity(named: "Ttouch") {
-            Task {
-                // jump.wav 파일을 가져와서 AudioFileResource을 통해 realitykit에서 사용할 수 있게함
-                let jumpSound = try! await AudioFileResource(
-                    named: "jump.wav",
-                    configuration: AudioFileResource.Configuration(
-                        // 일회성 재생
-                        shouldLoop: false,
-                    )
-                )
-                // ttouchJumpSound에서 jumpSound를 재생
-                await ttouchJumpSound.playAudio(jumpSound)
-            }
+        if let character = root.findEntity(named: "Ttouch"),
+            let audioLibrary = character.components[
+                AudioLibraryComponent.self
+            ],
+            let jumpAudio = audioLibrary.resources["jumpAudio"]
+        {
+            character.playAudio(jumpAudio)
         }
     }
 
-    static func playGetItemSound(root: Entity) {
-        // TO DO: 추후에 구현 예정~
+    // ChannelAudio(포지션, 디렉션x)
+    static func playGetItemAudio(root: Entity) {
+        if let item = root.findEntity(named: "ItemAudio"),
+            let audioLibrary = item.components[
+                AudioLibraryComponent.self
+            ],
+            let itemAudio = audioLibrary.resources["itemAudio"]
+        {
+            item.playAudio(itemAudio)
+        }
+    }
+
+    // SpatialAudio(포지션, 디렉션 O)
+    static func playOceanAudio(
+        root: Entity,
+        content: some RealityViewContentProtocol
+    ) {
+        if let ocean1 = root.findEntity(named: "OceanSpatialAudio1"),
+            let audioLibrary = ocean1.components[
+                AudioLibraryComponent.self
+            ],
+            let backgroundAudio = audioLibrary.resources["oceanAudio"]
+        {
+            ocean1.playAudio(backgroundAudio)
+        }
+
+        if let ocean2 = root.findEntity(named: "OceanSpatialAudio2"),
+            let audioLibrary = ocean2.components[
+                AudioLibraryComponent.self
+            ],
+            let backgroundAudio = audioLibrary.resources["oceanAudio"]
+        {
+            ocean2.playAudio(backgroundAudio)
+        }
+
+    }
+
+    // SpatialAudio(포지션, 디렉션 O)
+    static func playForestAudio(
+        root: Entity,
+        content: some RealityViewContentProtocol
+    ) {
+        if let forest = root.findEntity(named: "ForestSpatialAudio"),
+            let audioLibrary = forest.components[
+                AudioLibraryComponent.self
+            ],
+            let forestAudio = audioLibrary.resources["forestAudio"]
+        {
+            forest.playAudio(forestAudio)
+        }
+
     }
 }
