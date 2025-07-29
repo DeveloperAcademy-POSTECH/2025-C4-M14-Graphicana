@@ -8,12 +8,12 @@
 
 import CharacterMovement
 import RealityKit
+import simd
 import SwiftUI
 import WorldCamera
-import simd
 
 struct ItemSystem: System {
-    @State var appModel = GameManager.shared
+    @State var manager = GameManager.shared
 
     init(scene _: RealityKit.Scene) {}
 
@@ -25,11 +25,11 @@ struct ItemSystem: System {
 
     func update(context: SceneUpdateContext) {
         // 현재 nearItem이 설정되어 있다면 해당 엔티티와의 거리만 확인
-        if let currentNearItem = appModel.nearItem,
-            let currentItemComponent = currentNearItem.components[
-                ItemComponent.self
-            ],
-            let target = currentItemComponent.targetEntity
+        if let currentNearItem = manager.nearItem,
+           let currentItemComponent = currentNearItem.components[
+               ItemComponent.self
+           ],
+           let target = currentItemComponent.targetEntity
         {
             let itemPosition = currentNearItem.transform.translation
             let characterPosition = target.transform.translation
@@ -40,7 +40,7 @@ struct ItemSystem: System {
                 return
             } else {
                 // 유효 거리에서 벗어나면 nil로 설정
-                appModel.nearItem = nil
+                manager.nearItem = nil
             }
         }
 
@@ -50,7 +50,7 @@ struct ItemSystem: System {
             updatingSystemWhen: .rendering
         ) {
             guard var itemComponent = entity.components[ItemComponent.self],
-                let target = itemComponent.targetEntity  // 상호작용하려는 캐릭터 엔티티
+                  let target = itemComponent.targetEntity // 상호작용하려는 캐릭터 엔티티
             else { continue }
 
             // 1. 캐릭터와 아이템 사이 거리 계산
@@ -59,10 +59,10 @@ struct ItemSystem: System {
             let distance = simd.distance(itemPosition, characterPosition)
 
             if distance <= itemComponent.maxDistance {
-                appModel.nearItem = entity
+                manager.nearItem = entity
                 itemComponent.isCollected = true
                 entity.components.set(itemComponent)
-                break  // 가까운 엔티티를 찾으면 루프 종료
+                break // 가까운 엔티티를 찾으면 루프 종료
             }
         }
         // 루프 밖에서 다 모았는지 확인
@@ -71,8 +71,8 @@ struct ItemSystem: System {
 
     // endPint에서 모든 아이템을 수집했는지 확인
     func checkItemAtEndPoint(context: SceneUpdateContext) {
-        guard let character = appModel.gameRoot?.findEntity(named: "Ttouch"),
-            let endPoint = appModel.gameRoot?.findEntity(named: "Leaf")
+        guard let character = manager.gameRoot?.findEntity(named: "Ttouch"),
+              let endPoint = manager.gameRoot?.findEntity(named: "Leaf")
         else { return }
 
         // 1. 캐릭터와 아이템 사이 거리 계산
@@ -112,10 +112,10 @@ struct ItemSystem: System {
 
         // 모든 조건 충족하면 애니메이션 재생
         if isCollectedAllItem && endPointDistance < 0.5
-            && !appModel.isGameFinished
+            && !manager.isGameFinished
         {
-            appModel.isGameFinished = true
-            appModel.showResetButton = false
+            manager.isGameFinished = true
+            manager.showResetButton = false
 
             print("complete")
             // 엔딩 애니메이션: 물 차오르는 애니메이션 재생
@@ -124,8 +124,8 @@ struct ItemSystem: System {
     }
 
     func playMapEndingAnimation() {
-        guard let ocean = appModel.gameRoot?.findEntity(named: "OceanPlane"),
-            let character = appModel.gameRoot?.findEntity(named: "Ttouch")
+        guard let ocean = manager.gameRoot?.findEntity(named: "OceanPlane"),
+              let character = manager.gameRoot?.findEntity(named: "Ttouch")
         else { return }
 
         // 땃쥐 멈춰
@@ -135,7 +135,7 @@ struct ItemSystem: System {
             movementComponent.paused = true
             character.components.set(movementComponent)
         }
-        appModel.showInterface = false
+        manager.showInterface = false
 
         // 땃쥐 y좌표 가져오기
         let characterPosition = character.transform.translation.y
@@ -157,17 +157,17 @@ struct ItemSystem: System {
     }
 
     func playZoomOutOceanAnimation() {
-        guard let character = appModel.gameRoot?.findEntity(named: "Ttouch"),
-            let camera = appModel.gameRoot?.findEntity(named: "camera")
+        guard let character = manager.gameRoot?.findEntity(named: "Ttouch"),
+              let camera = manager.gameRoot?.findEntity(named: "camera")
         else { return }
 
         // 카메라 줌아웃하는 액션 생성
         let orientAction = CameraOrientAction(
             transitionIn: 0.5,
             transitionOut: 0.5,
-            azimuth: .pi / 12,  // 약 15도(오른쪽으로 살짝 회전)으로 땃쥐 바라보게 됨
-            elevation: .pi / 6,  // 약 30도로 위에서 내려다보는 시점으로 설정
-            radius: 12,  // 카메라 멀리 보내기
+            azimuth: .pi / 12, // 약 15도(오른쪽으로 살짝 회전)으로 땃쥐 바라보게 됨
+            elevation: .pi / 6, // 약 30도로 위에서 내려다보는 시점으로 설정
+            radius: 12, // 카메라 멀리 보내기
             targetOffset: .zero,
             target: character.id
         )
@@ -180,15 +180,15 @@ struct ItemSystem: System {
         ) {
             // CameraOrientAction이 어떻게 실행될지 정의하는 핸들러를 등록
             // 내부적으로 CameraOrientAction의 매개변수를 실제 카메라의 transform으로 변환하는 작업을 수행
-            CameraOrientActionHandler.register({ _ in
+            CameraOrientActionHandler.register { _ in
                 CameraOrientActionHandler()
-            })
+            }
             // 변환된 orientAnim 애니메이션 리소스를 카메라엔티티에 적용해서 실제로 움직이게함
             camera.playAnimation(orientAnim)
         }
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-            appModel.showEndCredits = true
+            manager.showEndCredits = true
         }
     }
 }
