@@ -228,6 +228,10 @@ struct ItemManager {
             print("⚠️ Warning: MapCompass is not available yet.")
         }
 
-        try? setCameraAngleToMapCompass(mapCompass: mapCompass)
+        do {
+            try setCameraAngleToMapCompass(mapCompass: mapCompass)
+        } catch {
+            print("❌ Error: Failed to set camera angle to map compass - \(error.localizedDescription)")
+        }
     }
 }
