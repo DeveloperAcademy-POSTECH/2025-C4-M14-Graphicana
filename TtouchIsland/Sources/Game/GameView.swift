@@ -63,8 +63,7 @@ struct GameView: View {
                                 item: item,
                                 camera: camera
                             )
-                        }
-                        if manager.visibleItems.count == 1 {
+                        } else if manager.visibleItems.count == 1 {
                             if item.components[ItemComponent.self]?.type
                                 == .backpack
                             {
@@ -79,9 +78,12 @@ struct GameView: View {
                                 manager.setAllItemsAvailable()
                                 item.removeFromParent()
                                 manager.nearItem = nil
+
+                                manager.currentSpeechStatus = .getBag
+                            } else {
+                                manager.currentSpeechStatus = .needBag
                             }
-                        }
-                        if manager.visibleItems.count > 1 {
+                        } else if manager.visibleItems.count > 1 {
                             if item.components[ItemComponent.self]?.type
                                 == .cheese
                             {
@@ -99,6 +101,8 @@ struct GameView: View {
                                 manager.visibleItems[1].isSolid = true
                                 item.removeFromParent()
                                 manager.nearItem = nil
+
+                                manager.currentSpeechStatus = .getCheeze
                             }
                             if item.components[ItemComponent.self]?.type
                                 == .bottle
@@ -115,6 +119,8 @@ struct GameView: View {
                                 manager.visibleItems[2].isSolid = true
                                 item.removeFromParent()
                                 manager.nearItem = nil
+
+                                manager.currentSpeechStatus = .getBottle
                             }
                             if item.components[ItemComponent.self]?.type
                                 == .flashlight
@@ -140,7 +146,11 @@ struct GameView: View {
                                 )
                                 item.removeFromParent()
                                 manager.nearItem = nil
+
+                                manager.currentSpeechStatus = .getFlashlight
                             }
+                        } else {
+                            manager.currentSpeechStatus = .needNewspaper
                         }
                         if manager.visibleItems.last?.outlinedImageName
                             == "Map_Outline"
@@ -168,6 +178,8 @@ struct GameView: View {
                                 manager.visibleItems[4].isSolid = true
                                 item.removeFromParent()
                                 manager.nearItem = nil
+
+                                manager.currentSpeechStatus = .getMap
                             }
                         }
                     }
@@ -202,8 +214,7 @@ struct GameView: View {
                         .frame(width: width, height: height)
                         .onAppear {
                             // 로티 재생시간
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 53)
-                            {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 53) {
                                 showRestartButton = true
                             }
                         }
@@ -275,12 +286,12 @@ struct GameView: View {
         await setupEnvironmentCollisions(on: game, content: content)
 
         if let character = manager.character,
-            let newspaper = game.findEntity(named: "NewsPaper"),
-            let backpack = game.findEntity(named: "Backpack_Anim"),
-            let cheese = game.findEntity(named: "Cheese_Anim"),
-            let bottle = game.findEntity(named: "Bottle_Anim"),
-            let flashlight = game.findEntity(named: "Flashlight_Anim"),
-            let mapCompass = game.findEntity(named: "MapCompass_Anim")
+           let newspaper = game.findEntity(named: "NewsPaper"),
+           let backpack = game.findEntity(named: "Backpack_Anim"),
+           let cheese = game.findEntity(named: "Cheese_Anim"),
+           let bottle = game.findEntity(named: "Bottle_Anim"),
+           let flashlight = game.findEntity(named: "Flashlight_Anim"),
+           let mapCompass = game.findEntity(named: "MapCompass_Anim")
         {
             setupItems(
                 character: character,
