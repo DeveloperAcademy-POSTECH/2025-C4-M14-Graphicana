@@ -13,7 +13,7 @@ import WorldCamera
 import simd
 
 struct ItemSystem: System {
-    @State var appModel = GameManager.shared
+    @State var manager = GameManager.shared
 
     init(scene _: RealityKit.Scene) {}
 
@@ -25,7 +25,7 @@ struct ItemSystem: System {
 
     func update(context: SceneUpdateContext) {
         // 현재 nearItem이 설정되어 있다면 해당 엔티티와의 거리만 확인
-        if let currentNearItem = appModel.nearItem,
+        if let currentNearItem = manager.nearItem,
             let currentItemComponent = currentNearItem.components[
                 ItemComponent.self
             ],
@@ -40,7 +40,7 @@ struct ItemSystem: System {
                 return
             } else {
                 // 유효 거리에서 벗어나면 nil로 설정
-                appModel.nearItem = nil
+                manager.nearItem = nil
             }
         }
 
@@ -59,7 +59,7 @@ struct ItemSystem: System {
             let distance = simd.distance(itemPosition, characterPosition)
 
             if distance <= itemComponent.maxDistance {
-                appModel.nearItem = entity
+                manager.nearItem = entity
                 itemComponent.isCollected = true
                 entity.components.set(itemComponent)
                 break  // 가까운 엔티티를 찾으면 루프 종료
@@ -71,8 +71,8 @@ struct ItemSystem: System {
 
     // endPint에서 모든 아이템을 수집했는지 확인
     func checkItemAtEndPoint(context: SceneUpdateContext) {
-        guard let character = appModel.gameRoot?.findEntity(named: "Ttouch"),
-            let endPoint = appModel.gameRoot?.findEntity(named: "Leaf")
+        guard let character = manager.gameRoot?.findEntity(named: "Ttouch"),
+            let endPoint = manager.gameRoot?.findEntity(named: "Leaf")
         else { return }
 
         // 1. 캐릭터와 아이템 사이 거리 계산
@@ -112,10 +112,10 @@ struct ItemSystem: System {
 
         // 모든 조건 충족하면 애니메이션 재생
         if isCollectedAllItem && endPointDistance < 0.5
-            && !appModel.isGameFinished
+            && !manager.isGameFinished
         {
-            appModel.isGameFinished = true
-            appModel.showResetButton = false
+            manager.isGameFinished = true
+            manager.showResetButton = false
 
             print("complete")
             // 엔딩 애니메이션: 물 차오르는 애니메이션 재생
@@ -124,18 +124,24 @@ struct ItemSystem: System {
     }
 
     func playMapEndingAnimation() {
-        guard let ocean = appModel.gameRoot?.findEntity(named: "OceanPlane"),
-            let character = appModel.gameRoot?.findEntity(named: "Ttouch")
+        guard let ocean = manager.gameRoot?.findEntity(named: "OceanPlane"),
+            let character = manager.gameRoot?.findEntity(named: "Ttouch")
         else { return }
 
         // 땃쥐 멈춰
         if var movementComponent = character.components[
             CharacterMovementComponent.self
-        ] {
+        ]  //            var stateComponent = character.components[
+        //                CharacterStateComponent.self
+        //            ]
+        {
             movementComponent.paused = true
             character.components.set(movementComponent)
+            //            stateComponent.currentState = .idle
+            //            character.components.set(stateComponent)
         }
-        appModel.showInterface = false
+
+        manager.showInterface = false
 
         // 땃쥐 y좌표 가져오기
         let characterPosition = character.transform.translation.y
@@ -151,14 +157,14 @@ struct ItemSystem: System {
             duration: 5.0
         )
         // 카메라 페이드 아웃되고 섬 전체 보여주는 애니메이션
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             playZoomOutOceanAnimation()
         }
     }
 
     func playZoomOutOceanAnimation() {
-        guard let character = appModel.gameRoot?.findEntity(named: "Ttouch"),
-            let camera = appModel.gameRoot?.findEntity(named: "camera")
+        guard let character = manager.gameRoot?.findEntity(named: "Ttouch"),
+            let camera = manager.gameRoot?.findEntity(named: "camera")
         else { return }
 
         // 카메라 줌아웃하는 액션 생성
@@ -188,7 +194,7 @@ struct ItemSystem: System {
         }
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-            appModel.showEndCredits = true
+            manager.showEndCredits = true
         }
     }
 }

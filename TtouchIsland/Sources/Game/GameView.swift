@@ -15,6 +15,7 @@ struct GameView: View {
     @State private var lastScale: CGFloat = 1.0
 
     @State private var showResetAlert = false
+    @State private var showRestartButton = false
 
     var body: some View {
         ZStack {
@@ -127,8 +128,14 @@ struct GameView: View {
                                 manager.visibleItems[3].isSolid = true
 
                                 if let game = manager.gameRoot {
-                                    guard let mapCompass = game.findEntity(named: "MapCompass_Anim") else { return }
-                                    ItemManager().setMapCompassItemAvailable(mapCompass: mapCompass)
+                                    guard
+                                        let mapCompass = game.findEntity(
+                                            named: "MapCompass_Anim"
+                                        )
+                                    else { return }
+                                    ItemManager().setMapCompassItemAvailable(
+                                        mapCompass: mapCompass
+                                    )
                                 }
 
                                 item.removeFromParent()
@@ -176,13 +183,31 @@ struct GameView: View {
             }
 
             if manager.showEndCredits {
-                VStack {
-                    Text("end credits")
-                    Button("처음부터 시작") {
-                        manager.isGameReady = false
-                        manager.resetGame()
-                        manager.showInterface = false
-                        gameId = UUID()
+                let width: CGFloat = UIScreen.main.bounds.width * 0.75
+                let height: CGFloat = UIScreen.main.bounds.height * 0.75
+                ZStack {
+                    EndCreditsView()
+                        .frame(width: width, height: height)
+                        .onAppear {
+                            // 로티 재생시간
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 53)
+                            {
+                                showRestartButton = true
+                            }
+                        }
+                    // 로티 재생 후 다시 시작버튼 생김
+                    if showRestartButton {
+                        Button {
+                            manager.isGameReady = false
+                            manager.resetGame()
+                            manager.showInterface = false
+                            showRestartButton = false
+                            gameId = UUID()
+                        } label: {
+                            Text("다시 탐험하기").foregroundStyle(Color.white)
+                                .padding(.horizontal, 32)
+                                .padding(.vertical, 14)
+                        }.glassEffect(.regular.interactive())
                     }
                 }
             }
