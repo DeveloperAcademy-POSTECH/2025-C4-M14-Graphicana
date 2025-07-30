@@ -118,6 +118,13 @@ struct ItemManager {
         do {
             if manager.isFocusedOnItem {
                 manager.currentActStatus = .common
+
+                // Stage Collision 해제
+                if let boundary = manager.gameRoot?.findEntity(named: "StageBoundary") {
+                    print("✅ Stage Collision 해제")
+                    boundary.removeFromParent()
+                }
+
                 try returnToPlayerView(camera: camera)
             } else {
                 manager.currentActStatus = .read
