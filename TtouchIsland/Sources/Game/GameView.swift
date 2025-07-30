@@ -63,15 +63,14 @@ struct GameView: View {
                                 item: item,
                                 camera: camera
                             )
-                        }
-                        if manager.visibleItems.count == 1 {
+                        } else if manager.visibleItems.count == 1 {
                             if item.components[ItemComponent.self]?.type
                                 == .backpack
                             {
                                 print("🎒")
 
                                 // 땃쥐 행복해하는 로티 애니메이션 플레이
-                                manager.updateStatus(to: .getItem)
+                                manager.currentActStatus = .getItem
                                 AudioManager.playGetItemAudio(
                                     root: manager.gameRoot!
                                 )
@@ -79,16 +78,19 @@ struct GameView: View {
                                 manager.setAllItemsAvailable()
                                 item.removeFromParent()
                                 manager.nearItem = nil
+
+                                manager.currentSpeechStatus = .getBag
+                            } else {
+                                manager.currentSpeechStatus = .needBag
                             }
-                        }
-                        if manager.visibleItems.count > 1 {
+                        } else if manager.visibleItems.count > 1 {
                             if item.components[ItemComponent.self]?.type
                                 == .cheese
                             {
                                 print("🧀")
 
                                 // 땃쥐 행복해하는 로티 애니메이션 플레이
-                                manager.updateStatus(to: .getItem)
+                                manager.currentActStatus = .getItem
 
                                 Task {
                                     await ItemManager().setCharacterScaleUp()
@@ -99,6 +101,8 @@ struct GameView: View {
                                 manager.visibleItems[1].isSolid = true
                                 item.removeFromParent()
                                 manager.nearItem = nil
+
+                                manager.currentSpeechStatus = .getCheeze
                             }
                             if item.components[ItemComponent.self]?.type
                                 == .bottle
@@ -106,7 +110,7 @@ struct GameView: View {
                                 print("🍶")
 
                                 // 땃쥐 행복해하는 로티 애니메이션 플레이
-                                manager.updateStatus(to: .getItem)
+                                manager.currentActStatus = .getItem
 
                                 ItemManager().setCharacterRunButtonAvailable()
                                 AudioManager.playGetItemAudio(
@@ -115,6 +119,8 @@ struct GameView: View {
                                 manager.visibleItems[2].isSolid = true
                                 item.removeFromParent()
                                 manager.nearItem = nil
+
+                                manager.currentSpeechStatus = .getBottle
                             }
                             if item.components[ItemComponent.self]?.type
                                 == .flashlight
@@ -122,7 +128,7 @@ struct GameView: View {
                                 print("🔦")
 
                                 // 땃쥐 행복해하는 로티 애니메이션 플레이
-                                manager.updateStatus(to: .getItem)
+                                manager.currentActStatus = .getItem
 
                                 manager.visibleItems[3].isSolid = true
                                 if let game = manager.gameRoot {
@@ -140,7 +146,11 @@ struct GameView: View {
                                 )
                                 item.removeFromParent()
                                 manager.nearItem = nil
+
+                                manager.currentSpeechStatus = .getFlashlight
                             }
+                        } else {
+                            manager.currentSpeechStatus = .needNewspaper
                         }
                         if manager.visibleItems.last?.outlinedImageName
                             == "Map_Outline"
@@ -151,7 +161,7 @@ struct GameView: View {
                                 print("🗺️")
 
                                 // 땃쥐 행복해하는 로티 애니메이션 플레이
-                                manager.updateStatus(to: .getItem)
+                                manager.currentActStatus = .getItem
 
                                 do {
                                     try ItemManager()
@@ -168,6 +178,8 @@ struct GameView: View {
                                 manager.visibleItems[4].isSolid = true
                                 item.removeFromParent()
                                 manager.nearItem = nil
+
+                                manager.currentSpeechStatus = .getMap
                             }
                         }
                     }
