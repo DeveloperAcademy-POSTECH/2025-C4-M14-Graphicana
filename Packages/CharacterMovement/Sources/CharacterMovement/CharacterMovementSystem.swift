@@ -144,7 +144,7 @@ public struct CharacterMovementSystem: System {
         lastLinear: inout SIMD3<Float>,
         jump: Bool
     ) {
-        var speedMultiplier: Float = 1.5
+        var speedMultiplier: Float = 1.3
 
         if let isOnRunning = character.components[CharacterStateComponent.self]?.isOnRunning,
            isOnRunning
