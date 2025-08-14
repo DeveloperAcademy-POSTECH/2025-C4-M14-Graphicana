@@ -206,6 +206,22 @@ struct GameView: View {
                 .zIndex(2)
             }
 
+            VStack {
+                HStack {
+                    //                    Spacer()
+                    Button {
+                        manager.showOnboarding = true
+                    } label: {
+                        Image(systemName: "info.circle")
+                        //                            .scaleEffect(0.7)
+                    }
+                }
+                .padding(.top, 50)
+                .padding(.leading, 600)
+                Spacer()
+            }
+            .zIndex(2)
+
             if manager.showEndCredits {
                 let width: CGFloat = UIScreen.main.bounds.width * 0.75
                 let height: CGFloat = UIScreen.main.bounds.height * 0.75
