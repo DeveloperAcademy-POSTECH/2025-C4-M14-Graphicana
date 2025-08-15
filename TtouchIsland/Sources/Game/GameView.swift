@@ -188,39 +188,13 @@ struct GameView: View {
 
             // 초기화 버튼
             if manager.showResetButton {
-                VStack {
-                    HStack {
-                        Spacer()
-
-                        Button {
-                            showResetAlert = true
-                        } label: {
-                            ActionButton(name: "ResetIcon")
-                                .scaleEffect(0.7)
-                        }
-                    }
-                    .padding(.all, 30)
-                    Spacer()
-                    // 우선순위 위로!
-                }
-                .zIndex(2)
+                ResetButton {
+                    showResetAlert = true
+                }.zIndex(2)
             }
 
-            VStack {
-                HStack {
-                    //                    Spacer()
-                    Button {
-                        manager.showOnboarding = true
-                    } label: {
-                        Image(systemName: "info.circle")
-                        //                            .scaleEffect(0.7)
-                    }
-                }
-                .padding(.top, 50)
-                .padding(.leading, 600)
-                Spacer()
-            }
-            .zIndex(2)
+            // 온보딩 여는 버튼
+            InfoButton().zIndex(2)
 
             if manager.showEndCredits {
                 let width: CGFloat = UIScreen.main.bounds.width * 0.75

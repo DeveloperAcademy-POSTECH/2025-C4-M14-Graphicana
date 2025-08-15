@@ -30,8 +30,10 @@ class GameManager {
     func setCharacterRunning(to boolean: Bool) {
         guard let character = character else { return }
 
-        character.components[CharacterStateComponent.self]?.isOnRunning = boolean
-        character.components[CharacterMovementComponent.self]?.isOnRunning = boolean
+        character.components[CharacterStateComponent.self]?.isOnRunning =
+            boolean
+        character.components[CharacterMovementComponent.self]?.isOnRunning =
+            boolean
     }
 
     var showOnboarding: Bool = true
@@ -85,7 +87,7 @@ extension GameManager {
                     solidImageName: "Backpack",
                     outlinedImageName: "Backpack_Outline",
                     isSolid: false
-                ),
+                )
             ]
         } else {
             print("⚠️ Warning: Backpack is already available.")
