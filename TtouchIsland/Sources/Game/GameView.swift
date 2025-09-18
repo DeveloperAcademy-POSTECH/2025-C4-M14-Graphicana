@@ -7,6 +7,7 @@ import WorldCamera
 
 struct GameView: View {
     @State var manager = GameManager.shared
+    @State private var gameCenterManager = GameCenterManager.shared
 
     // realityview를 완전히 다시 시작하기 위한 트리거
     @State private var gameId = UUID()
@@ -16,6 +17,7 @@ struct GameView: View {
 
     @State private var showResetAlert = false
     @State private var showRestartButton = false
+    @State private var showDashboard = false
 
     var body: some View {
         ZStack {
@@ -43,6 +45,16 @@ struct GameView: View {
 
                 playItemAnimations(game: game)
                 manager.showInterface = true
+            }
+            .onAppear {
+                gameCenterManager.authenticatePlayer()
+            }
+            .onChange(of: gameCenterManager.isAuthenticated) { newValue in
+                if newValue {
+                    print("Game Center 인증 성공")
+                } else {
+                    print("Game Center 인증 실패")
+                }
             }
             .id(gameId)
 
@@ -234,8 +246,7 @@ struct GameView: View {
                 // 새로운 게임 아이디를 설정해줘서 realityview를 다시 그리게 한다
                 gameId = UUID()
             }
-        }
-        .gesture(
+        }.gesture(
             // 핀치 인아웃(두 손가락 벌리기, 오므리기) 제스처를 감지
             MagnificationGesture()
                 .onChanged { newValue in
