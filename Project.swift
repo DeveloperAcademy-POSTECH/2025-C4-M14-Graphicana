@@ -1,33 +1,33 @@
 import ProjectDescription
 
-// let settings: Settings = .settings(
-//    base: [:],
-//    configurations: [
-//        // --- Debug 빌드 설정 ---
-//        .debug(name: "Debug", settings: [
-//            // 1. 코드 서명 스타일을 'Manual'로 설정합니다.
-//            "CODE_SIGN_STYLE": "Manual",
-//            // 2. Team ID는 수동 서명에서도 필요합니다.
-//            "DEVELOPMENT_TEAM": "4FCV7BL65G",
-//            // 3. ✅ 여기에 사용하려는 Provisioning Profile의 '이름'을 정확하게 입력합니다.
-//            "PROVISIONING_PROFILE_SPECIFIER": "CCC-AbundantLife-QT",
+let settings: Settings = .settings(
+    base: [:],
+    configurations: [
+        // --- Debug 빌드 설정 ---
+        .debug(name: "Debug", settings: [
+            // 1. 코드 서명 스타일을 'Manual'로 설정합니다.
+            "CODE_SIGN_STYLE": "Manual",
+            // 2. Team ID는 수동 서명에서도 필요합니다.
+            "DEVELOPMENT_TEAM": "4FCV7BL65G",
+            // 3. ✅ 여기에 사용하려는 Provisioning Profile의 '이름'을 정확하게 입력합니다.
+            "PROVISIONING_PROFILE_SPECIFIER": "Ttouch Island_Development",
 //            // 4. ✅ 서명 인증서 이름도 명시적으로 지정해주는 것이 좋습니다.
 //            "CODE_SIGN_IDENTITY": "iPhone Developer",
-//        ]),
-//
-//        // --- Release 빌드 설정 ---
-//        .release(name: "Release", settings: [
-//            // 1. 코드 서명 스타일을 'Manual'로 설정합니다.
-//            "CODE_SIGN_STYLE": "Manual",
-//            // 2. Team ID는 수동 서명에서도 필요합니다.
-//            "DEVELOPMENT_TEAM": "4FCV7BL65G",
-//            // 3. ✅ 여기에 사용하려는 Provisioning Profile의 '이름'을 정확하게 입력합니다.
-//            "PROVISIONING_PROFILE_SPECIFIER": "CCC-AbundantLife-QT",
+        ]),
+
+        // --- Release 빌드 설정 ---
+        .release(name: "Release", settings: [
+            // 1. 코드 서명 스타일을 'Manual'로 설정합니다.
+            "CODE_SIGN_STYLE": "Manual",
+            // 2. Team ID는 수동 서명에서도 필요합니다.
+            "DEVELOPMENT_TEAM": "4FCV7BL65G",
+            // 3. ✅ 여기에 사용하려는 Provisioning Profile의 '이름'을 정확하게 입력합니다.
+            "PROVISIONING_PROFILE_SPECIFIER": "Ttouch Island_Development",
 //            // 4. ✅ 서명 인증서 이름도 명시적으로 지정해주는 것이 좋습니다.
 //            "CODE_SIGN_IDENTITY": "iPhone Developer",
-//        ]),
-//    ]
-// )
+        ]),
+    ]
+)
 
 let project = Project(
     name: "TtouchIsland",
@@ -45,7 +45,7 @@ let project = Project(
             name: "TtouchIsland",
             destinations: .iOS,
             product: .app,
-            bundleId: "org.graphicana.TtouchIsland",
+            bundleId: "com.graphicana.TtouchIsland",
             deploymentTargets: .iOS("26.0"),
             infoPlist: .extendingDefault(
                 with: [
@@ -78,8 +78,8 @@ let project = Project(
                 .package(product: "WorldCamera"),
                 .package(product: "ControllerInput"),
                 .package(product: "Lottie"),
-            ]
-//            settings: settings
+            ],
+            settings: settings
         ),
         .target(
             name: "TtouchIslandTests",
