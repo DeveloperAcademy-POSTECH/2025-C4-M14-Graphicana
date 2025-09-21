@@ -115,6 +115,7 @@ struct ItemSystem: System {
             && !manager.isGameFinished
         {
             manager.isGameFinished = true
+            manager.showInfoButton = false
             manager.showResetButton = false
 
             print("complete")
