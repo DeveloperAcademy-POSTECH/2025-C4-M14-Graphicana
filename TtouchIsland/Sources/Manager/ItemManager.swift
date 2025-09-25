@@ -17,10 +17,11 @@ struct ItemManager {
     /// 신문을 클로즈업하는 함수
     func closeupNewspaper(newspaper: Entity, camera: Entity) throws {
         manager.isFocusedOnItem.toggle()
+        manager.showInfoButton = false
         manager.showResetButton = false
 
         if let character = manager.character {
-            character.isEnabled = false // 캐릭터 비활성화
+            character.isEnabled = false  // 캐릭터 비활성화
         }
 
         // 카메라 상태 수동 저장
@@ -33,9 +34,9 @@ struct ItemManager {
 
         // 캐릭터 움직임 정지
         if let character = manager.character,
-           var movementComponent = character.components[
-               CharacterMovementComponent.self
-           ]
+            var movementComponent = character.components[
+                CharacterMovementComponent.self
+            ]
         {
             movementComponent.paused = true
             character.components.set(movementComponent)
@@ -45,10 +46,10 @@ struct ItemManager {
         let orientAction = CameraOrientAction(
             transitionIn: 0.5,
             transitionOut: 0,
-            azimuth: .pi - 0.8, // 카메라의 수평 회전 각도
-            elevation: 0.3, // 카메라의 수직 회전 각도
-            radius: 0.75, // 카메라와 신문 사이의 거리
-            targetOffset: .zero, // 카메라가 바라볼 때 신문의 오프셋
+            azimuth: .pi - 0.8,  // 카메라의 수평 회전 각도
+            elevation: 0.3,  // 카메라의 수직 회전 각도
+            radius: 0.75,  // 카메라와 신문 사이의 거리
+            targetOffset: .zero,  // 카메라가 바라볼 때 신문의 오프셋
             target: newspaper.id
         )
 
@@ -73,12 +74,13 @@ struct ItemManager {
     /// 플레이어 시점으로 카메라를 되돌리는 함수
     func returnToPlayerView(camera: Entity) throws {
         manager.isFocusedOnItem.toggle()
+        manager.showInfoButton = true
         manager.showResetButton = true
 
         camera.stopAllAnimations()
 
         if let character = manager.character {
-            character.isEnabled = true // 캐릭터 활성화
+            character.isEnabled = true  // 캐릭터 활성화
         }
 
         // 카메라의 FollowComponent를 캐릭터로 다시 설정
@@ -99,9 +101,9 @@ struct ItemManager {
 
         // 캐릭터 움직임 재개
         if let character = manager.character,
-           var movementComponent = character.components[
-               CharacterMovementComponent.self
-           ]
+            var movementComponent = character.components[
+                CharacterMovementComponent.self
+            ]
         {
             movementComponent.paused = false
             character.components.set(movementComponent)
@@ -109,7 +111,7 @@ struct ItemManager {
 
         manager.setBackpackAvailable()
 
-        manager.savedCameraState = nil // 카메라 상태 초기화
+        manager.savedCameraState = nil  // 카메라 상태 초기화
     }
 
     // MARK: - 신문 아이템 상호작용 함수
@@ -120,7 +122,9 @@ struct ItemManager {
                 manager.currentActStatus = .common
 
                 // Stage Collision 해제
-                if let boundary = manager.gameRoot?.findEntity(named: "StageBoundary") {
+                if let boundary = manager.gameRoot?.findEntity(
+                    named: "StageBoundary"
+                ) {
                     print("✅ Stage Collision 해제")
                     boundary.removeFromParent()
                 }
@@ -157,7 +161,7 @@ struct ItemManager {
                         group: GameCollisionGroup.player,
                         mask: .all
                     )
-                ),
+                )
             ]
         )
     }
@@ -176,16 +180,25 @@ struct ItemManager {
             return
         }
 
-        guard let currentCameraSetting = camera.components[WorldCameraComponent.self] else { return }
+        guard
+            let currentCameraSetting = camera.components[
+                WorldCameraComponent.self
+            ]
+        else { return }
 
         let orientAction = CameraOrientAction(
-            transitionIn: 2.0, transitionOut: 2.0,
-            azimuth: .pi / 2, elevation: currentCameraSetting.elevation,
-            radius: 10.0, targetOffset: .zero, target: mapCompass.id
+            transitionIn: 2.0,
+            transitionOut: 2.0,
+            azimuth: .pi / 2,
+            elevation: currentCameraSetting.elevation,
+            radius: 10.0,
+            targetOffset: .zero,
+            target: mapCompass.id
         )
 
         let orientAnim = try AnimationResource.makeActionAnimation(
-            for: orientAction, duration: 6.0
+            for: orientAction,
+            duration: 6.0
         )
         CameraOrientActionHandler.register { _ in CameraOrientActionHandler() }
         camera.playAnimation(orientAnim)
@@ -197,7 +210,9 @@ struct ItemManager {
 
         // Pause the hero.
         if let character = manager.character,
-           var movementComponent = character.components[CharacterMovementComponent.self]
+            var movementComponent = character.components[
+                CharacterMovementComponent.self
+            ]
         {
             movementComponent.paused = true
             character.components.set(movementComponent)
@@ -207,7 +222,9 @@ struct ItemManager {
 
             // 캐릭터 움직임 재개
             if let character = manager.character,
-               var movementComponent = character.components[CharacterMovementComponent.self]
+                var movementComponent = character.components[
+                    CharacterMovementComponent.self
+                ]
             {
                 movementComponent.paused = false
                 character.components.set(movementComponent)
@@ -216,14 +233,17 @@ struct ItemManager {
 
         let fadeInAction = FromToByAction(to: Float(1.0))
         let fadeInAnim = try AnimationResource.makeActionAnimation(
-            for: fadeInAction, duration: 3, bindTarget: .opacity, delay: 1
+            for: fadeInAction,
+            duration: 3,
+            bindTarget: .opacity,
+            delay: 1
         )
         mapCompass.playAnimation(fadeInAnim)
     }
 
     func setMapCompassItemAvailable(mapCompass: Entity) {
         if manager.visibleItems.count == 5,
-           manager.visibleItems[4].outlinedImageName == "Mystery_Outline"
+            manager.visibleItems[4].outlinedImageName == "Mystery_Outline"
         {
             manager.visibleItems[3].isSolid = true
             manager.visibleItems[4] = StatusItem(
@@ -238,7 +258,9 @@ struct ItemManager {
         do {
             try setCameraAngleToMapCompass(mapCompass: mapCompass)
         } catch {
-            print("❌ Error: Failed to set camera angle to map compass - \(error.localizedDescription)")
+            print(
+                "❌ Error: Failed to set camera angle to map compass - \(error.localizedDescription)"
+            )
         }
     }
 
@@ -246,23 +268,31 @@ struct ItemManager {
 
     func setCameraAngleToDestination() throws {
         guard let camera = manager.gameCamera,
-              let leaf = manager.gameRoot?.findEntity(named: "Leaf") else { return }
+            let leaf = manager.gameRoot?.findEntity(named: "Leaf")
+        else { return }
 
         let orientAction = CameraOrientAction(
-            transitionIn: 3.5, transitionOut: 2.0,
-            azimuth: .pi / 2, elevation: .pi / 6,
-            radius: 5.0, targetOffset: .zero, target: leaf.id
+            transitionIn: 3.5,
+            transitionOut: 2.0,
+            azimuth: .pi / 2,
+            elevation: .pi / 6,
+            radius: 5.0,
+            targetOffset: .zero,
+            target: leaf.id
         )
 
         let orientAnim = try AnimationResource.makeActionAnimation(
-            for: orientAction, duration: 6.0
+            for: orientAction,
+            duration: 6.0
         )
         CameraOrientActionHandler.register { _ in CameraOrientActionHandler() }
         camera.playAnimation(orientAnim)
 
         // Pause the hero.
         if let character = manager.character,
-           var movementComponent = character.components[CharacterMovementComponent.self]
+            var movementComponent = character.components[
+                CharacterMovementComponent.self
+            ]
         {
             movementComponent.paused = true
             character.components.set(movementComponent)
@@ -272,7 +302,9 @@ struct ItemManager {
 
             // 캐릭터 움직임 재개
             if let character = manager.character,
-               var movementComponent = character.components[CharacterMovementComponent.self]
+                var movementComponent = character.components[
+                    CharacterMovementComponent.self
+                ]
             {
                 movementComponent.paused = false
                 character.components.set(movementComponent)

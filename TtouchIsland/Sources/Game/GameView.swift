@@ -198,6 +198,11 @@ struct GameView: View {
                 )
             }
 
+            // 온보딩 여는 버튼
+            if manager.showInfoButton {
+                InfoButton().zIndex(2)
+            }
+
             // 초기화 버튼
             if manager.showResetButton {
                 ResetButton {
@@ -205,12 +210,9 @@ struct GameView: View {
                 }.zIndex(2)
             }
 
-            // 온보딩 여는 버튼
-            InfoButton().zIndex(2)
-
             if manager.showEndCredits {
-                let width: CGFloat = UIScreen.main.bounds.width * 0.75
-                let height: CGFloat = UIScreen.main.bounds.height * 0.75
+                let width: CGFloat = UIScreen.main.bounds.width + 10
+                let height: CGFloat = UIScreen.main.bounds.height + 15
                 ZStack {
                     EndCreditsView()
                         .frame(width: width, height: height)
