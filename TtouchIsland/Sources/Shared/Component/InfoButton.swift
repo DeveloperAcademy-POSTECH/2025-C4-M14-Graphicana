@@ -16,10 +16,11 @@ struct InfoButton: View {
                 Button {
                     manager.showOnboarding = true
                 } label: {
-                    Image(systemName: "info.circle")
+                    ActionButton(name: "InfoIcon")
                 }
+                .scaleEffect(0.6)
             }
-            .padding(.top, 50)
+            .padding(.top, 30)
             .padding(.leading, 600)
             Spacer()
         }
