@@ -248,9 +248,9 @@ struct GameView: View {
                 // 새로운 게임 아이디를 설정해줘서 realityview를 다시 그리게 한다
                 gameId = UUID()
             }
-        }.gesture(
+        }.simultaneousGesture(
             // 핀치 인아웃(두 손가락 벌리기, 오므리기) 제스처를 감지
-            MagnificationGesture()
+            MagnificationGesture(minimumScaleDelta: 0.5)
                 .onChanged { newValue in
                     // 얼마나 크기가 변했는지 비율 계산
                     let delta = newValue / lastScale
