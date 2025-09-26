@@ -3,7 +3,41 @@
     "objectMetadataList" : [
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
-        "Root"
+        "Root",
+        "SpinItem",
+        "Track"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "ForestAudio"
+      ],
+      {
+        "isExpanded" : false,
+        "isLocked" : false,
+        "selectedAudioFilePrim" : {
+          "string" : "\/Root\/Sound_Spark___Sea____Wave_Crashing_into_the_Shore_Splashing_wav"
+        }
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "Timeline",
+        "Track"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "Bag_Anim",
+        "Bag"
       ],
       {
         "isExpanded" : true,
@@ -23,15 +57,11 @@
       },
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
-        "Root",
-        "ForestSpatialAudio"
+        "Root"
       ],
       {
-        "isExpanded" : false,
-        "isLocked" : false,
-        "selectedAudioFilePrim" : {
-          "string" : "\/Root\/Sound_Spark___Sea____Wave_Crashing_into_the_Shore_Splashing_wav"
-        }
+        "isExpanded" : true,
+        "isLocked" : false
       },
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
@@ -61,13 +91,13 @@
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root",
-        "EnvironmentMap"
+        "ForestSpatialAudio"
       ],
       {
         "isExpanded" : false,
         "isLocked" : false,
         "selectedAudioFilePrim" : {
-          "string" : "\/Root\/EnvironmentMap\/backgroundAudio"
+          "string" : "\/Root\/Sound_Spark___Sea____Wave_Crashing_into_the_Shore_Splashing_wav"
         }
       },
       [
@@ -99,13 +129,13 @@
       [
         "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
         "Root",
-        "ForestAudio"
+        "EnvironmentMap"
       ],
       {
         "isExpanded" : false,
         "isLocked" : false,
         "selectedAudioFilePrim" : {
-          "string" : "\/Root\/Sound_Spark___Sea____Wave_Crashing_into_the_Shore_Splashing_wav"
+          "string" : "\/Root\/EnvironmentMap\/backgroundAudio"
         }
       }
     ]
