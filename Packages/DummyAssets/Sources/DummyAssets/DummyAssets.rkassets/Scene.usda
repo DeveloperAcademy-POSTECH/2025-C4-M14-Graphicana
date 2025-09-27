@@ -819,6 +819,12 @@ def Xform "Root"
             uniform bool shouldLoop = 1
         }
 
+        def RealityKitComponent "ChannelAudio"
+        {
+            float gain = -0.49583334
+            uniform token info:id = "RealityKit.ChannelAudio"
+        }
+
         def RealityKitComponent "AudioLibrary"
         {
             uniform token info:id = "RealityKit.AudioLibrary"
