@@ -62,7 +62,7 @@ struct JoystickButtonView: View {
                             _,
                             newValue in
                             let movementVector: SIMD2<Float> =
-                                [Float(newValue.x), Float(-newValue.y)] / 30
+                                [Float(newValue.x), Float(-newValue.y)] / 50
 
                             manager.gameRoot?.findEntity(named: "camera")?
                                 .components[WorldCameraComponent.self]?
@@ -103,7 +103,8 @@ struct JoystickButtonView: View {
                                                 )
 
                                             } else {
-                                                manager.currentActStatus = .common
+                                                manager.currentActStatus =
+                                                    .common
                                                 manager.setCharacterRunning(
                                                     to: false
                                                 )
