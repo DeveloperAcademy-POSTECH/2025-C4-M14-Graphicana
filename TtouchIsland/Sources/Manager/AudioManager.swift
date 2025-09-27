@@ -16,7 +16,7 @@ enum AudioManager {
                 AudioLibraryComponent.self
             ],
             // AudioLibraryComponent(리컴포에서 추가할 수 있음)에서 backgroundAudio라는 리소스(.wav,.mp3 파일을 메모리에 올린 객체)를 가져온다
-            let backgroundAudio = audioLibrary.resources["backgroundAudio"]
+            let backgroundAudio = audioLibrary.resources["newbackgroundAudio"]
         {
             // 가져온 오디오 리소스를 해당 엔티티에서 재생한다
             background.playAudio(backgroundAudio)
@@ -58,18 +58,18 @@ enum AudioManager {
             let audioLibrary = ocean1.components[
                 AudioLibraryComponent.self
             ],
-            let backgroundAudio = audioLibrary.resources["oceanAudio"]
+            let oceanAudio = audioLibrary.resources["oceanAudio"]
         {
-            ocean1.playAudio(backgroundAudio)
+            ocean1.playAudio(oceanAudio)
         }
 
         if let ocean2 = root.findEntity(named: "OceanSpatialAudio2"),
             let audioLibrary = ocean2.components[
                 AudioLibraryComponent.self
             ],
-            let backgroundAudio = audioLibrary.resources["oceanAudio"]
+            let oceanAudio = audioLibrary.resources["oceanAudio"]
         {
-            ocean2.playAudio(backgroundAudio)
+            ocean2.playAudio(oceanAudio)
         }
 
     }

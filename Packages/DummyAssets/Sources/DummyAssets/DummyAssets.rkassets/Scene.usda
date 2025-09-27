@@ -806,10 +806,29 @@ def Xform "Root"
         references = @EnvironmentMap.usd@
     )
     {
+        reorder nameChildren = ["newbackgroundAudio", "Icosphere_012", "_materials", "Rock_04_006", "Icosphere_022", "Icosphere_013", "Rock_04_005", "NormalTree_001", "Icosphere_062", "Rock_02_008", "PalmTreeLarge_003", "Rock_03_003", "Cone_025", "NormalTree_052", "Cone_036", "Cone_023", "Rock_02_013", "Rock_10_002", "NormalTree_042", "PalmTreSmall_021", "Rock_10_010", "Rock_05_001", "NormalTree_022", "NormalTree_032", "Icosphere_033", "Icosphere_065", "Rock_03_008", "House03_039", "NormalTree_012", "Icosphere_023", "Cone_027", "Rock_03_007", "PalmTreSmall_007", "PalmTreSmall_017", "NormalTree_002", "Icosphere_066", "Rock_01_005", "PalmTreeLarge_004", "Icosphere_068", "Rock_03_004", "Icosphere_067", "Rock_01_004", "NormalTree_053", "Cone_035", "Cone_037", "Cone_024", "Rock_09_002", "NormalTree_043", "StrawRoofPanel_192", "Icosphere_044", "Rock_09_008", "Water", "Rock_04_001", "NormalTree_033", "Icosphere_034", "Cone_040", "Rock_02_011", "House01_149", "NormalTree_013", "Icosphere_005", "Cone_009", "Rock_06_009", "Rock_03_002", "Rock_02_010", "PalmTreSmall_008", "PalmTreSmall_018", "NormalTree_003", "Icosphere_014", "Icosphere_024", "Rock_02_009", "PalmTreeLarge_005", "Icosphere_069", "Rock_10_003", "Cone_030", "Rock_10_004", "NormalTree_054", "Icosphere_054", "Rock_08_002", "WoodenDoorPanel_198", "Rock_08_008", "Water_001", "Rock_03_001", "Cone", "NormalTree_034", "NormalTree_031", "Icosphere_027", "Rock_07_008", "House01_257", "NormalTree_014", "Icosphere_025", "Icosphere_006", "Icosphere_028", "Rock_01_006", "PalmTreSmall_019", "NormalTree_004", "Icosphere_015", "Icosphere_008", "Icosphere_029", "Rock_10_006", "PalmTreeLarge_006", "NormalTree_037", "Icosphere_070", "Cone_010", "Rock_09_003", "Cone_012", "Rock_07_004", "NormalTree_055", "Icosphere_055", "Icosphere_063", "Icosphere_036", "Cone_026", "Rock_07_002", "NormalTree_051", "NormalTree_045", "Rock_07_010", "Water_002", "Rock_02_001", "NormalTree_025", "NormalTree_035", "Cone_001", "Rock_06_007", "House01_521", "NormalTree_015", "Icosphere_026", "Icosphere_007", "Cone_034", "Icosphere_030", "Rock_10_008", "PalmTreSmall_010", "PalmTreSmall_020", "NormalTree_005", "Icosphere_016", "Icosphere_001", "Cone_014", "Rock_10_007", "PalmTreeLarge_152", "Icosphere_071", "Cone_031", "Icosphere", "Rock_10_005", "NormalTree_056", "Icosphere_056", "Icosphere_064", "Cone_006", "Rock_06_002", "Cone_015", "NormalTree_046", "Icosphere_047", "NormalTree_024", "Rock_01_001", "NormalTree_026", "NormalTree_036", "NormalTree_057", "Rock_07_009", "Cone_016", "Rock_09_006", "NormalTree_006", "Icosphere_017", "Cone_002", "Rock_09_005", "PalmTreSmall_001", "Icosphere_072", "Cone_011", "Icosphere_040", "Rock_07_003", "Rock_08_004", "PalmTreSmall_004", "Icosphere_057", "Rock_05_002", "Cone_003", "NormalTree_047", "Icosphere_048", "Rock_05_007", "Rock_02_002", "NormalTree_011", "Icosphere_038", "Rock_09_007", "House06_007", "NormalTree_017", "Icosphere_004", "Rock_02_007", "Rock_08_006", "PalmTreSmall_012", "PalmTreSmall_022", "NormalTree_007", "Icosphere_018", "Icosphere_002", "Cone_019", "Rock_08_005", "PalmTreSmall_002", "Icosphere_073", "Cone_032", "Icosphere_045", "Rock_06_003", "Rock_06_004", "NormalTree_058", "Icosphere_058", "Cone_038", "Cone_007", "Rock_04_002", "Icosphere_046", "NormalTree_048", "Rock_04_008", "Terrain", "Rock_02_003", "NormalTree_028", "NormalTree_016", "Icosphere_039", "Rock_04_007", "Rock_10_001", "NormalTree_018", "Cone_020", "Rock_02_005", "Rock_07_007", "PalmTreSmall_013", "PalmTreSmall_023", "NormalTree_008", "Icosphere_019", "Cone_017", "Icosphere_049", "Rock_07_006", "PalmTreSmall_003", "Icosphere_074", "Icosphere_031", "Icosphere_050", "Rock_05_003", "Rock_05_004", "NormalTree_059", "Icosphere_059", "Cone_028", "Icosphere_051", "NormalTree_049", "Cone_021", "Rock_03_009", "NormalTree_044", "Rock_02_006", "NormalTree_029", "PalmTreSmall_006", "NormalTree_039", "Rock_10_009", "Rock_09_001", "NormalTree_019", "Icosphere_043", "Icosphere_053", "Rock_06_006", "PalmTreSmall_014", "House09_398", "NormalTree_009", "Icosphere_020", "Icosphere_003", "NormalTree_023", "Rock_06_005", "NormalTree_038", "Icosphere_075", "Cone_033", "PalmTreSmall_009", "Rock_04_003", "Rock_04_004", "PalmTreeLarge_001", "Icosphere_060", "Icosphere_037", "Cone_008", "Rock_08_003", "NormalTree_050", "Icosphere_035", "Rock_02_012", "Rock_02_004", "NormalTree_030", "PalmTreSmall_011", "NormalTree_040", "Icosphere_041", "Icosphere_011", "Rock_08_007", "Rock_08_001", "NormalTree_020", "NormalTree_027", "Icosphere_009", "Rock_05_006", "PalmTreSmall_015", "House05_001", "NormalTree_010", "Icosphere_021", "Cone_018", "Cone_004", "Rock_05_005", "PalmTreSmall_005", "NormalTree", "Cone_013", "Icosphere_010", "Rock_03_005", "Rock_03_006", "PalmTreeLarge_002", "Icosphere_061", "Cone_039", "Cone_029", "Cone_005", "Rock_01_003", "Icosphere_052", "Rock_01_008", "Rock_01_002", "PalmTreSmall_016", "NormalTree_041", "Icosphere_042", "Rock_06_008", "Rock_06_001", "NormalTree_021", "Icosphere_032", "Cone_022", "env_light"]
         quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
         float3 xformOp:scale = (1, 1, 1)
         float3 xformOp:translate = (0, 0, 0)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def RealityKitAudioFile "newbackgroundAudio"
+        {
+            uniform asset file = @Sound source 1/BGM_v1.wav@
+            uniform token loadingStrategy = "Stream"
+            uniform bool shouldLoop = 1
+        }
+
+        def RealityKitComponent "AudioLibrary"
+        {
+            uniform token info:id = "RealityKit.AudioLibrary"
+
+            def RealityKitDict "resources"
+            {
+                string[] keys = ["newbackgroundAudio"]
+                rel values = </Root/EnvironmentMap/newbackgroundAudio>
+            }
+        }
     }
 
     def "MapBoundary" (
