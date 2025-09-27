@@ -10,91 +10,7 @@
 
 def Xform "Root"
 {
-    reorder nameChildren = ["Backpack_Anim", "Bottle_Anim", "Cheese_Anim", "DirectionalLight", "DummyMaterial", "EmissiveMap", "EmissiveMaterial", "EmissiveNewspaper", "EnvironmentMap", "Flashlight_Anim", "MapBoundary", "MapCompass_Anim", "OceanPlane", "SkyBoxMaterial", "SkySphere", "Ttouch", "Leaf", "StageBoundary", "ForestSpatialAudio", "forestAudio", "ItemAudio", "itemAudio", "NewsPaper"]
-    def "Backpack_Anim" (
-        active = true
-        customData = {
-            float3 rotationEulerHint = (-1.5707963, 0, 0)
-        }
-        references = @Items/Backpack_Anim.usd@
-    )
-    {
-        float2 ui:nodegraph:node:pos = (20, 20)
-        int ui:nodegraph:node:stackingOrder = 1
-        quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
-        float3 xformOp:scale = (0.5, 0.5, 0.5)
-        float3 xformOp:translate = (-48.340385, 0.7, -22.588247)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-
-        over "Backpack"
-        {
-            over "Cube" (
-                prepend apiSchemas = ["MaterialBindingAPI"]
-            )
-            {
-                rel material:binding = </Root/EmissiveMaterial> (
-                    bindMaterialAs = "strongerThanDescendants"
-                )
-            }
-        }
-    }
-
-    def "Bottle_Anim" (
-        active = true
-        customData = {
-            float3 rotationEulerHint = (-1.5707963, 0, 0)
-        }
-        references = @Items/Bottle_Anim.usd@
-    )
-    {
-        float2 ui:nodegraph:node:pos = (20, 20)
-        int ui:nodegraph:node:stackingOrder = 1
-        quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
-        float3 xformOp:scale = (1, 1, 1)
-        float3 xformOp:translate = (-12.3523245, 5.5, -9.939017)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-
-        over "Bottle"
-        {
-            over "Cylinder" (
-                prepend apiSchemas = ["MaterialBindingAPI"]
-            )
-            {
-                rel material:binding = </Root/EmissiveMaterial> (
-                    bindMaterialAs = "weakerThanDescendants"
-                )
-            }
-        }
-    }
-
-    def "Cheese_Anim" (
-        active = true
-        customData = {
-            float3 rotationEulerHint = (-1.5707963, 0, 0)
-        }
-        references = @Items/Cheese_Anim.usd@
-    )
-    {
-        float2 ui:nodegraph:node:pos = (20, 20)
-        int ui:nodegraph:node:stackingOrder = 1
-        quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
-        float3 xformOp:scale = (0.5, 0.5, 0.5)
-        float3 xformOp:translate = (54.98196, 4, 4.357605)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-
-        over "Circle"
-        {
-            over "Circle" (
-                prepend apiSchemas = ["MaterialBindingAPI"]
-            )
-            {
-                rel material:binding = </Root/EmissiveMaterial> (
-                    bindMaterialAs = "weakerThanDescendants"
-                )
-            }
-        }
-    }
-
+    reorder nameChildren = ["DirectionalLight", "DummyMaterial", "EmissiveMap", "EmissiveMaterial", "EmissiveNewspaper", "EnvironmentMap", "MapBoundary", "OceanPlane", "SkyBoxMaterial", "SkySphere", "Ttouch", "Leaf", "StageBoundary", "Backpack_Anim", "NewsPaper", "Bottle_Anim", "Cheese_Anim", "Flashlight_Anim", "MapCompass_Anim", "ForestSpatialAudio", "forestAudio", "ItemAudio", "itemAudio"]
     def Xform "DirectionalLight" (
         customData = {
             float3 rotationEulerHint = (-0.71140635, 1.556634e-7, -5.782976e-8)
@@ -116,6 +32,7 @@ def Xform "Root"
             def RealityKitStruct "Shadow"
             {
                 bool isEnabled = 1
+                float maximumDistance = 30
             }
         }
     }
@@ -167,13 +84,15 @@ def Xform "Root"
         def Shader "Image"
         {
             uniform token info:id = "ND_image_color3"
+            color3f inputs:default
             asset inputs:file = @Items/textures/Map.png@
             string inputs:filtertype
+            float2 inputs:texcoord
             string inputs:uaddressmode
             string inputs:vaddressmode
             color3f outputs:out
             float2 ui:nodegraph:node:pos = (-543.665, 126.19008)
-            int ui:nodegraph:node:stackingOrder = 595
+            int ui:nodegraph:node:stackingOrder = 654
             string[] ui:nodegraph:realitykit:node:attributesShowingChildren = []
         }
 
@@ -186,7 +105,7 @@ def Xform "Root"
                     }
                 }
             )
-            color3f inputs:Mix_bg.connect = </Root/EmissiveMap/Image.outputs:out>
+            color3f inputs:Mix_bg.connect = </Root/EmissiveMap/Image_1.outputs:out>
             color3f outputs:Mix_out.connect = </Root/EmissiveMap/nodegraph/Mix.outputs:out>
             float2 ui:nodegraph:node:pos = (-273.70248, 86.03568)
             int ui:nodegraph:node:stackingOrder = 593
@@ -291,6 +210,16 @@ def Xform "Root"
                 float2 ui:nodegraph:node:pos = (860.75, 256.33386)
                 int ui:nodegraph:node:stackingOrder = 934
             }
+        }
+
+        def Shader "Image_1"
+        {
+            uniform token info:id = "ND_image_color3"
+            asset inputs:file = @Items_V2/textures/Map.png@
+            string inputs:filtertype
+            color3f outputs:out
+            float2 ui:nodegraph:node:pos = (-821.03644, 148.80667)
+            int ui:nodegraph:node:stackingOrder = 635
         }
     }
 
@@ -480,12 +409,12 @@ def Xform "Root"
         def Shader "Image"
         {
             uniform token info:id = "ND_image_color3"
-            asset inputs:file = @NewsPaperV2/textures/NewsPaper.png@
+            asset inputs:file = @Items_V2/textures/newspapaer_v5.png@
             string inputs:filtertype
             string inputs:vaddressmode
             color3f outputs:out
             float2 ui:nodegraph:node:pos = (-600.5329, 135.63483)
-            int ui:nodegraph:node:stackingOrder = 590
+            int ui:nodegraph:node:stackingOrder = 613
             string[] ui:nodegraph:realitykit:node:attributesShowingChildren = []
         }
 
@@ -602,172 +531,6 @@ def Xform "Root"
                 float3 outputs:out
                 float2 ui:nodegraph:node:pos = (860.75, 256.33386)
                 int ui:nodegraph:node:stackingOrder = 934
-            }
-        }
-    }
-
-    def "EnvironmentMap" (
-        active = true
-        customData = {
-            float3 rotationEulerHint = (-1.5707964, 0, 0)
-        }
-        references = @EnvironmentMapV4/EnvironmentMap.usd@
-    )
-    {
-        reorder nameChildren = ["backgroundAudio", "Icosphere_052", "_materials", "Rock_08_004", "Icosphere_009", "Icosphere_053", "NormalTree_049", "PalmTreSmall_008", "House03_012", "Rock_05_007", "Icosphere_054", "House03_143", "House03_215", "Icosphere_055", "NormalTree_009", "Rock_08_006", "PalmTreSmall_004", "Icosphere_056", "Rock_06_004", "Icosphere_010", "House03_195", "House03_114", "House03_184", "House03_033", "NormalTree_050", "Rock_04_002", "House03_083", "House03_094", "House03_013", "Rock_04_008", "Icosphere_059", "House03_074", "House03_144", "House03_216", "Rock_01_002", "House02", "NormalTree_058", "NormalTree_010", "Rock_07_007", "House03_054", "Icosphere_061", "Rock_05_004", "House03_196", "House03_115", "Rock_09_002", "Cone_039", "House03_236", "House03_034", "NormalTree_051", "Rock_03_002", "PalmTreSmall_018", "House03_095", "House03_014", "Rock_03_009", "Rock_09_001", "Icosphere", "Rock_07_002", "House03_075", "NormalTree_031", "Icosphere_032", "House03_145", "House03_217", "Icosphere_063", "House07", "NormalTree_011", "Rock_06_006", "House03_258", "House03_055", "Rock_05_002", "Rock_04_004", "House03_197", "House03_116", "House03_194", "PalmTreSmall_006", "Cone_040", "House03_237", "House03_035", "House03_093", "House03_166", "House03_096", "House03_015", "Rock_02_012", "Rock_08_001", "Cone_014", "House01", "NormalTree_032", "Icosphere_033", "House03_146", "House03_218", "Cone_016", "House03_076", "House06", "NormalTree_012", "Rock_05_006", "House03_259", "Cone_013", "Rock_03_006", "Icosphere_013", "House03_198", "House03_117", "Icosphere_067", "Cone_012", "PalmTreSmall_007", "Icosphere_068", "Cone_027", "House03_238", "House03_036", "House03_149", "House03_167", "House03_178", "House03_097", "House03_016", "Rock_01_008", "Rock_06_001", "Cone_035", "Cone_009", "NormalTree_033", "House03_147", "House03_219", "House03_151", "House03_077", "House03", "NormalTree_013", "Rock_04_006", "House03_260", "Cone_008", "House03_057", "Rock_02_008", "House03_127", "House03_199", "House03_118", "House03_153", "Icosphere_069", "Cone_028", "House03_164", "House03_239", "House03_037", "NormalTree_054", "House03_103", "Rock_03_003", "House03_168", "House03_179", "House03_098", "House03_017", "Rock_08_002", "Icosphere_074", "Cone_007", "NormalTree_034", "Rock_05_001", "House03_148", "House03_220", "Icosphere_075", "House03_078", "House09", "NormalTree_014", "Rock_03_008", "House03_261", "House03_228", "House03_157", "House03_058", "Rock_01_005", "Icosphere_015", "House03_128", "House03_200", "House03_119", "House03_209", "PalmTreSmall_009", "Icosphere_070", "House03_240", "House03_152", "House03_038", "NormalTree_055", "Cone_001", "Rock_03_004", "House03_169", "House03_180", "House03_099", "House03_018", "Water", "Cone_002", "NormalTree_035", "Rock_04_001", "House03_221", "NormalTree_004", "House03_079", "House04", "NormalTree_015", "Rock_02_011", "House03_262", "Rock_07_009", "Cone_019", "House03_059", "Rock_02_009", "Icosphere_016", "House03_129", "House03_201", "House03_120", "House03_163", "PalmTreSmall_010", "Icosphere_071", "Cone_030", "House03_039", "NormalTree_056", "House03_113", "Rock_10_003", "House03_170", "House03_181", "House03_100", "House03_019", "Water_001", "House03_165", "Cone_005", "NormalTree_036", "Icosphere_037", "Rock_03_001", "House03_150", "Cone_023", "House03_080", "House08", "NormalTree_016", "Rock_07_008", "House03_263", "Cone_024", "House03_060", "Rock_10_006", "Icosphere_017", "House03_130", "House03_202", "House03_121", "PalmTreSmall_005", "Cone_025", "PalmTreSmall_011", "Icosphere_072", "Cone_031", "House03_242", "House03_040", "NormalTree_057", "Cone_026", "Rock_09_003", "House03_171", "House03_050", "Rock_02_013", "House03_182", "House03_101", "House03_020", "Water_002", "Icosphere_057", "Cone_006", "NormalTree_037", "Icosphere_038", "Rock_02_001", "House03_222", "House03_223", "House03_081", "House05", "NormalTree_017", "Rock_06_007", "House03_264", "Cone_029", "House03_061", "Rock_10_007", "Icosphere_018", "House03_131", "House03_203", "House03_122", "House03_173", "PalmTreSmall_012", "Icosphere_073", "Cone_032", "House03_041", "House03_225", "Rock_08_003", "House03_172", "Rock_07_003", "House03_183", "House03_102", "House03_021", "House03_124", "Icosphere_058", "NormalTree_038", "Icosphere_039", "Rock_01_001", "NormalTree_019", "House03_224", "House03_082", "House03_001", "NormalTree_018", "Cone_037", "House03_265", "NormalTree_020", "House03_062", "Rock_09_005", "Icosphere_019", "House03_132", "House03_204", "House03_123", "Icosphere_001", "PalmTreSmall_013", "Cone_033", "NormalTree_059", "Icosphere_002", "House03_022", "Cone_004", "Icosphere_003", "NormalTree_039", "Icosphere_040", "Rock_02_002", "Icosphere_004", "House03_002", "Rock_09_007", "Icosphere_005", "Rock_08_005", "House03_133", "House03_205", "House03_234", "PalmTreSmall_014", "Cone_034", "House03_235", "Rock_06_003", "House03_174", "House03_185", "House03_104", "House03_023", "Icosphere_060", "Cone", "House03_032", "NormalTree_040", "Icosphere_041", "Rock_02_003", "House03_154", "House03_226", "NormalTree_029", "House03_084", "House03_003", "Rock_04_007", "NormalTree_030", "House03_064", "Rock_07_006", "Icosphere_021", "House03_134", "House03_206", "House03_125", "Icosphere_011", "PalmTreSmall_015", "NormalTree", "House03_246", "House03_044", "Icosphere_012", "Rock_05_003", "House03_175", "House03_186", "House03_105", "House03_024", "House03_241", "Icosphere_042", "Rock_02_006", "House03_155", "House03_227", "Icosphere_014", "House03_085", "House03_004", "Rock_10_009", "House03_243", "House03_065", "Rock_06_005", "NormalTree_021", "Icosphere_022", "House03_135", "House03_207", "House03_126", "House03_244", "PalmTreSmall_016", "NormalTree_001", "House03_247", "House03_045", "PalmTreeLarge_003", "House03_245", "Rock_04_003", "House03_176", "House03_187", "House03_106", "Terrain", "Cone_036", "House03_042", "House03_025", "NormalTree_042", "Rock_02_004", "House03_156", "House03_043", "House03_086", "House03_005", "Rock_08_007", "House03_269", "PalmTreeLarge_006", "Icosphere_020", "House03_066", "Rock_05_005", "NormalTree_022", "House03_136", "House03_208", "NormalTree_041", "PalmTreSmall_017", "NormalTree_002", "House03_248", "House03_046", "PalmTreeLarge_004", "House03_250", "Rock_03_005", "House03_177", "House03_188", "House03_107", "Icosphere_023", "House03_026", "NormalTree_043", "Icosphere_024", "House03_087", "House03_006", "Rock_06_008", "House03_270", "House03_049", "House03_067", "Rock_04_005", "NormalTree_023", "House03_137", "Icosphere_026", "Rock_02_005", "NormalTree_003", "House03_249", "House03_047", "PalmTreeLarge_005", "House03_256", "Rock_02_007", "House03_189", "House03_108", "House03_257", "Icosphere_062", "Cone_018", "House03_229", "House03_027", "NormalTree_044", "Icosphere_045", "Rock_10_002", "House03_053", "House03_088", "House03_007", "Rock_10_010", "House03_158", "Icosphere_030", "House03_068", "NormalTree_024", "Icosphere_025", "House03_138", "House03_210", "Icosphere_031", "PalmTreSmall_019", "Rock_03_007", "Cone_010", "NormalTree_052", "Rock_01_004", "House03_190", "House03_109", "NormalTree_053", "House03_230", "House03_028", "NormalTree_045", "Icosphere_046", "Icosphere_034", "House03_159", "House03_089", "House03_008", "Rock_09_008", "House03_272", "Cone_017", "Icosphere_035", "House03_069", "NormalTree_025", "House03_139", "House03_211", "Icosphere_036", "PalmTreSmall_020", "NormalTree_005", "Rock_02_010", "House03_251", "House03_266", "Rock_10_004", "Icosphere_006", "House03_191", "House03_110", "House03_267", "Icosphere_064", "Cone_020", "House03_231", "House03_029", "NormalTree_046", "Icosphere_047", "House03_268", "House03_160", "House03_090", "House03_009", "Rock_08_008", "House03_273", "Cone_011", "PalmTreeLarge_001", "House03_070", "NormalTree_026", "Icosphere_027", "House03_056", "House03_140", "House03_212", "PalmTreeLarge_002", "PalmTreSmall_021", "NormalTree_006", "Rock_01_006", "House03_252", "House03_271", "PalmTreSmall_001", "Rock_07_004", "Icosphere_007", "House03_192", "House03_111", "Icosphere_043", "Icosphere_065", "Cone_021", "House03_232", "House03_030", "NormalTree_047", "Icosphere_048", "Icosphere_044", "House03_161", "House03_048", "House03_091", "House03_010", "Rock_07_010", "Cone_015", "House03_274", "House03_071", "NormalTree_027", "Icosphere_028", "House03_141", "House03_213", "PalmTreeLarge_152", "House03_063", "PalmTreSmall_022", "NormalTree_007", "Rock_10_008", "House03_253", "House03_276", "House03_051", "PalmTreSmall_002", "Rock_10_005", "Icosphere_008", "House03_193", "House03_112", "Rock_10_001", "Icosphere_066", "Cone_038", "Cone_022", "House03_233", "House03_031", "NormalTree_048", "Icosphere_049", "House03_073", "Rock_06_002", "House03_162", "House03_092", "House03_011", "Rock_06_009", "House03_275", "Icosphere_050", "House03_072", "NormalTree_028", "Icosphere_029", "House03_142", "House03_214", "Icosphere_051", "Rock_01_003", "PalmTreSmall_023", "NormalTree_008", "Rock_09_006", "House03_254", "Cone_003", "House03_052", "PalmTreSmall_003", "env_light"]
-        float2 ui:nodegraph:node:pos = (20, 20)
-        int ui:nodegraph:node:stackingOrder = 1
-        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
-        float3 xformOp:scale = (1, 1, 1)
-        float3 xformOp:translate = (0, 0, 0)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-
-        over "Icosphere_052"
-        {
-            reorder nameChildren = ["Semo___Bamboozled_wav", "Icosphere_053"]
-        }
-
-        def RealityKitAudioFile "backgroundAudio"
-        {
-            uniform asset file = @Sound source 1/Semo - Bamboozled.wav@
-            uniform token loadingStrategy = "Stream"
-            uniform bool shouldLoop = 1
-        }
-
-        def RealityKitComponent "ChannelAudio"
-        {
-            float gain = -21.932291
-            uniform token info:id = "RealityKit.ChannelAudio"
-        }
-
-        def RealityKitComponent "AudioLibrary"
-        {
-            uniform token info:id = "RealityKit.AudioLibrary"
-
-            def RealityKitDict "resources"
-            {
-                string[] keys = ["backgroundAudio"]
-                rel values = </Root/EnvironmentMap/backgroundAudio>
-            }
-        }
-    }
-
-    def "Flashlight_Anim" (
-        active = true
-        customData = {
-            float3 rotationEulerHint = (-1.5707963, 0, 0)
-        }
-        references = @Items/Flashlight_Anim.usd@
-    )
-    {
-        float2 ui:nodegraph:node:pos = (20, 20)
-        int ui:nodegraph:node:stackingOrder = 1
-        quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
-        float3 xformOp:scale = (0.7, 0.7, 0.7)
-        float3 xformOp:translate = (-30.014364, 0.79999924, 32.050423)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-
-        over "FlashLight"
-        {
-            over "Cylinder_001" (
-                prepend apiSchemas = ["MaterialBindingAPI"]
-            )
-            {
-                rel material:binding = </Root/EmissiveMaterial> (
-                    bindMaterialAs = "weakerThanDescendants"
-                )
-            }
-        }
-    }
-
-    def "MapBoundary" (
-        active = true
-        customData = {
-            float3 rotationEulerHint = (-1.5707964, 0, 0)
-        }
-        references = @MapBoundary/MapBoundary.usd@
-    )
-    {
-        float2 ui:nodegraph:node:pos = (20, 20)
-        int ui:nodegraph:node:stackingOrder = 1
-        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
-        float3 xformOp:scale = (1, 1, 1)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-
-        over "_materials"
-        {
-            over "Transparent"
-            {
-                token outputs:mtlx:surface
-                token outputs:realitykit:vertex
-
-                over "Principled_BSDF"
-                {
-                    float inputs:opacityThreshold = 1
-                }
-            }
-        }
-
-        over "SeaWall"
-        {
-            quatf xformOp:orient = (0.9999955, -0.0004442352, -0.0020393047, 0.00214269)
-            float3 xformOp:scale = (150, 150.00003, 1)
-            double3 xformOp:translate = (0.04505950212478638, -0.005868434906005859, 0)
-            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-        }
-    }
-
-    def "MapCompass_Anim" (
-        active = true
-        customData = {
-            float3 rotationEulerHint = (1.570796, 1.0753179, -3.1415925)
-        }
-        references = @Items/MapCompass_Anim.usd@
-    )
-    {
-        float2 ui:nodegraph:node:pos = (20, 20)
-        int ui:nodegraph:node:stackingOrder = 1
-        quatf xformOp:orient = (0.36212817, -0.36212817, 0.607341, 0.6073411)
-        float3 xformOp:scale = (0.2, 0.2, 0.19999999)
-        float3 xformOp:translate = (21.215084, 1, 44.15179)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-
-        over "_materials"
-        {
-            over "Map"
-            {
-                token outputs:mtlx:surface
-                token outputs:realitykit:vertex
-            }
-        }
-
-        over "MapandCompass"
-        {
-            over "Mesh_004" (
-                prepend apiSchemas = ["MaterialBindingAPI"]
-            )
-            {
-                rel material:binding = </Root/EmissiveMap> (
-                    bindMaterialAs = "weakerThanDescendants"
-                )
-
-                over "Map" (
-                    prepend apiSchemas = ["MaterialBindingAPI"]
-                )
-                {
-                    rel material:binding = </Root/EmissiveMap> (
-                        bindMaterialAs = "weakerThanDescendants"
-                    )
-                }
-
-                over "Compass" (
-                    prepend apiSchemas = ["MaterialBindingAPI"]
-                )
-                {
-                    rel material:binding = </Root/EmissiveMaterial> (
-                        bindMaterialAs = "weakerThanDescendants"
-                    )
-                }
             }
         }
     }
@@ -975,33 +738,6 @@ def Xform "Root"
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
     }
 
-    def "StageBoundary" (
-        active = true
-        customData = {
-            float3 rotationEulerHint = (-1.5707963, 0, 0)
-        }
-        references = @MapBoundary/StageBoundary.usd@
-    )
-    {
-        quatf xformOp:orient = (0.70710677, -0.7071067, 0, 0)
-        float3 xformOp:scale = (1, 1, 1)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-
-        over "_materials"
-        {
-            over "Transparent"
-            {
-                token outputs:mtlx:surface
-                token outputs:realitykit:vertex
-
-                over "Principled_BSDF"
-                {
-                    float inputs:opacityThreshold = 1
-                }
-            }
-        }
-    }
-
     def Xform "ForestSpatialAudio" (
         customData = {
             float3 rotationEulerHint = (4.7123885, 0, 0)
@@ -1062,17 +798,89 @@ def Xform "Root"
         uniform bool shouldLoop = 0
     }
 
+    def "EnvironmentMap" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707964, 0, 0)
+        }
+        references = @EnvironmentMap.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def "MapBoundary" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707964, 0, 0)
+        }
+        references = @MapBoundary.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def "StageBoundary" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707964, 0, 0)
+        }
+        references = @StageBoundary.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def "Backpack_Anim" (
+        active = true
+        prepend apiSchemas = ["MaterialBindingAPI"]
+        customData = {
+            float3 rotationEulerHint = (-1.5707964, 0, 0)
+        }
+        references = @Items_V2/Bag_Anim.usd@
+    )
+    {
+        rel material:binding = </Root/EmissiveMaterial> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
+        float3 xformOp:scale = (0.2, 0.2, 0.2)
+        float3 xformOp:translate = (-48.31288, 0.67185724, -22.633123)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "Bag"
+        {
+            over "Cube" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </Root/EmissiveMaterial> (
+                    bindMaterialAs = "weakerThanDescendants"
+                )
+            }
+        }
+    }
+
     def "NewsPaper" (
         active = true
         customData = {
-            float3 rotationEulerHint = (-2.9670596, 0.6981318, 0)
+            float3 rotationEulerHint = (1.4060032, -0.6836751, -3.1415925)
         }
-        references = @NewspaperV3/NewsPaper.usd@
+        references = @Items_V2/Newspaper.usd@
     )
     {
-        quatf xformOp:orient = (-0.081899665, 0.9361168, -0.029809043, -0.3407187)
+        quatf xformOp:orient = (-0.2167226, 0.25574017, 0.6091037, 0.7187636)
         float3 xformOp:scale = (1, 1, 1)
-        float3 xformOp:translate = (-72.94689, 0.6, -30.653868)
+        float3 xformOp:translate = (-72.95098, 0.5627032, -30.658556)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
         def RealityKitComponent "VFXEmitter"
@@ -1083,10 +891,10 @@ def Xform "Root"
             {
                 token birthDirection = "Constant"
                 token birthLocation = "Volume"
-                float3 emissionDirection = (0, 0, 0)
+                float3 emissionDirection = (1, 0, 0)
                 double emissionDuration = 1
                 double emissionDurationVariation = 0
-                token emitterShape = "Cylinder"
+                token emitterShape = "Plane"
                 double idleDuration = 0
                 double idleDurationVariation = 0
                 bool isLocal = 0
@@ -1094,7 +902,7 @@ def Xform "Root"
                 bool loops = 1
                 float particleSpeed = 0.06
                 float particleSpeedVariation = 0.04
-                float3 shapeSize = (0.7, 0.3, 0.05)
+                float3 shapeSize = (1, 0.1, 0.5)
                 bool spawnInheritParentColor = 1
                 token spawnOccasion = "OnUpdate"
                 float spawnSpreadFactor = 0
@@ -1202,6 +1010,138 @@ def Xform "Root"
                     bool useStartColorRange = 1
                     float3 vortexDirection = (0, 1, 0)
                     float vortexStrength = 0
+                }
+            }
+        }
+
+        over "NewsPaper"
+        {
+            over "Plane" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </Root/NewsPaper/_materials/NewsPaper> (
+                    bindMaterialAs = "weakerThanDescendants"
+                )
+            }
+        }
+    }
+
+    def "Bottle_Anim" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707964, 0, 0)
+        }
+        references = @Items_V2/Bottle_Anim.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
+        float3 xformOp:scale = (0.15, 0.15, 0.15)
+        float3 xformOp:translate = (-12.35232, 5.327108, -9.93902)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "Bottle"
+        {
+            over "Circle_001" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </Root/EmissiveMaterial> (
+                    bindMaterialAs = "weakerThanDescendants"
+                )
+                float3 xformOp:translate = (0, 0, 0)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+        }
+    }
+
+    def "Cheese_Anim" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707964, 0, 0)
+        }
+        references = @Items_V2/Cheese_Anim.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
+        float3 xformOp:scale = (0.17, 0.17, 0.17)
+        float3 xformOp:translate = (54.98196, 4, 4.3576)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "Cheeze"
+        {
+            over "Circle" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </Root/EmissiveMaterial> (
+                    bindMaterialAs = "weakerThanDescendants"
+                )
+                float3 xformOp:translate = (0, -0.2606125, 0)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+        }
+    }
+
+    def "Flashlight_Anim" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707964, 0, 0)
+        }
+        references = @Items_V2/Flashlight_Anim.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
+        float3 xformOp:scale = (0.17, 0.17, 0.17)
+        float3 xformOp:translate = (-30.081654, 0.8, 32.05042)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "FlashLight"
+        {
+            over "Cylinder_001" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </Root/EmissiveMaterial> (
+                    bindMaterialAs = "weakerThanDescendants"
+                )
+            }
+        }
+    }
+
+    def "MapCompass_Anim" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (1.5707966, 1.0752972, -3.1415927)
+        }
+        references = @Items_V2/MapCompass_Anim.usd@
+    )
+    {
+        quatf xformOp:orient = (0.362122, -0.36212188, 0.60734487, 0.6073447)
+        float3 xformOp:scale = (0.2, 0.2, 0.2)
+        float3 xformOp:translate = (21.21508, 1, 44.15179)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "MapandCompass"
+        {
+            over "Mesh_004"
+            {
+                over "Map" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </Root/EmissiveMap> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+                }
+
+                over "Compass" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </Root/EmissiveMaterial> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
                 }
             }
         }

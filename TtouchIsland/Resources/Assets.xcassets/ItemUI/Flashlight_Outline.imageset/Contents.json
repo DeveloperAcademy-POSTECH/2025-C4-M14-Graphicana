@@ -1,12 +1,12 @@
 {
-  "images" : [
-    {
-      "filename" : "Flashlight_Outline.svg",
-      "idiom" : "universal"
-    }
-  ],
-  "info" : {
-    "author" : "xcode",
-    "version" : 1
-  }
+	"images": [
+		{
+			"filename": "Flashlight_Outline.svg",
+			"idiom": "universal"
+		}
+	],
+	"info": {
+		"author": "xcode",
+		"version": 1
+	}
 }

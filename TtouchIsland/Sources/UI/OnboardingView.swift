@@ -10,11 +10,6 @@ import SwiftUI
 
 struct OnboardingView: View {
     let manager: GameManager = .shared
-    @State private var currentPageIndex = 0
-
-    let onboardingImage = [
-        "OnBoarding_1", "OnBoarding_2", "OnBoarding_3", "OnBoarding_4",
-    ]
 
     var body: some View {
         // 화면 크기를 가져와서 그거보다 조금 더 크게 설정
@@ -61,7 +56,6 @@ struct OnboardingView: View {
                         .frame(width: 8, height: 8)
                 }
             }
-            .padding(.bottom, 40)
         }.ignoresSafeArea()
             .padding(.top, 25)
     }

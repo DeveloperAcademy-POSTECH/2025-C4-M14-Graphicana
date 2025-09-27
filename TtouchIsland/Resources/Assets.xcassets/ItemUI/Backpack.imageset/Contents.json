@@ -1,12 +1,12 @@
 {
-  "images" : [
-    {
-      "filename" : "Backpack.svg",
-      "idiom" : "universal"
-    }
-  ],
-  "info" : {
-    "author" : "xcode",
-    "version" : 1
-  }
+	"images": [
+		{
+			"filename": "Backpack.svg",
+			"idiom": "universal"
+		}
+	],
+	"info": {
+		"author": "xcode",
+		"version": 1
+	}
 }
