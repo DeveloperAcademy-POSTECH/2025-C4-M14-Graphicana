@@ -46,7 +46,7 @@ let project = Project(
             destinations: .iOS,
             product: .app,
             bundleId: "com.graphicana.TtouchIsland",
-            deploymentTargets: .iOS("26.0"),
+            deploymentTargets: .iOS("18.0"),
             infoPlist: .extendingDefault(
                 with: [
                     "UILaunchScreen": [
@@ -57,14 +57,10 @@ let project = Project(
                         "UIInterfaceOrientationLandscapeLeft",
                         "UIInterfaceOrientationLandscapeRight",
                     ],
-                    "UISupportedInterfaceOrientations~ipad": [
-                        "UIInterfaceOrientationLandscapeLeft",
-                        "UIInterfaceOrientationLandscapeRight",
-                    ],
                     "CFBundleDisplayName": "Ttouch Island",
                     "LSApplicationCategoryType": "public.app-category.adventure-games",
                     // Version (앱 스토어에 표시될 버전, 예: 1.0.0)
-//                        "CFBundleShortVersionString": .string("1.0.0"),
+                    "CFBundleShortVersionString": .string("1.0.0"),
                     // Build (빌드 번호, 예: 1)
 //                        "CFBundleVersion": .string("1"),
                 ]
