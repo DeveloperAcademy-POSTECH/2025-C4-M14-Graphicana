@@ -23,7 +23,7 @@ struct OnboardingView: View {
 
         ZStack(alignment: .bottom) {
             TabView(selection: $currentPageIndex) {
-                ForEach(0..<onboardingImage.count, id: \.self) {
+                ForEach(0 ..< onboardingImage.count, id: \.self) {
                     i in
                     ZStack(alignment: .bottom) {
                         Image(onboardingImage[i])
@@ -38,12 +38,11 @@ struct OnboardingView: View {
                                 Text("탐험 시작").foregroundStyle(Color.gray)
                                     .padding(.horizontal, 32)
                                     .padding(.vertical, 14)
-                            }.glassEffect(.regular.interactive())
-                                .padding(.bottom, 70)
-
+                            }
+//                            .glassEffect(.regular.interactive())
+                            .padding(.bottom, 70)
                         }
                     }
-
                 }
                 // 기본 땡땡이 없애기
             }.tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
@@ -53,7 +52,7 @@ struct OnboardingView: View {
                 )
             // 커스텀 땡땡이바
             HStack(spacing: 8) {
-                ForEach(0..<onboardingImage.count, id: \.self) { i in
+                ForEach(0 ..< onboardingImage.count, id: \.self) { i in
                     Circle()
                         .fill(
                             i == currentPageIndex

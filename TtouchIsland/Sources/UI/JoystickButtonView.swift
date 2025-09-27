@@ -22,7 +22,7 @@ struct JoystickButtonView: View {
     var body: some View {
         ZStack {
             VStack {
-                if !manager.isFocusedOnItem { Spacer().frame(height: 30) }  // 하단 패딩과 10 차이나게 (이유 모름;;)
+                if !manager.isFocusedOnItem { Spacer().frame(height: 30) } // 하단 패딩과 10 차이나게 (이유 모름;;)
 
                 HStack {
                     GameStatusView()
@@ -32,7 +32,7 @@ struct JoystickButtonView: View {
                     if manager.isFocusedOnItem {
                         CloseNewspaperComponent(itemAction: itemAction)
                     }
-                }  // HStack
+                } // HStack
                 .padding(.horizontal, 48)
 
                 Spacer()
@@ -44,7 +44,7 @@ struct JoystickButtonView: View {
                         .onChange(of: characterJoystick) { _, newValue in
                             let movementVector: SIMD3<Float> =
                                 [Float(newValue.x), 0, Float(newValue.y)]
-                                / 10
+                                    / 10
                             manager.character?
                                 .components[
                                     CharacterMovementComponent.self
@@ -60,7 +60,7 @@ struct JoystickButtonView: View {
                         )
                         .onChange(of: cameraAngleThumbstick) {
                             _,
-                            newValue in
+                                newValue in
                             let movementVector: SIMD2<Float> =
                                 [Float(newValue.x), Float(-newValue.y)] / 30
 
@@ -75,26 +75,25 @@ struct JoystickButtonView: View {
                         HStack {
                             if manager.nearItem != nil {
                                 // Get Item Button
-                                ActionButton(name: "GetIcon")
-                                    .onTapGesture {
-                                        if let item = manager.nearItem,
-                                            let camera = manager.gameCamera,
-                                            let character = manager.character
-                                        {
-                                            itemAction(item, camera)
-                                            AudioManager.playJumpAudio(
-                                                root: character
-                                            )
-                                        }
+                                ActionButton(name: "GetIcon", color: .IconBG) {
+                                    if let item = manager.nearItem,
+                                       let camera = manager.gameCamera,
+                                       let character = manager.character
+                                    {
+                                        itemAction(item, camera)
+                                        AudioManager.playJumpAudio(
+                                            root: character
+                                        )
                                     }
-                                    .padding(.trailing, 8)
+                                }
+                                .padding(.trailing, 8)
                             }
 
                             // Run Button
                             if manager.runButtonEnabled {
-                                ActionButton(name: "RunIcon")
+                                ActionButton(name: "RunIcon", color: .IconBG)
                                     .onLongPressGesture(
-                                        minimumDuration: 0.0,  // 즉시 반응
+                                        minimumDuration: 0.0, // 즉시 반응
                                         pressing: { isPressed in
                                             if isPressed {
                                                 manager.currentActStatus = .run
@@ -113,13 +112,13 @@ struct JoystickButtonView: View {
                                     )
                                     .padding(.trailing, 8)
                             } else {
-                                DisabledActionButton(name: "RunIcon")
+                                DisabledActionButton(name: "RunIcon", color: .IconBG)
                                     .disabled(true)
                                     .padding(.trailing, 8)
                             }
 
                             // Jump button.
-                            ActionButton(name: "JumpIcon")
+                            ActionButton(name: "JumpIcon", color: .IconBG)
                                 .onLongPressGesture(
                                     minimumDuration: 0.0,
                                     pressing: { isPressed in
@@ -135,12 +134,12 @@ struct JoystickButtonView: View {
                                     },
                                     perform: {}
                                 )
-                        }  // HStack
-                    }  // ZStack
-                }  // HStack
+                        } // HStack
+                    } // ZStack
+                } // HStack
                 .padding(.horizontal, 56)
                 .padding(.bottom, 40)
             }
-        }  // ZStack
+        } // ZStack
     }
 }

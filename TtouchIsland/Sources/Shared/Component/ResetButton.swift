@@ -16,8 +16,11 @@ struct ResetButton: View {
                 Spacer()
 
                 Button(action: action) {
-                    ActionButton(name: "ResetIcon")
-                        .scaleEffect(0.7)
+                    ActionButton(
+                        name: "ResetIcon",
+                        size: 50,
+                        color: .clear
+                    )
                 }
             }
             .padding(.all, 30)
