@@ -17,7 +17,6 @@ struct OnboardingView: View {
         let height: CGFloat = UIScreen.main.bounds.height + 15
 
         ZStack(alignment: .bottom) {
-
             Color.black
                 .opacity(0.7)
                 .ignoresSafeArea()
@@ -32,15 +31,44 @@ struct OnboardingView: View {
                 Button {
                     manager.showOnboarding = false
                 } label: {
-                    Text("탐험 시작").foregroundStyle(Color.gray)
-                        .padding(.horizontal, 32)
-                        .padding(.vertical, 14)
-                }.glassEffect(.regular.interactive())
-                    .padding(.bottom, 70)
-                    .padding(.leading, 450)
-
+                    Text("탐험 시작")
+                        .foregroundStyle(.black)
+                        .font(.system(size: 18, weight: .semibold))
+                }
+                .buttonStyle(ExploreWarmStyle())
+//                .glassEffect(.regular.interactive())
+                .padding(.bottom, 70)
+                .padding(.leading, 450)
             }
-        }.ignoresSafeArea()
-            .padding(.top, 25)
+        }
+        .ignoresSafeArea()
+    }
+}
+
+struct ExploreWarmStyle: ButtonStyle {
+    var cornerRadius: CGFloat = 15
+
+    func makeBody(configuration: Configuration) -> some View {
+        let pressed = configuration.isPressed
+
+        configuration.label
+            .frame(minWidth: 150, minHeight: 60)
+            .background(
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .fill(
+                        Color(red: 1.00, green: 0.90, blue: 0.55)
+                    )
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .stroke(Color.white.opacity(0.18), lineWidth: 1)
+            )
+            .shadow(
+                color: Color(red: 0.95, green: 0.45, blue: 0.35).opacity(0.30),
+                radius: pressed ? 6 : 12,
+                x: 0, y: pressed ? 3 : 8
+            )
+            .scaleEffect(pressed ? 0.98 : 1.0)
+            .animation(.easeOut(duration: 0.12), value: pressed)
     }
 }

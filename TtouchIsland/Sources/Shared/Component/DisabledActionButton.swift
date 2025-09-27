@@ -10,26 +10,46 @@ import SwiftUI
 
 struct DisabledActionButton: View {
     let name: String
+    var size: CGFloat = 60
+    var color: Color = .gray
 
     var body: some View {
         ZStack {
-            Image(name)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 70, height: 70)
-                .glassEffect(.regular.interactive())
-                .opacity(0.5)
+            ActionButton(name: name, size: size, color: color)
+                .brightness(-0.25)
+                .saturation(0.0)
+                .blur(radius: 0.5)
+                .disabled(true)
 
-            // 잠금 아이콘 추가
-            Image(systemName: "lock.fill")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 32, height: 32)
-                .foregroundColor(.gray)
+            // 잠금 배지
+            Circle()
+                .fill(Color.black.opacity(0.55))
+                .frame(width: size * 0.5, height: size * 0.5)
+                .overlay(
+                    Image(systemName: "lock.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: size * 0.22, height: size * 0.22)
+                        .foregroundColor(.white.opacity(0.9))
+                )
+                .overlay(
+                    Circle().stroke(Color.white.opacity(0.35), lineWidth: 1)
+                )
         }
+        .frame(width: size, height: size)
+        .contentShape(Circle())
+        .compositingGroup()
+        .accessibilityLabel(Text("사용 불가"))
+        .accessibilityHint(Text("잠금 상태"))
     }
 }
 
 #Preview {
-    DisabledActionButton(name: "Disabled_Action_Button")
+    VStack(spacing: 24) {
+        ActionButton(name: "RunIcon", size: 70, color: .cyan)
+        DisabledActionButton(name: "RunIcon", size: 70, color: .cyan)
+        DisabledActionButton(name: "JumpIcon", size: 86, color: .purple)
+        DisabledActionButton(name: "JumpIcon", size: 60, color: .orange)
+    }
+    .padding()
 }
