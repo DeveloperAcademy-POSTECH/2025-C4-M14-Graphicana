@@ -1,0 +1,167 @@
+{
+  "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD" : {
+    "objectMetadataList" : [
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "SpinItem",
+        "Track"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "ForestAudio"
+      ],
+      {
+        "isExpanded" : false,
+        "isLocked" : false,
+        "selectedAudioFilePrim" : {
+          "string" : "\/Root\/Sound_Spark___Sea____Wave_Crashing_into_the_Shore_Splashing_wav"
+        }
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "Timeline",
+        "Track"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "Bag_Anim",
+        "Bag"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "Ttouch"
+      ],
+      {
+        "isExpanded" : false,
+        "isLocked" : false,
+        "selectedAudioFilePrim" : {
+          "string" : "\/Root\/Ttouch\/jumpAudio"
+        }
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "OceanPlane",
+        "SpatialAudio"
+      ],
+      {
+        "isExpanded" : false,
+        "isLocked" : false,
+        "selectedAudioFilePrim" : {
+          "string" : "\/Root\/OceanPlane\/oceanAudio"
+        }
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "SpatialAudio"
+      ],
+      {
+        "isExpanded" : false,
+        "isLocked" : false,
+        "selectedAudioFilePrim" : {
+          "string" : "\/Root\/Sound_Spark___Sea____Wave_Crashing_into_the_Shore_Splashing_wav"
+        }
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "ForestSpatialAudio"
+      ],
+      {
+        "isExpanded" : false,
+        "isLocked" : false,
+        "selectedAudioFilePrim" : {
+          "string" : "\/Root\/Sound_Spark___Sea____Wave_Crashing_into_the_Shore_Splashing_wav"
+        }
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "OceanPlane",
+        "OceanSpatialAudio"
+      ],
+      {
+        "isExpanded" : false,
+        "isLocked" : false,
+        "selectedAudioFilePrim" : {
+          "string" : "\/Root\/OceanPlane\/oceanAudio"
+        }
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "OceanPlane",
+        "OceanSpatialAudio1"
+      ],
+      {
+        "isExpanded" : false,
+        "isLocked" : false,
+        "selectedAudioFilePrim" : {
+          "string" : "\/Root\/OceanPlane\/oceanAudio"
+        }
+      },
+      [
+        "B4863DCF-98C5-4234-80FE-5B9EFCAE5DAD",
+        "Root",
+        "EnvironmentMap"
+      ],
+      {
+        "isExpanded" : false,
+        "isLocked" : false,
+        "selectedAudioFilePrim" : {
+          "string" : "\/Root\/EnvironmentMap\/backgroundAudio"
+        }
+      }
+    ]
+  },
+  "CF54CED5-2F79-4F0F-9CD8-D2AFFFD5BC46" : {
+    "objectMetadataList" : [
+      [
+        "CF54CED5-2F79-4F0F-9CD8-D2AFFFD5BC46",
+        "Root"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      }
+    ]
+  },
+  "CF57283A-64B4-4D99-94FF-F9C265F12A52" : {
+    "objectMetadataList" : [
+      [
+        "CF57283A-64B4-4D99-94FF-F9C265F12A52",
+        "Root"
+      ],
+      {
+        "isExpanded" : true,
+        "isLocked" : false
+      }
+    ]
+  }
+}

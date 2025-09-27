@@ -1,0 +1,1150 @@
+#usda 1.0
+(
+    customLayerData = {
+        string creator = "Reality Composer Pro Version 2.0 (489.0.1)"
+    }
+    defaultPrim = "Root"
+    metersPerUnit = 1
+    upAxis = "Y"
+)
+
+def Xform "Root"
+{
+    reorder nameChildren = ["DirectionalLight", "DummyMaterial", "EmissiveMap", "EmissiveMaterial", "EmissiveNewspaper", "EnvironmentMap", "MapBoundary", "OceanPlane", "SkyBoxMaterial", "SkySphere", "Ttouch", "Leaf", "StageBoundary", "Backpack_Anim", "NewsPaper", "Bottle_Anim", "Cheese_Anim", "Flashlight_Anim", "MapCompass_Anim", "ForestSpatialAudio", "forestAudio", "ItemAudio", "itemAudio"]
+    def Xform "DirectionalLight" (
+        customData = {
+            float3 rotationEulerHint = (-0.71140635, 1.556634e-7, -5.782976e-8)
+        }
+    )
+    {
+        float2 ui:nodegraph:node:pos = (20, 20)
+        int ui:nodegraph:node:stackingOrder = 1
+        quatf xformOp:orient = (0.93740183, -0.34824958, 8.302917e-8, -3.789958e-15)
+        float3 xformOp:scale = (1, 0.9999999, 0.9999999)
+        float3 xformOp:translate = (0, 24.496136, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def RealityKitComponent "DirectionalLight"
+        {
+            float3 color = (0.9048901, 0.9454482, 1)
+            token info:id = "RealityKit.DirectionalLight"
+
+            def RealityKitStruct "Shadow"
+            {
+                bool isEnabled = 1
+                float maximumDistance = 30
+            }
+        }
+    }
+
+    def Material "DummyMaterial"
+    {
+        token outputs:mtlx:surface
+        token outputs:realitykit:vertex
+        token outputs:surface.connect = </Root/DummyMaterial/UsdPreviewSurface.outputs:surface>
+        float2 ui:nodegraph:node:pos = (20, 20)
+        int ui:nodegraph:node:stackingOrder = 1
+        float2 ui:nodegraph:realitykit:subgraphOutputs:pos = (0, 110.5)
+
+        def Shader "UsdPreviewSurface"
+        {
+            uniform token info:id = "UsdPreviewSurface"
+            color3f inputs:diffuseColor = (0.8365234, 0.7811884, 0.2966173) (
+                colorSpace = "srgb_displayp3"
+            )
+            float inputs:metallic = 0.5
+            float inputs:roughness = 0.2
+            token outputs:surface
+        }
+    }
+
+    def Material "EmissiveMap"
+    {
+        token outputs:mtlx:surface.connect = </Root/EmissiveMap/PreviewSurface.outputs:out>
+        token outputs:realitykit:vertex
+        float2 ui:nodegraph:node:pos = (-240.5904, 159.48856)
+        int ui:nodegraph:node:stackingOrder = 3
+        float2 ui:nodegraph:realitykit:subgraphOutputs:pos = (295.90976, 107.18535)
+        int ui:nodegraph:realitykit:subgraphOutputs:stackingOrder = 349
+
+        def Shader "PreviewSurface"
+        {
+            uniform token info:id = "ND_UsdPreviewSurface_surfaceshader"
+            color3f inputs:diffuseColor.connect = </Root/EmissiveMap/nodegraph.outputs:Mix_out>
+            float inputs:metallic
+            float3 inputs:normal
+            float inputs:opacity
+            float inputs:roughness
+            token outputs:out
+            float2 ui:nodegraph:node:pos = (69.368706, 42.220215)
+            int ui:nodegraph:node:stackingOrder = 445
+            string[] ui:nodegraph:realitykit:node:attributesShowingChildren = []
+        }
+
+        def Shader "Image"
+        {
+            uniform token info:id = "ND_image_color3"
+            color3f inputs:default
+            asset inputs:file = @Items/textures/Map.png@
+            string inputs:filtertype
+            float2 inputs:texcoord
+            string inputs:uaddressmode
+            string inputs:vaddressmode
+            color3f outputs:out
+            float2 ui:nodegraph:node:pos = (-543.665, 126.19008)
+            int ui:nodegraph:node:stackingOrder = 654
+            string[] ui:nodegraph:realitykit:node:attributesShowingChildren = []
+        }
+
+        def NodeGraph "nodegraph"
+        {
+            color3f inputs:Mix_bg (
+                customData = {
+                    dictionary realitykit = {
+                        float2 positionInSubgraph = (1268.75, 391.82568)
+                    }
+                }
+            )
+            color3f inputs:Mix_bg.connect = </Root/EmissiveMap/Image_1.outputs:out>
+            color3f outputs:Mix_out.connect = </Root/EmissiveMap/nodegraph/Mix.outputs:out>
+            float2 ui:nodegraph:node:pos = (-273.70248, 86.03568)
+            int ui:nodegraph:node:stackingOrder = 593
+            string[] ui:nodegraph:realitykit:node:attributesShowingChildren = ["inputs:Mix_bg", "inputs:Mix_bg"]
+            float2 ui:nodegraph:realitykit:subgraphOutputs:pos = (1666, 324.07977)
+
+            def Shader "Mix"
+            {
+                uniform token info:id = "ND_mix_color3"
+                color3f inputs:bg.connect = </Root/EmissiveMap/nodegraph.inputs:Mix_bg>
+                color3f inputs:fg.connect = </Root/EmissiveMap/nodegraph/Convert.outputs:out>
+                float inputs:mix = 0.5
+                color3f outputs:out
+                float2 ui:nodegraph:node:pos = (1461, 324.07977)
+                int ui:nodegraph:node:stackingOrder = 935
+            }
+
+            def Shader "Convert"
+            {
+                uniform token info:id = "ND_convert_float_color3"
+                float inputs:in.connect = </Root/EmissiveMap/nodegraph/Noise3D.outputs:out>
+                color3f outputs:out
+                float2 ui:nodegraph:node:pos = (1268.75, 256.33386)
+                int ui:nodegraph:node:stackingOrder = 934
+            }
+
+            def Shader "Separate3"
+            {
+                uniform token info:id = "ND_separate3_vector3"
+                float3 inputs:in.connect = </Root/EmissiveMap/nodegraph/Position.outputs:out>
+                float outputs:outx
+                float outputs:outy
+                float outputs:outz
+                float2 ui:nodegraph:node:pos = (272.25, 27.5)
+                int ui:nodegraph:node:stackingOrder = 934
+                string[] ui:nodegraph:realitykit:node:attributesShowingChildren = ["outputs:outy"]
+            }
+
+            def Shader "Multiply_2"
+            {
+                uniform token info:id = "ND_multiply_vector3FA"
+                float3 inputs:in1.connect = </Root/EmissiveMap/nodegraph/Combine3.outputs:out>
+                float inputs:in2.connect = </Root/EmissiveMap/nodegraph/ConstantFloat.outputs:out>
+                float3 outputs:out
+                float2 ui:nodegraph:node:pos = (709.75, 145.87036)
+                int ui:nodegraph:node:stackingOrder = 934
+            }
+
+            def Shader "Position"
+            {
+                uniform token info:id = "ND_position_vector3"
+                float3 outputs:out
+                float2 ui:nodegraph:node:pos = (68.75, 27.5)
+                int ui:nodegraph:node:stackingOrder = 934
+            }
+
+            def Shader "ConstantFloat"
+            {
+                uniform token info:id = "ND_constant_float"
+                float inputs:value = 0.5
+                float outputs:out
+                float2 ui:nodegraph:node:pos = (497.25, 264.24072)
+                int ui:nodegraph:node:stackingOrder = 934
+            }
+
+            def Shader "Combine3"
+            {
+                uniform token info:id = "ND_combine3_vector3"
+                float inputs:in1.connect = </Root/EmissiveMap/nodegraph/Separate3.outputs:outx>
+                float inputs:in2.connect = </Root/EmissiveMap/nodegraph/Separate3.outputs:outy>
+                float inputs:in3
+                float3 outputs:out
+                float2 ui:nodegraph:node:pos = (497.25, 27.5)
+                int ui:nodegraph:node:stackingOrder = 934
+            }
+
+            def Shader "Time"
+            {
+                uniform token info:id = "ND_time_float"
+                float outputs:out
+                float2 ui:nodegraph:node:pos = (709.75, 366.79736)
+                int ui:nodegraph:node:stackingOrder = 934
+            }
+
+            def Shader "Noise3D"
+            {
+                uniform token info:id = "ND_noise3d_float"
+                float inputs:amplitude
+                float inputs:pivot = 0.5
+                float3 inputs:position.connect = </Root/EmissiveMap/nodegraph/Add.outputs:out>
+                float outputs:out
+                float2 ui:nodegraph:node:pos = (1045, 256.33386)
+                int ui:nodegraph:node:stackingOrder = 934
+            }
+
+            def Shader "Add"
+            {
+                uniform token info:id = "ND_add_vector3FA"
+                float3 inputs:in1.connect = </Root/EmissiveMap/nodegraph/Multiply_2.outputs:out>
+                float inputs:in2.connect = </Root/EmissiveMap/nodegraph/Time.outputs:out>
+                float3 outputs:out
+                float2 ui:nodegraph:node:pos = (860.75, 256.33386)
+                int ui:nodegraph:node:stackingOrder = 934
+            }
+        }
+
+        def Shader "Image_1"
+        {
+            uniform token info:id = "ND_image_color3"
+            asset inputs:file = @Items_V2/textures/Map.png@
+            string inputs:filtertype
+            color3f outputs:out
+            float2 ui:nodegraph:node:pos = (-821.03644, 148.80667)
+            int ui:nodegraph:node:stackingOrder = 635
+        }
+    }
+
+    def Material "EmissiveMaterial"
+    {
+        token outputs:mtlx:surface.connect = </Root/EmissiveMaterial/PreviewSurface.outputs:out>
+        token outputs:realitykit:vertex
+        float2 ui:nodegraph:node:pos = (20, 20)
+        int ui:nodegraph:node:stackingOrder = 1
+        float2 ui:nodegraph:realitykit:subgraphOutputs:pos = (295.90976, 107.18535)
+        int ui:nodegraph:realitykit:subgraphOutputs:stackingOrder = 349
+
+        def Shader "PreviewSurface"
+        {
+            uniform token info:id = "ND_UsdPreviewSurface_surfaceshader"
+            color3f inputs:diffuseColor.connect = </Root/EmissiveMaterial/nodegraph.outputs:Mix_out>
+            float inputs:metallic
+            float3 inputs:normal
+            float inputs:opacity
+            float inputs:roughness
+            token outputs:out
+            float2 ui:nodegraph:node:pos = (69.368706, 42.220215)
+            int ui:nodegraph:node:stackingOrder = 445
+            string[] ui:nodegraph:realitykit:node:attributesShowingChildren = []
+        }
+
+        def Shader "Image"
+        {
+            uniform token info:id = "ND_image_color3"
+            asset inputs:file = @Items/textures/Texture_01.png@
+            string inputs:filtertype
+            string inputs:vaddressmode
+            color3f outputs:out
+            float2 ui:nodegraph:node:pos = (-547.98157, 324.4609)
+            int ui:nodegraph:node:stackingOrder = 493
+            string[] ui:nodegraph:realitykit:node:attributesShowingChildren = []
+        }
+
+        def Scope "Group" (
+            kind = "group"
+        )
+        {
+            string ui:group:annotation = "Group"
+            string ui:group:annotationDescription = ""
+            string[] ui:group:members = ["p:nodegraph"]
+        }
+
+        def NodeGraph "nodegraph"
+        {
+            color3f inputs:Mix_bg (
+                customData = {
+                    dictionary realitykit = {
+                        float2 positionInSubgraph = (1268.75, 391.82568)
+                    }
+                }
+            )
+            color3f inputs:Mix_bg.connect = </Root/EmissiveMaterial/Image.outputs:out>
+            color3f outputs:Mix_out.connect = </Root/EmissiveMaterial/nodegraph/Mix.outputs:out>
+            float2 ui:nodegraph:node:pos = (-237.15913, 25.024858)
+            int ui:nodegraph:node:stackingOrder = 500
+            float2 ui:nodegraph:realitykit:subgraphOutputs:pos = (1666, 324.07977)
+
+            def Shader "Mix"
+            {
+                uniform token info:id = "ND_mix_color3"
+                color3f inputs:bg.connect = </Root/EmissiveMaterial/nodegraph.inputs:Mix_bg>
+                color3f inputs:fg.connect = </Root/EmissiveMaterial/nodegraph/Convert.outputs:out>
+                float inputs:mix = 0.5
+                color3f outputs:out
+                float2 ui:nodegraph:node:pos = (1461, 324.07977)
+                int ui:nodegraph:node:stackingOrder = 935
+            }
+
+            def Shader "Convert"
+            {
+                uniform token info:id = "ND_convert_float_color3"
+                float inputs:in.connect = </Root/EmissiveMaterial/nodegraph/Noise3D.outputs:out>
+                color3f outputs:out
+                float2 ui:nodegraph:node:pos = (1268.75, 256.33386)
+                int ui:nodegraph:node:stackingOrder = 934
+            }
+
+            def Shader "Separate3"
+            {
+                uniform token info:id = "ND_separate3_vector3"
+                float3 inputs:in.connect = </Root/EmissiveMaterial/nodegraph/Position.outputs:out>
+                float outputs:outx
+                float outputs:outy
+                float outputs:outz
+                float2 ui:nodegraph:node:pos = (272.25, 27.5)
+                int ui:nodegraph:node:stackingOrder = 934
+                string[] ui:nodegraph:realitykit:node:attributesShowingChildren = ["outputs:outy"]
+            }
+
+            def Shader "Multiply_2"
+            {
+                uniform token info:id = "ND_multiply_vector3FA"
+                float3 inputs:in1.connect = </Root/EmissiveMaterial/nodegraph/Combine3.outputs:out>
+                float inputs:in2.connect = </Root/EmissiveMaterial/nodegraph/ConstantFloat.outputs:out>
+                float3 outputs:out
+                float2 ui:nodegraph:node:pos = (709.75, 145.87036)
+                int ui:nodegraph:node:stackingOrder = 934
+            }
+
+            def Shader "Position"
+            {
+                uniform token info:id = "ND_position_vector3"
+                float3 outputs:out
+                float2 ui:nodegraph:node:pos = (68.75, 27.5)
+                int ui:nodegraph:node:stackingOrder = 934
+            }
+
+            def Shader "ConstantFloat"
+            {
+                uniform token info:id = "ND_constant_float"
+                float inputs:value = 0.5
+                float outputs:out
+                float2 ui:nodegraph:node:pos = (497.25, 264.24072)
+                int ui:nodegraph:node:stackingOrder = 934
+            }
+
+            def Shader "Combine3"
+            {
+                uniform token info:id = "ND_combine3_vector3"
+                float inputs:in1.connect = </Root/EmissiveMaterial/nodegraph/Separate3.outputs:outx>
+                float inputs:in2.connect = </Root/EmissiveMaterial/nodegraph/Separate3.outputs:outy>
+                float inputs:in3
+                float3 outputs:out
+                float2 ui:nodegraph:node:pos = (497.25, 27.5)
+                int ui:nodegraph:node:stackingOrder = 934
+            }
+
+            def Shader "Time"
+            {
+                uniform token info:id = "ND_time_float"
+                float outputs:out
+                float2 ui:nodegraph:node:pos = (709.75, 366.79736)
+                int ui:nodegraph:node:stackingOrder = 934
+            }
+
+            def Shader "Noise3D"
+            {
+                uniform token info:id = "ND_noise3d_float"
+                float inputs:amplitude
+                float inputs:pivot = 0.5
+                float3 inputs:position.connect = </Root/EmissiveMaterial/nodegraph/Add.outputs:out>
+                float outputs:out
+                float2 ui:nodegraph:node:pos = (1045, 256.33386)
+                int ui:nodegraph:node:stackingOrder = 934
+            }
+
+            def Shader "Add"
+            {
+                uniform token info:id = "ND_add_vector3FA"
+                float3 inputs:in1.connect = </Root/EmissiveMaterial/nodegraph/Multiply_2.outputs:out>
+                float inputs:in2.connect = </Root/EmissiveMaterial/nodegraph/Time.outputs:out>
+                float3 outputs:out
+                float2 ui:nodegraph:node:pos = (860.75, 256.33386)
+                int ui:nodegraph:node:stackingOrder = 934
+            }
+        }
+    }
+
+    def Material "EmissiveNewspaper"
+    {
+        token outputs:mtlx:surface.connect = </Root/EmissiveNewspaper/PreviewSurface.outputs:out>
+        token outputs:realitykit:vertex
+        float2 ui:nodegraph:node:pos = (-260.5904, 139.48856)
+        int ui:nodegraph:node:stackingOrder = 2
+        float2 ui:nodegraph:realitykit:subgraphOutputs:pos = (295.90976, 107.18535)
+        int ui:nodegraph:realitykit:subgraphOutputs:stackingOrder = 349
+
+        def Shader "PreviewSurface"
+        {
+            uniform token info:id = "ND_UsdPreviewSurface_surfaceshader"
+            color3f inputs:diffuseColor.connect = </Root/EmissiveNewspaper/nodegraph.outputs:Mix_out>
+            float inputs:metallic
+            float3 inputs:normal
+            float inputs:opacity
+            float inputs:roughness
+            token outputs:out
+            float2 ui:nodegraph:node:pos = (69.368706, 42.220215)
+            int ui:nodegraph:node:stackingOrder = 445
+            string[] ui:nodegraph:realitykit:node:attributesShowingChildren = []
+        }
+
+        def Shader "Image"
+        {
+            uniform token info:id = "ND_image_color3"
+            asset inputs:file = @Items_V2/textures/newspapaer_v5.png@
+            string inputs:filtertype
+            string inputs:vaddressmode
+            color3f outputs:out
+            float2 ui:nodegraph:node:pos = (-600.5329, 135.63483)
+            int ui:nodegraph:node:stackingOrder = 613
+            string[] ui:nodegraph:realitykit:node:attributesShowingChildren = []
+        }
+
+        def NodeGraph "nodegraph"
+        {
+            color3f inputs:Mix_bg (
+                customData = {
+                    dictionary realitykit = {
+                        float2 positionInSubgraph = (1268.75, 391.82568)
+                    }
+                }
+            )
+            color3f inputs:Mix_bg.connect = </Root/EmissiveNewspaper/Image.outputs:out>
+            color3f outputs:Mix_out.connect = </Root/EmissiveNewspaper/nodegraph/Mix.outputs:out>
+            float2 ui:nodegraph:node:pos = (-237.90915, 43.274002)
+            int ui:nodegraph:node:stackingOrder = 591
+            string[] ui:nodegraph:realitykit:node:attributesShowingChildren = ["inputs:Mix_bg", "inputs:Mix_bg", "outputs:Mix_out"]
+            float2 ui:nodegraph:realitykit:subgraphOutputs:pos = (1666, 324.07977)
+
+            def Shader "Mix"
+            {
+                uniform token info:id = "ND_mix_color3"
+                color3f inputs:bg.connect = </Root/EmissiveNewspaper/nodegraph.inputs:Mix_bg>
+                color3f inputs:fg.connect = </Root/EmissiveNewspaper/nodegraph/Convert.outputs:out>
+                float inputs:mix = 0.5
+                color3f outputs:out
+                float2 ui:nodegraph:node:pos = (1461, 324.07977)
+                int ui:nodegraph:node:stackingOrder = 935
+            }
+
+            def Shader "Convert"
+            {
+                uniform token info:id = "ND_convert_float_color3"
+                float inputs:in.connect = </Root/EmissiveNewspaper/nodegraph/Noise3D.outputs:out>
+                color3f outputs:out
+                float2 ui:nodegraph:node:pos = (1268.75, 256.33386)
+                int ui:nodegraph:node:stackingOrder = 934
+            }
+
+            def Shader "Separate3"
+            {
+                uniform token info:id = "ND_separate3_vector3"
+                float3 inputs:in.connect = </Root/EmissiveNewspaper/nodegraph/Position.outputs:out>
+                float outputs:outx
+                float outputs:outy
+                float outputs:outz
+                float2 ui:nodegraph:node:pos = (272.25, 27.5)
+                int ui:nodegraph:node:stackingOrder = 934
+                string[] ui:nodegraph:realitykit:node:attributesShowingChildren = ["outputs:outy"]
+            }
+
+            def Shader "Multiply_2"
+            {
+                uniform token info:id = "ND_multiply_vector3FA"
+                float3 inputs:in1.connect = </Root/EmissiveNewspaper/nodegraph/Combine3.outputs:out>
+                float inputs:in2.connect = </Root/EmissiveNewspaper/nodegraph/ConstantFloat.outputs:out>
+                float3 outputs:out
+                float2 ui:nodegraph:node:pos = (709.75, 145.87036)
+                int ui:nodegraph:node:stackingOrder = 934
+            }
+
+            def Shader "Position"
+            {
+                uniform token info:id = "ND_position_vector3"
+                float3 outputs:out
+                float2 ui:nodegraph:node:pos = (68.75, 27.5)
+                int ui:nodegraph:node:stackingOrder = 934
+            }
+
+            def Shader "ConstantFloat"
+            {
+                uniform token info:id = "ND_constant_float"
+                float inputs:value = 0.5
+                float outputs:out
+                float2 ui:nodegraph:node:pos = (497.25, 264.24072)
+                int ui:nodegraph:node:stackingOrder = 934
+            }
+
+            def Shader "Combine3"
+            {
+                uniform token info:id = "ND_combine3_vector3"
+                float inputs:in1.connect = </Root/EmissiveNewspaper/nodegraph/Separate3.outputs:outx>
+                float inputs:in2.connect = </Root/EmissiveNewspaper/nodegraph/Separate3.outputs:outy>
+                float inputs:in3
+                float3 outputs:out
+                float2 ui:nodegraph:node:pos = (497.25, 27.5)
+                int ui:nodegraph:node:stackingOrder = 934
+            }
+
+            def Shader "Time"
+            {
+                uniform token info:id = "ND_time_float"
+                float outputs:out
+                float2 ui:nodegraph:node:pos = (709.75, 366.79736)
+                int ui:nodegraph:node:stackingOrder = 934
+            }
+
+            def Shader "Noise3D"
+            {
+                uniform token info:id = "ND_noise3d_float"
+                float inputs:amplitude
+                float inputs:pivot = 0.5
+                float3 inputs:position.connect = </Root/EmissiveNewspaper/nodegraph/Add.outputs:out>
+                float outputs:out
+                float2 ui:nodegraph:node:pos = (1045, 256.33386)
+                int ui:nodegraph:node:stackingOrder = 934
+            }
+
+            def Shader "Add"
+            {
+                uniform token info:id = "ND_add_vector3FA"
+                float3 inputs:in1.connect = </Root/EmissiveNewspaper/nodegraph/Multiply_2.outputs:out>
+                float inputs:in2.connect = </Root/EmissiveNewspaper/nodegraph/Time.outputs:out>
+                float3 outputs:out
+                float2 ui:nodegraph:node:pos = (860.75, 256.33386)
+                int ui:nodegraph:node:stackingOrder = 934
+            }
+        }
+    }
+
+    def "OceanPlane" (
+        customData = {
+            float3 rotationEulerHint = (-1.5707964, 0, 0)
+        }
+        references = @EnvironmentMapV3/OceanPlane.usd@
+    )
+    {
+        reorder nameChildren = ["OceanSpatialAudio1", "OceanSpatialAudio2", "oceanAudio", "Sea", "_materials", "env_light"]
+        float2 ui:nodegraph:node:pos = (20, 20)
+        int ui:nodegraph:node:stackingOrder = 1
+        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def RealityKitAudioFile "oceanAudio"
+        {
+            uniform asset file = @AddSoundeffects/Sound Spark - Sea -  Wave Crashing into the Shore Splashing.wav@
+            uniform token loadingStrategy = "Stream"
+            uniform bool shouldLoop = 1
+        }
+
+        over "Sea"
+        {
+            quatf xformOp:orient = (0.9999955, -0.0004442352, -0.0020393047, 0.00214269)
+            float3 xformOp:scale = (150, 150.00003, 1)
+            double3 xformOp:translate = (0.04505950212478638, -0.005868434906005859, 0.0037565231323242188)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+        }
+
+        def Xform "OceanSpatialAudio1" (
+            customData = {
+                float3 rotationEulerHint = (1.5707964, -2.9802322e-8, 5.41052)
+            }
+        )
+        {
+            quatf xformOp:orient = (0.6408563, 0.6408564, -0.2988363, -0.29883623)
+            float3 xformOp:scale = (1, 1, 1)
+            float3 xformOp:translate = (-78.17673, -18.914549, -0.47799355)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+            def RealityKitComponent "SpatialAudio"
+            {
+                uniform token info:id = "RealityKit.SpatialAudio"
+            }
+
+            def RealityKitComponent "AudioLibrary"
+            {
+                uniform token info:id = "RealityKit.AudioLibrary"
+
+                def RealityKitDict "resources"
+                {
+                    string[] keys = ["oceanAudio"]
+                    rel values = </Root/OceanPlane/oceanAudio>
+                }
+            }
+        }
+
+        def Xform "OceanSpatialAudio2" (
+            customData = {
+                float3 rotationEulerHint = (1.5707965, -8.940697e-8, 1.5707964)
+            }
+        )
+        {
+            float2 ui:nodegraph:node:pos = (20, 20)
+            int ui:nodegraph:node:stackingOrder = 1
+            quatf xformOp:orient = (0.4999999, 0.50000006, 0.50000006, 0.5)
+            float3 xformOp:scale = (0.9999998, 0.9999999, 0.9999998)
+            float3 xformOp:translate = (5.846469, 57.769257, 0.2089066)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+            def RealityKitComponent "SpatialAudio"
+            {
+                uniform token info:id = "RealityKit.SpatialAudio"
+            }
+
+            def RealityKitComponent "AudioLibrary"
+            {
+                uniform token info:id = "RealityKit.AudioLibrary"
+
+                def RealityKitDict "resources"
+                {
+                    string[] keys = ["oceanAudio"]
+                    rel values = </Root/OceanPlane/oceanAudio>
+                }
+            }
+        }
+    }
+
+    def Material "SkyBoxMaterial"
+    {
+        token outputs:mtlx:surface
+        token outputs:realitykit:vertex
+        token outputs:surface.connect = </Root/SkyBoxMaterial/UsdPreviewSurface.outputs:surface>
+        float2 ui:nodegraph:node:pos = (20, 20)
+        int ui:nodegraph:node:stackingOrder = 1
+        float2 ui:nodegraph:realitykit:subgraphOutputs:pos = (0, 110.5)
+
+        def Shader "UsdPreviewSurface"
+        {
+            uniform token info:id = "UsdPreviewSurface"
+            color3f inputs:diffuseColor = (0.46264648, 0.6430664, 0.7216797) (
+                colorSpace = "srgb_displayp3"
+            )
+            color3f inputs:emissiveColor = (1, 1, 1) (
+                colorSpace = "srgb_displayp3"
+            )
+            token outputs:surface
+        }
+    }
+
+    def "SkySphere" (
+        active = true
+        prepend apiSchemas = ["MaterialBindingAPI"]
+        references = @SkySphere.usdz@
+    )
+    {
+        rel material:binding = </Root/SkyBoxMaterial> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        float2 ui:nodegraph:node:pos = (20, 20)
+        int ui:nodegraph:node:stackingOrder = 1
+        quatf xformOp:orient = (1, 0, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+    }
+
+    def "Ttouch" (
+        active = true
+        references = @TtouchV3-1/Ttouch.usd@
+    )
+    {
+        reorder nameChildren = ["jumpAudio", "Ttouch_root", "_materials", "env_light"]
+        float2 ui:nodegraph:node:pos = (20, 20)
+        int ui:nodegraph:node:stackingOrder = 1
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (-78.03683, 0.6000004, -49.708427)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "Ttouch_root"
+        {
+            def RealityKitComponent "AnimationLibrary"
+            {
+                reorder nameChildren = ["Ttouch_idle", "Ttouch_run", "Ttouch_walk"]
+                uniform token info:id = "RealityKit.AnimationLibrary"
+
+                def RealityKitAnimationFile "Ttouch_idle"
+                {
+                    uniform asset file = @TtouchV3-1/Ttouch_idle.usd@
+                    uniform string name = "Ttouch_idle"
+                }
+
+                def RealityKitAnimationFile "Ttouch_run"
+                {
+                    uniform asset file = @TtouchV3-1/Ttouch_walk2.usd@
+                    uniform string name = "Ttouch_run"
+                }
+
+                def RealityKitAnimationFile "Ttouch_walk"
+                {
+                    uniform asset file = @TtouchV3-1/Ttouch_walk3.usd@
+                    uniform string name = "Ttouch_walk"
+                }
+            }
+        }
+
+        def RealityKitAudioFile "jumpAudio"
+        {
+            uniform asset file = @Sound source 1/SoundCrib - Casual UI - Pop Notification.wav@
+            uniform token loadingStrategy = "Stream"
+            uniform bool shouldLoop = 0
+        }
+
+        def RealityKitComponent "ChannelAudio"
+        {
+            uniform token info:id = "RealityKit.ChannelAudio"
+        }
+
+        def RealityKitComponent "AudioLibrary"
+        {
+            uniform token info:id = "RealityKit.AudioLibrary"
+
+            def RealityKitDict "resources"
+            {
+                string[] keys = ["jumpAudio"]
+                rel values = </Root/Ttouch/jumpAudio>
+            }
+        }
+    }
+
+    def "Leaf" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707963, 0.7277698, 3.9914188e-8)
+        }
+        references = @Leaf/Leaf.usd@
+    )
+    {
+        quatf xformOp:orient = (0.66080636, -0.6608063, 0.25166455, 0.25166455)
+        float3 xformOp:scale = (1.4999998, 1.4999998, 1.4999998)
+        float3 xformOp:translate = (40.770023, 7.898014, 17.76182)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def Xform "ForestSpatialAudio" (
+        customData = {
+            float3 rotationEulerHint = (4.7123885, 0, 0)
+        }
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
+        float3 xformOp:translate = (-0.6087668, 13.920228, -4.672399)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def RealityKitComponent "SpatialAudio"
+        {
+            uniform token info:id = "RealityKit.SpatialAudio"
+        }
+
+        def RealityKitComponent "AudioLibrary"
+        {
+            uniform token info:id = "RealityKit.AudioLibrary"
+
+            def RealityKitDict "resources"
+            {
+                string[] keys = ["forestAudio"]
+                rel values = </Root/forestAudio>
+            }
+        }
+    }
+
+    def RealityKitAudioFile "forestAudio"
+    {
+        uniform asset file = @AddSoundeffects/Mat Eric Hart - Pure Nature - Morning Forest Ambience Songbirds.wav@
+        uniform token loadingStrategy = "Stream"
+        uniform bool shouldLoop = 1
+    }
+
+    def Xform "ItemAudio"
+    {
+        def RealityKitComponent "ChannelAudio"
+        {
+            uniform token info:id = "RealityKit.ChannelAudio"
+        }
+
+        def RealityKitComponent "AudioLibrary"
+        {
+            uniform token info:id = "RealityKit.AudioLibrary"
+
+            def RealityKitDict "resources"
+            {
+                string[] keys = ["itemAudio"]
+                rel values = </Root/itemAudio>
+            }
+        }
+    }
+
+    def RealityKitAudioFile "itemAudio"
+    {
+        uniform asset file = @Sound source 1/JBoB - Cartoon UI - Swirly Bleep.wav@
+        uniform token loadingStrategy = "Stream"
+        uniform bool shouldLoop = 0
+    }
+
+    def "EnvironmentMap" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707964, 0, 0)
+        }
+        references = @EnvironmentMap.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def "MapBoundary" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707964, 0, 0)
+        }
+        references = @MapBoundary.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def "StageBoundary" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707964, 0, 0)
+        }
+        references = @StageBoundary.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def "Backpack_Anim" (
+        active = true
+        prepend apiSchemas = ["MaterialBindingAPI"]
+        customData = {
+            float3 rotationEulerHint = (-1.5707964, 0, 0)
+        }
+        references = @Items_V2/Bag_Anim.usd@
+    )
+    {
+        rel material:binding = </Root/EmissiveMaterial> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
+        float3 xformOp:scale = (0.2, 0.2, 0.2)
+        float3 xformOp:translate = (-48.31288, 0.67185724, -22.633123)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "Bag"
+        {
+            over "Cube" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </Root/EmissiveMaterial> (
+                    bindMaterialAs = "weakerThanDescendants"
+                )
+            }
+        }
+    }
+
+    def "NewsPaper" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (1.4060032, -0.6836751, -3.1415925)
+        }
+        references = @Items_V2/Newspaper.usd@
+    )
+    {
+        quatf xformOp:orient = (-0.2167226, 0.25574017, 0.6091037, 0.7187636)
+        float3 xformOp:scale = (1, 1, 1)
+        float3 xformOp:translate = (-72.95098, 0.5627032, -30.658556)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def RealityKitComponent "VFXEmitter"
+        {
+            uniform token info:id = "RealityKit.VFXEmitter"
+
+            def RealityKitStruct "currentState"
+            {
+                token birthDirection = "Constant"
+                token birthLocation = "Volume"
+                float3 emissionDirection = (1, 0, 0)
+                double emissionDuration = 1
+                double emissionDurationVariation = 0
+                token emitterShape = "Plane"
+                double idleDuration = 0
+                double idleDurationVariation = 0
+                bool isLocal = 0
+                bool isSpawningEnabled = 1
+                bool loops = 1
+                float particleSpeed = 0.06
+                float particleSpeedVariation = 0.04
+                float3 shapeSize = (1, 0.1, 0.5)
+                bool spawnInheritParentColor = 1
+                token spawnOccasion = "OnUpdate"
+                float spawnSpreadFactor = 0
+                float spawnSpreadFactorVariation = 0
+                float spawnVelocityFactor = 1
+                double warmupDuration = 1.5
+
+                def RealityKitStruct "mainEmitter"
+                {
+                    float3 acceleration = (0, 0, 0)
+                    token animationRepeatMode = "Looping"
+                    token billboardMode = "Billboard"
+                    float birthRate = 40
+                    float birthRateVariation = 0
+                    token blendMode = "Additive"
+                    float colorEvolutionPower = 1
+                    int64 columnCount = 4
+                    float dampingFactor = 0.25
+                    float4 endColorA = (1, 0.051991113, 1, 1)
+                    float4 endColorB = (0, 0.98059916, 1, 1)
+                    float frameRate = 30
+                    float frameRateVariation = 0
+                    int64 initialFrame = 0
+                    int64 initialFrameVariation = 2
+                    bool isAnimated = 1
+                    bool isLightingEnabled = 0
+                    float noiseAnimationSpeed = 1
+                    float noiseScale = 1
+                    float noiseStrength = 0.1
+                    token opacityOverLife = "GradualFadeInOut"
+                    float particleAngle = 0
+                    float particleAngleVariation = 0.5
+                    float particleAngularVelocity = 0.25
+                    float particleAngularVelocityVariation = 0.5
+                    asset particleImage = @ParticleEmitterPresetTextures/twinkle.exr@
+                    double particleLifeSpan = 2
+                    double particleLifeSpanVariation = 0.2
+                    float particleMass = 1
+                    float particleMassVariation = 0.2
+                    float particleSize = 0.2
+                    float particleSizeVariation = 0.004
+                    float3 radialGravityCenter = (1, 1, 0)
+                    float radialGravityStrength = 0
+                    int64 rowCount = 4
+                    float sizeMultiplierAtEndOfLifespan = 0.5
+                    float sizeMultiplierAtEndOfLifespanPower = 3
+                    token sortOrder = "IncreasingDepth"
+                    float spreadingAngle = 0
+                    float4 startColorA = (1, 0.051991113, 1, 1)
+                    float4 startColorB = (0.9986965, 0.9674097, 0, 1)
+                    float stretchFactor = 0
+                    bool useEndColor = 1
+                    bool useEndColorRange = 1
+                    bool useStartColorRange = 1
+                    float3 vortexDirection = (0, 1, 0)
+                    float vortexStrength = 0
+                }
+
+                def RealityKitStruct "spawnedEmitter"
+                {
+                    float3 acceleration = (0, -0.04, 0)
+                    token animationRepeatMode = "AutoReverse"
+                    token billboardMode = "Billboard"
+                    float birthRate = 25
+                    float birthRateVariation = 0
+                    token blendMode = "Additive"
+                    float colorEvolutionPower = 0
+                    int64 columnCount = 4
+                    float dampingFactor = 3
+                    float4 endColorA = (0, 0.98059916, 1, 1)
+                    float4 endColorB = (1, 0.051991113, 1, 1)
+                    float frameRate = 24
+                    float frameRateVariation = 0
+                    int64 initialFrame = 2
+                    int64 initialFrameVariation = 4
+                    bool isAnimated = 1
+                    bool isLightingEnabled = 0
+                    float noiseAnimationSpeed = 0.25
+                    float noiseScale = 1
+                    float noiseStrength = 0.1
+                    token opacityOverLife = "GradualFadeInOut"
+                    float particleAngle = 0.745
+                    float particleAngleVariation = 0.25
+                    float particleAngularVelocity = 0.25
+                    float particleAngularVelocityVariation = 0
+                    asset particleImage = @ParticleEmitterPresetTextures/twinkle.exr@
+                    double particleLifeSpan = 0.75
+                    double particleLifeSpanVariation = 0.25
+                    float particleMass = 1
+                    float particleMassVariation = 2
+                    float particleSize = 0.02
+                    float particleSizeVariation = 0.004
+                    float3 radialGravityCenter = (0, 0, 0)
+                    float radialGravityStrength = 0
+                    int64 rowCount = 4
+                    float sizeMultiplierAtEndOfLifespan = 0
+                    float sizeMultiplierAtEndOfLifespanPower = 1
+                    token sortOrder = "IncreasingID"
+                    float spreadingAngle = 0
+                    float4 startColorA = (1, 0.051991113, 1, 0.04)
+                    float4 startColorB = (0, 0.98059916, 1, 0.04)
+                    float stretchFactor = 0
+                    bool useEndColor = 0
+                    bool useEndColorRange = 1
+                    bool useStartColorRange = 1
+                    float3 vortexDirection = (0, 1, 0)
+                    float vortexStrength = 0
+                }
+            }
+        }
+
+        over "NewsPaper"
+        {
+            over "Plane" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </Root/NewsPaper/_materials/NewsPaper> (
+                    bindMaterialAs = "weakerThanDescendants"
+                )
+            }
+        }
+    }
+
+    def "Bottle_Anim" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707964, 0, 0)
+        }
+        references = @Items_V2/Bottle_Anim.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
+        float3 xformOp:scale = (0.15, 0.15, 0.15)
+        float3 xformOp:translate = (-12.35232, 5.327108, -9.93902)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "Bottle"
+        {
+            over "Circle_001" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </Root/EmissiveMaterial> (
+                    bindMaterialAs = "weakerThanDescendants"
+                )
+                float3 xformOp:translate = (0, 0, 0)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+        }
+    }
+
+    def "Cheese_Anim" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707964, 0, 0)
+        }
+        references = @Items_V2/Cheese_Anim.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
+        float3 xformOp:scale = (0.17, 0.17, 0.17)
+        float3 xformOp:translate = (54.98196, 4, 4.3576)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "Cheeze"
+        {
+            over "Circle" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </Root/EmissiveMaterial> (
+                    bindMaterialAs = "weakerThanDescendants"
+                )
+                float3 xformOp:translate = (0, -0.2606125, 0)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+        }
+    }
+
+    def "Flashlight_Anim" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (-1.5707964, 0, 0)
+        }
+        references = @Items_V2/Flashlight_Anim.usd@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
+        float3 xformOp:scale = (0.17, 0.17, 0.17)
+        float3 xformOp:translate = (-30.081654, 0.8, 32.05042)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "FlashLight"
+        {
+            over "Cylinder_001" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </Root/EmissiveMaterial> (
+                    bindMaterialAs = "weakerThanDescendants"
+                )
+            }
+        }
+    }
+
+    def "MapCompass_Anim" (
+        active = true
+        customData = {
+            float3 rotationEulerHint = (1.5707966, 1.0752972, -3.1415927)
+        }
+        references = @Items_V2/MapCompass_Anim.usd@
+    )
+    {
+        quatf xformOp:orient = (0.362122, -0.36212188, 0.60734487, 0.6073447)
+        float3 xformOp:scale = (0.2, 0.2, 0.2)
+        float3 xformOp:translate = (21.21508, 1, 44.15179)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "MapandCompass"
+        {
+            over "Mesh_004"
+            {
+                over "Map" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </Root/EmissiveMap> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+                }
+
+                over "Compass" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </Root/EmissiveMaterial> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+                }
+            }
+        }
+    }
+}
+
