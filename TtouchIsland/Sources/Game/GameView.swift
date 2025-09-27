@@ -58,11 +58,6 @@ struct GameView: View {
             }
             .id(gameId)
 
-            if manager.showOnboarding {
-                OnboardingView()
-                    .zIndex(3)
-            }
-
             if manager.showInterface {
                 JoystickButtonView(
                     manager: manager,
@@ -198,24 +193,9 @@ struct GameView: View {
                 )
             }
 
-            // 온보딩 여는 버튼
-            if manager.showInfoButton {
-                InfoButton().zIndex(2)
-            }
-
-            // 초기화 버튼
-            if manager.showResetButton {
-                ResetButton {
-                    showResetAlert = true
-                }.zIndex(2)
-            }
-
             if manager.showEndCredits {
-                let width: CGFloat = UIScreen.main.bounds.width + 10
-                let height: CGFloat = UIScreen.main.bounds.height + 15
                 ZStack {
                     EndCreditsView()
-                        .frame(width: width, height: height)
                         .onAppear {
                             // 로티 재생시간
                             DispatchQueue.main.asyncAfter(deadline: .now() + 53) {
@@ -238,6 +218,17 @@ struct GameView: View {
 //                        .glassEffect(.regular.interactive())
                     }
                 }
+            }
+        }
+        .overlay(
+            TopButtonList(showResetAlert: $showResetAlert)
+                .padding(.top, 30)
+                .padding(.trailing, 30),
+            alignment: .topTrailing
+        )
+        .overlay {
+            if manager.showOnboarding {
+                OnboardingView()
             }
         }
         .alert("게임을 다시 시작하시겠습니까?", isPresented: $showResetAlert) {

@@ -10,11 +10,16 @@ import Lottie
 import SwiftUI
 
 struct EndCreditsView: View {
+    let height: CGFloat = UIScreen.main.bounds.height
+
     var body: some View {
-        LottieEndCreditsView(
-            animationName: "EndcreditsLottie",
-            loopMode: .playOnce
-        )
+        LottieView(animation: .named("EndcreditsLottie"))
+            .playbackMode(.playing(.fromProgress(0, toProgress: 1, loopMode: .playOnce)))
+            .resizable()
+            .scaledToFill()
+            .frame(height: height)
+            .padding(.bottom, -20)
+            .ignoresSafeArea()
     }
 }
 
@@ -23,7 +28,7 @@ struct LottieEndCreditsView: UIViewRepresentable {
     var loopMode: LottieLoopMode = .playOnce
 
     // UIKit뷰를 생성하고 초기화
-    func makeUIView(context: Context) -> UIView {
+    func makeUIView(context _: Context) -> UIView {
         // swift ui에서 사용할 UIView 컨테이너 생성(사이즈 조절용)
         let container = UIView()
 
@@ -51,5 +56,9 @@ struct LottieEndCreditsView: UIViewRepresentable {
         return container
     }
 
-    func updateUIView(_ uiView: UIView, context: Context) {}
+    func updateUIView(_: UIView, context _: Context) {}
+}
+
+#Preview {
+    EndCreditsView()
 }

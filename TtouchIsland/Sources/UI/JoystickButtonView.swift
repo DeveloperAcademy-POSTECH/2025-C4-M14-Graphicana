@@ -22,8 +22,6 @@ struct JoystickButtonView: View {
     var body: some View {
         ZStack {
             VStack {
-                if !manager.isFocusedOnItem { Spacer().frame(height: 30) } // 하단 패딩과 10 차이나게 (이유 모름;;)
-
                 HStack {
                     GameStatusView()
 
