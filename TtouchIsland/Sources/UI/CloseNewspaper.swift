@@ -26,7 +26,7 @@ struct CloseNewspaperComponent: View {
                 .frame(width: 36, height: 36)
                 .foregroundColor(.black)
                 .font(.system(size: 24))
-                .glassEffect(.regular.interactive())
+//                .glassEffect(.regular.interactive())
         }
         .padding()
     }

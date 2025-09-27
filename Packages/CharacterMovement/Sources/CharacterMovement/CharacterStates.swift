@@ -44,7 +44,7 @@ public struct CharacterStateComponent: Component {
     /// 캐릭터가 달리고 있는 여부
     public var isOnRunning: Bool = false
 
-// Removed commented-out code for clarity and maintainability.
+    // Removed commented-out code for clarity and maintainability.
 
     /// - 상태에 따른 애니메이션 속도 계산
     /// - 걷기: 입력된 속도 그대로, 점프: 2, 나머지: 1
@@ -96,10 +96,6 @@ public struct CharacterStateComponent: Component {
             transitionDuration = 0.1
 
         case .none, .idle, .walking: break
-
-        default:
-            let oldState = currentState?.rawValue ?? "nil"
-            fatalError("not yet handling \(oldState) to \(newState)")
         }
         return true
     }

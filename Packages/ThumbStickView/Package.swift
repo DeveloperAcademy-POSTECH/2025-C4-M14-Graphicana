@@ -11,7 +11,7 @@ import PackageDescription
 
 let package = Package(
     name: "ThumbStickView",
-    platforms: [.iOS("26.0")],
+    platforms: [.iOS("18.0")],
     products: [.library(name: "ThumbStickView", targets: ["ThumbStickView"])],
     targets: [.target(
         name: "ThumbStickView",

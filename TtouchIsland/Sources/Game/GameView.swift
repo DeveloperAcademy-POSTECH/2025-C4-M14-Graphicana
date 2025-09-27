@@ -58,11 +58,6 @@ struct GameView: View {
             }
             .id(gameId)
 
-            if manager.showOnboarding {
-                OnboardingView()
-                    .zIndex(3)
-            }
-
             if manager.showInterface {
                 JoystickButtonView(
                     manager: manager,
@@ -198,28 +193,12 @@ struct GameView: View {
                 )
             }
 
-            // 온보딩 여는 버튼
-            if manager.showInfoButton {
-                InfoButton().zIndex(2)
-            }
-
-            // 초기화 버튼
-            if manager.showResetButton {
-                ResetButton {
-                    showResetAlert = true
-                }.zIndex(2)
-            }
-
             if manager.showEndCredits {
-                let width: CGFloat = UIScreen.main.bounds.width + 10
-                let height: CGFloat = UIScreen.main.bounds.height + 15
                 ZStack {
                     EndCreditsView()
-                        .frame(width: width, height: height)
                         .onAppear {
                             // 로티 재생시간
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 53)
-                            {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 53) {
                                 showRestartButton = true
                             }
                         }
@@ -235,14 +214,26 @@ struct GameView: View {
                             Text("다시 탐험하기").foregroundStyle(Color.white)
                                 .padding(.horizontal, 32)
                                 .padding(.vertical, 14)
-                        }.glassEffect(.regular.interactive())
+                        }
+//                        .glassEffect(.regular.interactive())
                     }
                 }
             }
         }
+        .overlay(
+            TopButtonList(showResetAlert: $showResetAlert)
+                .padding(.top, 30)
+                .padding(.trailing, 30),
+            alignment: .topTrailing
+        )
+        .overlay {
+            if manager.showOnboarding {
+                OnboardingView()
+            }
+        }
         .alert("게임을 다시 시작하시겠습니까?", isPresented: $showResetAlert) {
             Button("취소", role: .cancel) {}
-            Button("다시 시작할래요", role: .confirm) {
+            Button("다시 시작할래요") {
                 manager.isGameReady = false
                 manager.resetGame()
                 // 새로운 게임 아이디를 설정해줘서 realityview를 다시 그리게 한다
@@ -290,12 +281,12 @@ struct GameView: View {
         await setupEnvironmentCollisions(on: game, content: content)
 
         if let character = manager.character,
-            let newspaper = game.findEntity(named: "NewsPaper"),
-            let backpack = game.findEntity(named: "Backpack_Anim"),
-            let cheese = game.findEntity(named: "Cheese_Anim"),
-            let bottle = game.findEntity(named: "Bottle_Anim"),
-            let flashlight = game.findEntity(named: "Flashlight_Anim"),
-            let mapCompass = game.findEntity(named: "MapCompass_Anim")
+           let newspaper = game.findEntity(named: "NewsPaper"),
+           let backpack = game.findEntity(named: "Backpack_Anim"),
+           let cheese = game.findEntity(named: "Cheese_Anim"),
+           let bottle = game.findEntity(named: "Bottle_Anim"),
+           let flashlight = game.findEntity(named: "Flashlight_Anim"),
+           let mapCompass = game.findEntity(named: "MapCompass_Anim")
         {
             setupItems(
                 character: character,
